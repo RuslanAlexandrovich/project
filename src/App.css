@@ -1,38 +1,96 @@
+main {
+  flex: 1 1 auto;
+}
 .App {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+.AppMain {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* ===============Header============= */
+
+.header_button {
+  margin-left: auto;
+  margin-right: 0;
+}
+.header_button a {
+  color: white;
+  text-decoration: none;
+  margin-right: 10px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* ==============Registration================== */
+.wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+form {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  width: 50%;
+  padding: 20px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+}
+.form_login {
+  margin-top: 100px;
+}
+form .title_form {
+  width: 100%;
+  text-align: center;
+}
+.App-label {
+  font-size: 18px;
+}
+.form-control::placeholder {
+  font-size: 14px;
+}
+.form-check {
+  display: flex !important;
+}
+.form-check-input {
+  margin-right: 20px;
+}
+form #submit {
+  border: none;
+  background-color: white;
+  border: 1px solid gray;
+  color: black;
+  min-width: 50%;
+  height: 40px;
+  font-size: 18px;
+  margin-left: auto;
+  margin-right: auto;
+  transition: all 0.5s ease;
+}
+form #submit:hover {
+  transform: scale(1.03);
 }
 
-.App-link {
-  color: #61dafb;
+/* ==============AboutUserComp================== */
+.newPassBtn {
+  width: fit-content;
+  padding: 2px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.editName {
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 50%;
+  padding: 20px;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+}
+.wrapperAboutUserInfo {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
 }
