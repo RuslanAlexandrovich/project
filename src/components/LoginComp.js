@@ -27,6 +27,7 @@ function LoginComp() {
   const onSubmit = async (data) => {
     try {
       await AuthService.login(data);
+      window.location.href = "/";
       // navigate("/");
       // window.location.reload(); // Перезавантажити сторінку тільки в разі успіху
     } catch (error) {

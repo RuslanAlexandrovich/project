@@ -40,6 +40,7 @@ function SendEmailComp() {
           // Обробка успішної відповіді
           console.log("Тимчасовий пароль надіслано");
           // navigate("/login");
+          window.location.href = "/login";
         } else {
           throw new Error("Помилка при обробці запиту");
         }

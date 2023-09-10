@@ -12,7 +12,6 @@ export default function UserConfirmComp() {
       let userdata = await AuthService.userConfirm(paramsObj);
       if (userdata) setUserInfo(userdata);
       //navigate("/");
-      //window.location.reload(); // Перезавантажити сторінку тільки в разі успіху
     } catch (error) {
       // Обробка помилок, якщо дані не були успішно надіслані
       console.error("Помилка входу...");
@@ -23,7 +22,7 @@ export default function UserConfirmComp() {
   }, []);
 
   return userInfo ? (
-    <Navigate to="/" replace={true}></Navigate>
+    <Navigate to="/" replace={true}></Navigate> //На сторінку підтвердження
   ) : (
     <div className="userConfirm">Data provided not valid!</div>
   );

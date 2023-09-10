@@ -48,8 +48,8 @@ class AuthService {
         console.log(userdata);
         console.log("token ok!");
         localStorage.setItem("token", token);
-
         console.log(token);
+        window.location.href = "/aboutuser"; // Перезавантажити сторінку тільки в разі успіху
         return userdata;
       } else {
         console.log("token undefined!");
@@ -80,6 +80,7 @@ class AuthService {
         const responseData = response.data; // Отримуємо дані відповіді
         // Обробка успішної відповіді
         console.log("Registration successful:", responseData);
+        window.location.href = "/"; // Перезавантажити сторінку тільки в разі успіху
       } else {
         throw new Error("Registration failed");
       }

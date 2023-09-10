@@ -13,8 +13,11 @@ import { surNameCheck } from "../pattern/allPattern";
 import { emailCheck } from "../pattern/allPattern";
 import { phoneCheck } from "../pattern/allPattern";
 import { passwordCheck } from "../pattern/allPattern";
+import loading from "../images/loading.gif";
 
 function RegisterComp() {
+  const [isLoading, setIsLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -23,17 +26,20 @@ function RegisterComp() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
+      setIsLoading(true); // Встановіть isLoading в true перед відправкою запиту
       await AuthService.register(data);
-      console.log("Реєстрація успішна...   ", data);
+      console.log("Дані надіслано...   ", data);
       // navigate("/userconfirm");
-      // window.location.reload(); // Перезавантажити сторінку тільки в разі успіху
     } catch (error) {
       // Обробка помилок, якщо дані не були успішно надіслані
-      console.log("Помилка реєстрації...", error);
+      console.log("Помилка відправки даних...", error);
+      setIsLoading(false); // Встановіть isLoading в false після завершення операції
+    } finally {
+      setIsLoading(false); // Встановіть isLoading в false після завершення операції
     }
   };
 
@@ -137,9 +143,19 @@ function RegisterComp() {
                   onChange={() => setShowPassword(!showPassword)}
                 />
               </Form.Group>
-              <Button type="submit" id="submit">
-                Зареєструвати
-              </Button>
+              {isLoading ? (
+                <img
+                  src={loading}
+                  height="60"
+                  width="60"
+                  alt="Завантаження..."
+                  className="loading-spinner"
+                />
+              ) : (
+                <Button type="submit" id="submit">
+                  Зареєструвати
+                </Button>
+              )}
             </Form>
           </Col>
         </Row>

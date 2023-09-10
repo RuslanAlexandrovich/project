@@ -73,6 +73,10 @@ form #submit {
 form #submit:hover {
   transform: scale(1.03);
 }
+.loading-spinner {
+  margin-left: auto;
+  margin-right: auto;
+}
 
 /* ==============AboutUserComp================== */
 .newPassBtn {
