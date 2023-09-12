@@ -158,7 +158,7 @@ class EditUser {
     }
   };
 
-  DeleteUser = async (data) => {
+  AdminDeleteUser = async (data) => {
     try {
       const id = data;
       console.log(id);
@@ -182,6 +182,44 @@ class EditUser {
     } catch (error) {
       // Обробка помилки
       console.error("Помилка видалення користувача", error);
+    }
+  };
+
+  AdminEditUser = async (data) => {
+    try {
+      const id = data.id;
+      // const newData = data;
+      // const newDataUser = {
+      //   id: data.id,
+      //   name: data.name,
+      //   surname: data.surname,
+      //   email: data.email,
+      //   phoneNumber: data.phone,
+      //   userName: data.login,
+      // };
+      // console.log(newDataUser);
+      console.log("id AdminEditUser", id);
+      console.log("data AdminEditUser", data);
+      const token = localStorage.getItem("token"); // Отримати токен з локального сховища
+      if (!token) {
+        // Перевірити, чи токен доступний
+        throw new Error("No token available");
+      }
+
+      const response = await axios.put(SERVER_URL + `User/${id}`, data, {
+        headers: authHeader(),
+      });
+
+      if (response.status === 200) {
+        // Перевіряємо статус відповіді
+        // Обробка успішної відповіді
+        console.log("Дані користувача Змінено!");
+      } else {
+        throw new Error("Зміна даних користувача не вдалася!");
+      }
+    } catch (error) {
+      // Обробка помилки
+      console.error("Помилка зміни користувача!", error);
     }
   };
 }

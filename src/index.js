@@ -10,19 +10,19 @@ import Footer from "./pageElements/Footer";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <header>
-        <Header />
-      </header>
-      <main>
-        <App />
-      </main>
-      <footer>
-        <Footer />
-      </footer>
-    </BrowserRouter>
-  </React.StrictMode>
+  // <React.StrictMode>
+  <BrowserRouter>
+    <header>
+      <Header />
+    </header>
+    <main>
+      <App />
+    </main>
+    <footer>
+      <Footer />
+    </footer>
+  </BrowserRouter>
+  // </React.StrictMode>
 );
 
 reportWebVitals();

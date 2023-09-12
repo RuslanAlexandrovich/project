@@ -40,7 +40,9 @@ export const isAdmin = () => {
 export const isShow = () => {
   const token = localStorage.getItem("token");
   console.log("token", token);
-  const userData = parseJWT(token);
-  let show = token ? true : false;
-  return show;
+  if (token) {
+    // const userData = parseJWT(token);
+    let show = token ? true : false;
+    return show;
+  }
 };

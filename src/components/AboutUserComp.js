@@ -94,21 +94,81 @@ function AboutUserComp() {
 
   const toggleFormUserName = () => {
     setShowFormUserName(!showFormUserName);
+    setIsEditingName(false);
+    setShowFormName(false);
+    setIsEditingSurName(false);
+    setShowFormSurName(false);
+    setIsEditingEmail(false);
+    setShowFormEmail(false);
+    setIsEditingPhone(false);
+    setShowFormPhone(false);
+    setIsEditingPassword(false);
+    setShowFormPassword(false);
   };
   const toggleFormName = () => {
     setShowFormName(!showFormName);
+    setIsEditingUserName(false);
+    setShowFormUserName(false);
+    setIsEditingSurName(false);
+    setShowFormSurName(false);
+    setIsEditingEmail(false);
+    setShowFormEmail(false);
+    setIsEditingPhone(false);
+    setShowFormPhone(false);
+    setIsEditingPassword(false);
+    setShowFormPassword(false);
   };
   const toggleFormSurName = () => {
     setShowFormSurName(!showFormSurName);
+    setIsEditingUserName(false);
+    setShowFormUserName(false);
+    setIsEditingName(false);
+    setShowFormName(false);
+    setIsEditingEmail(false);
+    setShowFormEmail(false);
+    setIsEditingPhone(false);
+    setShowFormPhone(false);
+    setIsEditingPassword(false);
+    setShowFormPassword(false);
   };
   const toggleFormEmail = () => {
     setShowFormEmail(!showFormEmail);
+    setIsEditingUserName(false);
+    setShowFormUserName(false);
+    setIsEditingName(false);
+    setShowFormName(false);
+    setIsEditingSurName(false);
+    setShowFormSurName(false);
+    setIsEditingPhone(false);
+    setShowFormPhone(false);
+    setIsEditingPassword(false);
+    setShowFormPassword(false);
   };
   const toggleFormPhone = () => {
     setShowFormPhone(!showFormPhone);
+    setIsEditingUserName(false);
+    setShowFormUserName(false);
+    setIsEditingName(false);
+    setShowFormName(false);
+    setIsEditingSurName(false);
+    setShowFormSurName(false);
+    setIsEditingEmail(false);
+    setShowFormEmail(false);
+    setIsEditingPassword(false);
+    setShowFormPassword(false);
   };
   const toggleFormPassword = () => {
     setShowFormPassword(!showFormPassword);
+    setIsEditingUserName(false);
+    setShowFormUserName(false);
+    setIsEditingName(false);
+    setShowFormName(false);
+    setIsEditingSurName(false);
+    setShowFormSurName(false);
+    setIsEditingEmail(false);
+    setShowFormEmail(false);
+    setIsEditingPhone(false);
+    setShowFormPhone(false);
   };
 
   // Створення змінної стану для відстеження поточного стану значка
@@ -199,83 +259,89 @@ function AboutUserComp() {
 
   return (
     <div className="App">
-      <Container>
-        <Row>
-          <Col className="userInfo col-6">
+      <Container className="AbUsInfoCont mt-3 mb-3">
+        <h2 className="mt-3">Особистий кабінет</h2>
+        <hr></hr>
+        <Row className="row-cols-xl-2 row-cols-md-2 row-cols-sm-1 mt-2">
+          <Col className="userInfo col-12 col-xl-6 col-md-6 col-sm-12">
             <div className="wrapperAboutUserInfo">
-              <span>
-                Логін: {userName}{" "}
+              <span className="nameRow">
+                Логін: <span className="nameObject">{userName}</span>
                 <span
-                  className="login"
+                  className="iconWrapper"
                   onClick={() => {
                     toggleEditingUserName();
                     toggleFormUserName();
                   }}
                 >
                   {isEditingUserName ? (
-                    <span>&#10006;</span>
+                    <span className="icon">&#10006;</span>
                   ) : (
-                    <span>&#9998;</span>
+                    <span className="icon">&#9998;</span>
                   )}
                 </span>
               </span>
-              <span className="name">
-                Ім'я: {name}{" "}
+              <span className="nameRow">
+                Ім'я: <span className="nameObject">{name}</span>
                 <span
-                  className="newName"
+                  className="iconWrapper"
                   onClick={() => {
                     toggleEditingName();
                     toggleFormName();
                   }}
                 >
-                  {isEditingName ? <span>&#10006;</span> : <span>&#9998;</span>}
+                  {isEditingName ? (
+                    <span className="icon">&#10006;</span>
+                  ) : (
+                    <span className="icon">&#9998;</span>
+                  )}
                 </span>
               </span>
-              <span className="surname">
-                Прізвище: {surname}{" "}
+              <span className="nameRow">
+                Прізвище: <span className="nameObject">{surname}</span>
                 <span
-                  className="newSurname"
+                  className="iconWrapper"
                   onClick={() => {
                     toggleEditingSurName();
                     toggleFormSurName();
                   }}
                 >
                   {isEditingSurName ? (
-                    <span>&#10006;</span>
+                    <span className="icon">&#10006;</span>
                   ) : (
-                    <span>&#9998;</span>
+                    <span className="icon">&#9998;</span>
                   )}
                 </span>
               </span>
-              <span className="mail">
-                Пошта: {email}{" "}
+              <span className="nameRow">
+                Пошта: <span className="nameObject">{email}</span>
                 <span
-                  className="newEmail"
+                  className="iconWrapper"
                   onClick={() => {
                     toggleEditingEmail();
                     toggleFormEmail();
                   }}
                 >
                   {isEditingEmail ? (
-                    <span>&#10006;</span>
+                    <span className="icon">&#10006;</span>
                   ) : (
-                    <span>&#9998;</span>
+                    <span className="icon">&#9998;</span>
                   )}
                 </span>
               </span>
-              <span className="phone">
-                Телефон: {phoneNumber}{" "}
+              <span className="nameRow">
+                Телефон: <span className="nameObject">{phoneNumber}</span>
                 <span
-                  className="newPhone"
+                  className="iconWrapper"
                   onClick={() => {
                     toggleEditingPhone();
                     toggleFormPhone();
                   }}
                 >
                   {isEditingPhone ? (
-                    <span>&#10006;</span>
+                    <span className="icon">&#10006;</span>
                   ) : (
-                    <span>&#9998;</span>
+                    <span className="icon">&#9998;</span>
                   )}
                 </span>
               </span>
@@ -292,14 +358,14 @@ function AboutUserComp() {
               </span>
             </div>
           </Col>
-          <Col className="col-6">
+          <Col className="wrappAbEdUsForm col-12 col-xl-6 col-md-6 col-sm-12">
             {showFormUserName && (
               <Form
-                className="editName"
+                className="AboutUserForm editForm"
                 onSubmit={handleSubmit(onSubmitUserName)}
               >
-                <h1 className="title_form">Редагування</h1>
-                <Form.Group className="mb-2" controlId="formBasicName">
+                <h2 className="title_form">Редагування</h2>
+                <Form.Group className=" mb-2" controlId="formBasicLogin">
                   <Form.Label className="App-label">Логін</Form.Label>
                   <Form.Control
                     type="text"
@@ -311,8 +377,8 @@ function AboutUserComp() {
                   />
                   {errors.login && (
                     <Form.Text className="text-danger">
-                      Ім'я має містити мінімум дві літери, з першою великою і
-                      рештою малих літер.
+                      Логін повинен починатися з великої літери, від 3 до 15
+                      символів, лише літери та цифри. рештою малих літер.
                     </Form.Text>
                   )}
                 </Form.Group>
@@ -320,8 +386,8 @@ function AboutUserComp() {
               </Form>
             )}
             {showFormName && (
-              <Form className="editName" onSubmit={handleSubmit(onSubmitName)}>
-                <h1 className="title_form">Редагування</h1>
+              <Form className="editForm" onSubmit={handleSubmit(onSubmitName)}>
+                <h2 className="title_form">Редагування</h2>
                 <Form.Group className="mb-2" controlId="formBasicName">
                   <Form.Label className="App-label">Ім'я</Form.Label>
                   <Form.Control
@@ -344,10 +410,10 @@ function AboutUserComp() {
             )}
             {showFormSurName && (
               <Form
-                className="editName"
+                className="editForm"
                 onSubmit={handleSubmit(onSubmitSurName)}
               >
-                <h1 className="title_form">Редагування</h1>
+                <h2 className="title_form">Редагування</h2>
                 <Form.Group className="mb-2" controlId="formBasicName">
                   <Form.Label className="App-label">Прізвище</Form.Label>
                   <Form.Control
@@ -370,10 +436,10 @@ function AboutUserComp() {
             )}
             {showFormEmail && (
               <Form
-                className="editName editEmail"
+                className="editForm editEmail"
                 onSubmit={handleSubmit(onSubmitPhone)}
               >
-                <h1 className="title_form">Редагування</h1>
+                <h2 className="title_form">Редагування</h2>
                 <Form.Group className="mb-2" controlId="formBasicEmail">
                   <Form.Label className="App-label">Пошта</Form.Label>
                   <Form.Control
@@ -396,9 +462,9 @@ function AboutUserComp() {
             {showFormPhone && (
               <Form
                 onSubmit={handleSubmit(onSubmitPhone)}
-                className="editName editPhone"
+                className="editForm editPhone"
               >
-                <h1 className="title_form">Редагування</h1>
+                <h2 className="title_form">Редагування</h2>
                 <Form.Group className="mb-2">
                   <Form.Label className="App-label">Номер телефону</Form.Label>
                   <Form.Control
@@ -406,6 +472,7 @@ function AboutUserComp() {
                     id="phone"
                     placeholder="380 (необов'язково)"
                     {...register("phone", {
+                      required: true,
                       validate: (value) => phoneCheck(value),
                     })}
                   />
@@ -420,8 +487,11 @@ function AboutUserComp() {
               </Form>
             )}
             {showFormPassword && (
-              <Form onSubmit={handleSubmit(onSubmitPassword)}>
-                <h1 className="title_form">Редагування</h1>
+              <Form
+                onSubmit={handleSubmit(onSubmitPassword)}
+                className="editForm editPhone"
+              >
+                <h2 className="title_form">Редагування</h2>
                 <Form.Group className="mb-2">
                   <Form.Label className="App-label">Пароль *</Form.Label>
                   <Form.Control
@@ -430,13 +500,14 @@ function AboutUserComp() {
                     placeholder="******"
                     {...register("password", {
                       required: true,
-                      // validate: (value) => passwordCheck(value),
+                      validate: (value) => passwordCheck(value),
                     })}
                   />
                   {errors.password && (
                     <Form.Text className="text-danger">
-                      Пароль має містити не менше 6 символів латинського
-                      алфавіту, 1 велику літеру, 1 цифру.
+                      Пароль має містити: Не менше 8 символів латинського
+                      алфавіту, 1 велику та малу літери, 1 цифру, 1 спеціальний
+                      символ.
                     </Form.Text>
                   )}
                 </Form.Group>

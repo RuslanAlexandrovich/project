@@ -1,18 +1,19 @@
 import "../App.css";
 import Form from "react-bootstrap/Form";
 import { Button } from "react-bootstrap";
-import "bootstrap/dist/css/bootstrap.min.css";
+// import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { Nav } from "react-bootstrap";
 import AuthService from "../services/AuthService";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { emailCheck } from "../pattern/allPattern";
 import { passwordCheck } from "../pattern/allPattern";
 
 function LoginComp() {
+  const [ServerMessage, setServerMessage] = useState(""); // Визначення стану ServerMessage
   const {
     register,
     handleSubmit,
@@ -22,14 +23,15 @@ function LoginComp() {
   const [showPassword, setShowPassword] = useState(false);
   // const [token, setToken] = useState("");
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
-      await AuthService.login(data);
-      window.location.href = "/";
-      // navigate("/");
-      // window.location.reload(); // Перезавантажити сторінку тільки в разі успіху
+      await AuthService.login(data, (errorMessage) => {
+        // Обробка тексту помилки тут
+        // console.error("Помилка входу:", errorMessage);
+        setServerMessage(errorMessage); // Оновлення стану ServerMessage з текстом помилки
+      });
     } catch (error) {
       // Обробка помилок, якщо дані не були успішно надіслані
       console.error("Помилка входу...");
@@ -71,13 +73,14 @@ function LoginComp() {
                     placeholder="******"
                     {...register("password", {
                       required: true,
-                      // validate: (value) => passwordCheck(value),
+                      validate: (value) => passwordCheck(value),
                     })}
                   />
                   {errors.password && (
                     <Form.Text className="text-danger">
-                      Пароль має містити не менше 6 символів латинського
-                      алфавіту, 1 велику літеру, 1 цифру.
+                      Пароль має містити: Не менше 8 символів латинського
+                      алфавіту, 1 велику та малу літери, 1 цифру, 1 спеціальний
+                      символ.
                     </Form.Text>
                   )}
                 </Form.Group>
@@ -95,6 +98,7 @@ function LoginComp() {
                 <Button type="submit" id="submit">
                   Авторизуватися
                 </Button>
+                <span className="errorMessage">{ServerMessage}</span>
               </Form>
             </Col>
           </Row>

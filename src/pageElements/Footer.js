@@ -7,7 +7,7 @@ export default class Footer extends Component {
     return (
       <>
         <Navbar bg="dark" variant="dark">
-          <Container>
+          <Container className="Footer">
             <NavbarBrand href="/">
               <img
                 src={logo}
@@ -17,6 +17,9 @@ export default class Footer extends Component {
                 alt="Logo"
               />
             </NavbarBrand>
+            <div className="infoFooterContainer">
+              <span className="footerText">KAI</span>
+            </div>
           </Container>
         </Navbar>
       </>

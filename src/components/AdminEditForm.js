@@ -5,8 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
-import AuthService from "../services/AuthService";
-// import { useNavigate } from "react-router-dom";
+import EditUser from "../editUser/EditUser";
+import { useNavigate } from "react-router-dom";
 import { loginCheck } from "../pattern/allPattern";
 import { nameCheck } from "../pattern/allPattern";
 import { surNameCheck } from "../pattern/allPattern";
@@ -15,9 +15,11 @@ import { phoneCheck } from "../pattern/allPattern";
 import { passwordCheck } from "../pattern/allPattern";
 import loading from "../images/loading.gif";
 
-function RegisterComp() {
-  const [ServerMessage, setServerMessage] = useState(""); // Визначення стану ServerMessage
+//Отримуємо userId з AdminPageComp через props
+
+function AdminEditUserForm(props) {
   const [isLoading, setIsLoading] = useState(false);
+  const userId = props.userId; // Отримати userId з пропс
 
   const {
     register,
@@ -25,17 +27,14 @@ function RegisterComp() {
     formState: { errors },
   } = useForm();
 
-  const [showPassword, setShowPassword] = useState(false);
-
-  // const navigate = useNavigate();
+  //   const [showPassword, setShowPassword] = useState(false);
 
   const onSubmit = async (data) => {
     try {
       setIsLoading(true); // Встановіть isLoading в true перед відправкою запиту
-      await AuthService.register(data, (errorMessage) => {
-        setServerMessage(errorMessage); // Оновлення стану ServerMessage з текстом помилки
-      });
+      await EditUser.AdminEditUser(data);
       console.log("Дані надіслано...   ", data);
+      console.log("UserId...   ", userId);
       // navigate("/userconfirm");
     } catch (error) {
       // Обробка помилок, якщо дані не були успішно надіслані
@@ -51,15 +50,52 @@ function RegisterComp() {
       <Container>
         <Row>
           <Col className="wrapper mb-4">
-            <Form onSubmit={handleSubmit(onSubmit)} className="form_reg">
-              <h1 className="title_form">Реєстрація</h1>
+            <Form
+              onSubmit={handleSubmit(onSubmit)}
+              className="form_EditForAdmin"
+            >
+              <h3 className="title_form">Редагування користувача</h3>
+              <Form.Group className="mb-2" controlId="formBasicId">
+                {/* <Form.Label className="App-label">Id</Form.Label> */}
+                <Form.Control
+                  type="text"
+                  value={userId}
+                  {...register("id", {
+                    required: true,
+                    // validate: (value) => nameCheck(value),
+                  })}
+                />
+                {/* {errors.name && (
+                  <Form.Text className="text-danger">
+                    Ім'я має містити мінімум дві літери, з першою великою і
+                    рештою малих літер.
+                  </Form.Text>
+                )} */}
+              </Form.Group>
+              <Form.Group className="mb-2" controlId="formBasicLogin">
+                {/* <Form.Label className="App-label">Логін</Form.Label> */}
+                <Form.Control
+                  type="text"
+                  placeholder="Логін"
+                  {...register("userName", {
+                    required: false,
+                    validate: (value) => nameCheck(value),
+                  })}
+                />
+                {errors.login && (
+                  <Form.Text className="text-danger">
+                    Логін повинен починатися з великої літери, від 3 до 15
+                    символів, лише літери та цифри. рештою малих літер.
+                  </Form.Text>
+                )}
+              </Form.Group>
               <Form.Group className="mb-2" controlId="formBasicName">
-                <Form.Label className="App-label">Ім'я *</Form.Label>
+                {/* <Form.Label className="App-label">Ім'я</Form.Label> */}
                 <Form.Control
                   type="text"
                   placeholder="Ім'я"
                   {...register("name", {
-                    required: true,
+                    required: false,
                     validate: (value) => nameCheck(value),
                   })}
                 />
@@ -71,12 +107,12 @@ function RegisterComp() {
                 )}
               </Form.Group>
               <Form.Group className="mb-2" controlId="formBasicSurname">
-                <Form.Label className="App-label">Прізвище *</Form.Label>
+                {/* <Form.Label className="App-label">Прізвище</Form.Label> */}
                 <Form.Control
                   type="text"
                   placeholder="Прізвище"
                   {...register("surname", {
-                    required: true,
+                    required: false,
                     validate: (value) => surNameCheck(value),
                   })}
                 />
@@ -88,12 +124,12 @@ function RegisterComp() {
                 )}
               </Form.Group>
               <Form.Group className="mb-2" controlId="formBasicEmail">
-                <Form.Label className="App-label">Пошта *</Form.Label>
+                {/* <Form.Label className="App-label">Пошта</Form.Label> */}
                 <Form.Control
                   type="email"
                   placeholder="Email"
                   {...register("email", {
-                    required: true,
+                    required: false,
                     validate: (value) => emailCheck(value),
                   })}
                 />
@@ -104,12 +140,13 @@ function RegisterComp() {
                 )}
               </Form.Group>
               <Form.Group className="mb-2">
-                <Form.Label className="App-label">Номер телефону</Form.Label>
+                {/* <Form.Label className="App-label">Номер телефону</Form.Label> */}
                 <Form.Control
                   type="text"
                   id="phone"
-                  placeholder="+380 (необов'язково)"
-                  {...register("phone", {
+                  placeholder="Телефон"
+                  {...register("phoneNumber", {
+                    required: false,
                     validate: (value) => phoneCheck(value),
                   })}
                 />
@@ -120,7 +157,7 @@ function RegisterComp() {
                   </Form.Text>
                 )}
               </Form.Group>
-              <Form.Group className="mb-2">
+              {/* <Form.Group className="mb-2">
                 <Form.Label className="App-label">Пароль *</Form.Label>
                 <Form.Control
                   type={showPassword ? "text" : "password"}
@@ -128,14 +165,13 @@ function RegisterComp() {
                   placeholder="******"
                   {...register("password", {
                     required: true,
-                    validate: (value) => passwordCheck(value),
+                    // validate: (value) => passwordCheck(value),
                   })}
                 />
                 {errors.password && (
                   <Form.Text className="text-danger">
-                    Пароль має містити: Не менше 8 символів латинського
-                    алфавіту, 1 велику та малу літери, 1 цифру, 1 спеціальний
-                    символ.
+                    Пароль має містити не менше 6 символів латинського алфавіту,
+                    1 велику літеру, 1 цифру.
                   </Form.Text>
                 )}
               </Form.Group>
@@ -146,7 +182,7 @@ function RegisterComp() {
                   label="Видимий пароль"
                   onChange={() => setShowPassword(!showPassword)}
                 />
-              </Form.Group>
+              </Form.Group> */}
               {isLoading ? (
                 <img
                   src={loading}
@@ -156,11 +192,10 @@ function RegisterComp() {
                   className="loading-spinner"
                 />
               ) : (
-                <Button type="submit" id="submit">
-                  Зареєструвати
+                <Button type="submit" id="submitNewDataBtn">
+                  Надіслати
                 </Button>
               )}
-              <span className="errorMessage">{ServerMessage}</span>
             </Form>
           </Col>
         </Row>
@@ -169,4 +204,4 @@ function RegisterComp() {
   );
 }
 
-export default RegisterComp;
+export default AdminEditUserForm;

@@ -4,7 +4,7 @@ import AboutUserComp from "../components/AboutUserComp";
 export default class AboutUser extends Component {
   render() {
     return (
-      <div className="AboutUser">
+      <div className="AboutUserPage">
         <AboutUserComp />
       </div>
     );

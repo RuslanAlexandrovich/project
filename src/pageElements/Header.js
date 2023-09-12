@@ -8,6 +8,7 @@ import AuthService from "../services/AuthService";
 import parseJWT from "../helpers/JWTService";
 import HOME_URL from "../helpers/homeURL";
 import { isAdmin, isUser, isShow } from "../helpers/isAdmin";
+import isTokenValid from "../tokenTime/tokenValidTime";
 
 // const logOut = () => {
 //   AuthService.logout();
@@ -39,18 +40,28 @@ export default function Header() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const showValue = isShow();
-      const userValue = isUser();
-      const adminValue = isAdmin();
-
-      setShow(showValue);
-      setUser(userValue);
-      setAdmin(adminValue);
+      const tokenIsValid = isTokenValid();
+      setShow(tokenIsValid ? isShow() : false);
+      setUser(tokenIsValid ? isUser() : false);
+      setAdmin(tokenIsValid ? isAdmin() : false);
+      // console.log("раз");
+      if (!tokenIsValid) {
+        setButton();
+      }
     };
 
     fetchData();
   }, []);
+
   // ======Вихід з кабінету LOGOUT======
+  const setButton = async () => {
+    // Спершу оновлюємо стани, а потім викликаємо AuthService.logout()
+    setShow(false);
+    setAdmin(false);
+    setUser(false);
+    AuthService.logout();
+  };
+
   const logOut = () => {
     AuthService.logout();
     window.location.href = HOME_URL;
@@ -77,9 +88,13 @@ export default function Header() {
               {!show ? <Link to="/login">LogIn</Link> : null}
               {show ? <Link to="/aboutuser">AboutUser</Link> : null}
               {admin ? <Link to="/adminpage">AdminPage</Link> : null}
+              {show ? (
+                <span className="exitBtn" onClick={logOut}>
+                  Exit
+                </span>
+              ) : null}
             </Nav>
           </NavbarCollapse>
-          {show ? <Button onClick={logOut}>Exit</Button> : null}
         </Container>
       </Navbar>
     </>
