@@ -8,20 +8,24 @@ import axios from "axios";
 import authHeader from "../helpers/auth-header";
 import EditUser from "../editUser/EditUser";
 import AdminEditForm from "../components/AdminEditForm";
+import AdminAddForm from "../components/AdminAddForm";
 import SERVER_URL from "../helpers/Config";
 import { Modal } from "react-bootstrap";
-import { FaTimes } from "react-icons/fa"; // Імпорт іконки "X"
+import { CloseCircleOutlined } from "@ant-design/icons"; // Імпорт іконки "X"
 
 function AboutAllUser() {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null); //для передачі пропсів AdminEditForm
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false); // Стан для відображення модального вікна редагування
+  const [showAddUserModal, setshowAddUserModal] = useState(false); // Стан для відображення модального вікна редагування
   const [selectedUserIdForEdit, setSelectedUserIdForEdit] = useState(null);
   const [selectedUserData, setSelectedUserData] = useState(null); //для передачі пропсів AdminEditForm
   const [originalUsers, setOriginalUsers] = useState([]);
   const [notFoundMessage, setnotFoundMessage] = useState(false);
   const submitButtonRef = useRef(null); // Створюємо реф для кнопки "Надіслати" в іншому компоненті
+  const submitAddButtonRef = useRef(null); // Створюємо реф для кнопки "Додати" в іншому компоненті
+  const [searchUser, setSearchUser] = useState("");
 
   const allUser = async (data) => {
     try {
@@ -72,6 +76,9 @@ function AboutAllUser() {
   const openDeleteModal = () => {
     setShowDeleteModal(true);
   };
+  const openAddUserModal = () => {
+    setshowAddUserModal(true);
+  };
 
   const deleteUser = async () => {
     try {
@@ -87,6 +94,15 @@ function AboutAllUser() {
   const handleDeleteUser = async () => {
     try {
       await deleteUser(selectedUser);
+      setSelectedUser(null);
+      setShowDeleteModal(false);
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
+  };
+  const handleAddUser = async (data) => {
+    try {
+      await EditUser.AdminAddUser();
       setSelectedUser(null);
       setShowDeleteModal(false);
     } catch (error) {
@@ -109,6 +125,12 @@ function AboutAllUser() {
       submitButtonRef.current.click(); // Симулюємо клік на кнопці "Надіслати" в іншому компоненті
     }
   };
+  const handleSubmitAddUserButtonClick = () => {
+    // Клацання на кнопці "modalConfirm" в модальному вікні
+    if (submitAddButtonRef.current) {
+      submitAddButtonRef.current.click(); // Симулюємо клік на кнопці "Надіслати" в іншому компоненті
+    }
+  };
 
   const {
     register,
@@ -118,18 +140,16 @@ function AboutAllUser() {
     watch,
   } = useForm();
 
-  const searchUser = watch("searchUser", ""); // Відстеження значення поля пошуку
   // ======================Форма пошуку Search користувача========================
 
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
+    // console.log("DATA SEARCH...." + data);
     try {
-      if (data.searchUser.trim() === "") {
+      if (searchUser.trim() === "") {
         // Якщо поле пошуку порожнє, встановлюємо список користувачів в початковий стан
         setUsers(originalUsers);
       } else {
-        const newUsersFilter = await EditUser.AdminSearchallUser(
-          data.searchUser
-        );
+        const newUsersFilter = await EditUser.AdminSearchallUser(searchUser);
         if (newUsersFilter && newUsersFilter.length > 0) {
           setUsers(newUsersFilter); // Зберігаємо всіх користувачів в стані
           setnotFoundMessage(false); // Результати пошуку є
@@ -158,26 +178,17 @@ function AboutAllUser() {
                   className="searchInput"
                   type="text"
                   placeholder="Знайти користувача"
-                  {...register("searchUser", {
-                    required: false,
-                  })}
+                  value={searchUser}
+                  onChange={(e) => setSearchUser(e.target.value)}
                 />
                 {searchUser && ( // Показуємо символ "X" лише якщо є введений текст
-                  <span
+                  <CloseCircleOutlined
                     className="clear-search"
                     onClick={() => {
-                      reset("searchUser"); // Скидуємо значення поля пошуку
+                      setSearchUser(""); // Скидуємо значення поля пошуку
                     }}
-                  >
-                    <FaTimes />
-                  </span>
+                  />
                 )}
-                {/* {errors.name && (
-                  <Form.Text className="text-danger">
-                    Ім'я має містити мінімум дві літери, з першою великою і
-                    рештою малих літер.
-                  </Form.Text>
-                )} */}
               </Form.Group>
               <Button
                 className="returnAllUsers btn-secondary"
@@ -220,7 +231,12 @@ function AboutAllUser() {
 
         <div className="allUsersBlock mt-4 mb-2">
           <div className="adminBtnWrapper">
-            <button className="btn btn-success AddBtn">Додати</button>
+            <button
+              className="btn btn-success AddBtn"
+              onClick={openAddUserModal}
+            >
+              Додати
+            </button>
             <button
               className={`btn btn-warning EditBtn ${
                 !selectedUser ? "disabled" : ""
@@ -294,7 +310,9 @@ function AboutAllUser() {
             </tbody>
           </table>
         </div>
+
         {/* =======================Вікно редагування користувача========================== */}
+
         <Modal show={showEditModal} onHide={() => setShowEditModal(false)}>
           <Modal.Header closeButton>
             <Modal.Title>Редагування користувача</Modal.Title>
@@ -313,13 +331,46 @@ function AboutAllUser() {
               onClick={handleSubmitButtonClick}
               className="btn btn-primary modalSendForm"
             >
-              Отправить
+              Надіслати
             </button>
             <button
               className="btn btn-secondary modalCancel"
               onClick={() => {
                 setShowEditModal(false);
                 setSelectedUserIdForEdit(null); // Скидання обраного користувача при закритті модального вікна
+              }}
+            >
+              Відмінити
+            </button>
+          </Modal.Body>
+          {/* </Modal.Footer> */}
+        </Modal>
+
+        {/* =======================Вікно Додавання Адміном користувача========================== */}
+
+        <Modal
+          show={showAddUserModal}
+          onHide={() => setshowAddUserModal(false)}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Додавання користувача</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <AdminAddForm
+              // user={selectedUserData}
+              submitAddButtonRef={submitAddButtonRef}
+            />
+            {/* <Modal.Footer> */}
+            <button
+              onClick={handleSubmitAddUserButtonClick}
+              className="btn btn-primary modalSendForm"
+            >
+              Надіслати
+            </button>
+            <button
+              className="btn btn-secondary modalCancel"
+              onClick={() => {
+                setshowAddUserModal(false);
               }}
             >
               Відмінити

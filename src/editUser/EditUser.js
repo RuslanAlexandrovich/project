@@ -249,6 +249,29 @@ class EditUser {
       console.error("Not answer:", error);
     }
   };
+
+  AdminAddUser = async (data) => {
+    try {
+      console.log("AdminSearchAllUser.......", data);
+      const response = await axios.post(SERVER_URL + "User", data, {
+        // params: data,
+        headers: authHeader(),
+      });
+      // Перевіряємо статус відповіді
+      if (response.status === 200) {
+        // const responseData = response.data; // Отримуємо дані відповіді
+        // const usersData = responseData.users;
+        // Обробка успішної відповіді
+        console.log("Created new USERS.....OK......!");
+        // return usersData;
+      } else {
+        throw new Error("Failed data");
+      }
+    } catch (error) {
+      // Обробка помилки
+      console.error("Not answer:", error);
+    }
+  };
 }
 
 export default new EditUser();

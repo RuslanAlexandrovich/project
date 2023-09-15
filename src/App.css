@@ -203,12 +203,18 @@ form #submit:hover {
 .searchForm div {
   display: flex;
   width: 100%;
+  position: relative;
 }
 #formBasicSearch {
   width: 100%;
 }
 .searchInput {
   min-width: 70%;
+}
+.clear-search {
+  position: absolute;
+  top: 10px;
+  right: 10px;
 }
 .returnAllUsers {
   margin-left: 10px;

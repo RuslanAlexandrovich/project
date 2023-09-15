@@ -17,11 +17,11 @@ import loading from "../images/loading.gif";
 
 //Отримуємо userId з AdminPageComp через props
 
-function AdminEditUserForm(props) {
-  const [isLoading, setIsLoading] = useState(false);
-  const userId = props.userId; // Отримати userId з пропс
+function AdminAddUserForm(props) {
   const userObj = props.user; // Отримати userId з пропс
-  const submitButtonRef = props.submitButtonRef; // Отримати submitButtonRef з пропс
+
+  const [isLoading, setIsLoading] = useState(false);
+  const submitAddButtonRef = props.submitAddButtonRef; // Отримати submitAddButtonRef з пропс
   const [editComplete, seteditComplete] = useState(false);
 
   const [isAdminChecked, setIsAdminChecked] = useState(false);
@@ -30,16 +30,16 @@ function AdminEditUserForm(props) {
 
   // ==================Відстеження та перевірка ролі користувача============================
 
-  useEffect(() => {
-    if (userObj.roles.some((role) => role.name === "admin")) {
-      setIsAdminChecked(true);
-      setIsAtLeastOneChecked(true);
-    }
-    if (userObj.roles.some((role) => role.name === "user")) {
-      setIsUserChecked(true);
-      setIsAtLeastOneChecked(true);
-    }
-  }, [userObj]);
+  //   useEffect(() => {
+  //     if (userObj.roles.some((role) => role.name === "admin")) {
+  //       setIsAdminChecked(true);
+  //       setIsAtLeastOneChecked(true);
+  //     }
+  //     if (userObj.roles.some((role) => role.name === "user")) {
+  //       setIsUserChecked(true);
+  //       setIsAtLeastOneChecked(true);
+  //     }
+  //   }, [userObj]);
 
   // ==================Ролі для користувача============================
 
@@ -92,11 +92,10 @@ function AdminEditUserForm(props) {
             },
           ];
         }
-        await EditUser.AdminEditUser(data);
+        await EditUser.AdminAddUser(data);
         console.log("Дані надіслано...   ", data);
-        console.log("UserId...   ", userId);
         seteditComplete(true);
-        setTimeout(() => window.location.reload(), 1500);
+        // setTimeout(() => window.location.reload(), 1500);
         // navigate("/userconfirm");
       } catch (error) {
         // Обробка помилок, якщо дані не були успішно надіслані
@@ -117,31 +116,12 @@ function AdminEditUserForm(props) {
               onSubmit={handleSubmit(onSubmit)}
               className="form_EditForAdmin"
             >
-              <Form.Group className="mb-2" controlId="formBasicId">
-                {/* <Form.Label className="App-label">Id</Form.Label> */}
-                <Form.Control
-                  type="text"
-                  value={userId}
-                  {...register("id", {
-                    required: true,
-                    // validate: (value) => nameCheck(value),
-                  })}
-                />
-                {/* {errors.name && (
-                  <Form.Text className="text-danger">
-                    Ім'я має містити мінімум дві літери, з першою великою і
-                    рештою малих літер.
-                  </Form.Text>
-                )} */}
-              </Form.Group>
-              <Form.Group className="mb-2" controlId="formBasicLogin">
-                {/* <Form.Label className="App-label">Логін</Form.Label> */}
+              <Form.Group className="mb-2" controlId="formBasicAddUser">
                 <Form.Control
                   type="text"
                   placeholder="Логін"
-                  defaultValue={userObj.userName}
                   {...register("userName", {
-                    required: true,
+                    required: false,
                     validate: (value) => loginCheck(value),
                   })}
                 />
@@ -153,11 +133,9 @@ function AdminEditUserForm(props) {
                 )}
               </Form.Group>
               <Form.Group className="mb-2" controlId="formBasicName">
-                {/* <Form.Label className="App-label">Ім'я</Form.Label> */}
                 <Form.Control
                   type="text"
                   placeholder="Ім'я"
-                  defaultValue={userObj.name}
                   {...register("name", {
                     required: false,
                     validate: (value) => nameCheck(value),
@@ -171,11 +149,9 @@ function AdminEditUserForm(props) {
                 )}
               </Form.Group>
               <Form.Group className="mb-2" controlId="formBasicSurname">
-                {/* <Form.Label className="App-label">Прізвище</Form.Label> */}
                 <Form.Control
                   type="text"
                   placeholder="Прізвище"
-                  defaultValue={userObj.surname}
                   {...register("surname", {
                     required: false,
                     validate: (value) => surNameCheck(value),
@@ -189,13 +165,11 @@ function AdminEditUserForm(props) {
                 )}
               </Form.Group>
               <Form.Group className="mb-2" controlId="formBasicEmail">
-                {/* <Form.Label className="App-label">Пошта</Form.Label> */}
                 <Form.Control
                   type="email"
                   placeholder="Email"
-                  defaultValue={userObj.email}
                   {...register("email", {
-                    required: false,
+                    required: true,
                     validate: (value) => emailCheck(value),
                   })}
                 />
@@ -206,13 +180,11 @@ function AdminEditUserForm(props) {
                 )}
               </Form.Group>
               <Form.Group className="mb-2">
-                {/* <Form.Label className="App-label">Номер телефону</Form.Label> */}
                 <Form.Control
                   type="text"
                   id="phone"
                   placeholder="Телефон"
-                  defaultValue={userObj.phoneNumber}
-                  {...register("phoneNumber", {
+                  {...register("phone", {
                     required: false,
                     validate: (value) => phoneCheck(value),
                   })}
@@ -221,6 +193,24 @@ function AdminEditUserForm(props) {
                   <Form.Text className="text-danger">
                     Будь ласка, введіть номер телефону у форматі +380 і 9 цифр
                     вашого телефону.
+                  </Form.Text>
+                )}
+              </Form.Group>
+              <Form.Group className="mb-2">
+                <Form.Control
+                  type="text"
+                  id="password"
+                  placeholder="******"
+                  {...register("password", {
+                    required: true,
+                    validate: (value) => passwordCheck(value),
+                  })}
+                />
+                {errors.password && (
+                  <Form.Text className="text-danger">
+                    Пароль має містити: Не менше 8 символів латинського
+                    алфавіту, 1 велику та малу літери, 1 цифру, 1 спеціальний
+                    символ.
                   </Form.Text>
                 )}
               </Form.Group>
@@ -251,7 +241,9 @@ function AdminEditUserForm(props) {
                 </Form.Group>
               </div>
               {editComplete ? (
-                <span className="confirmEdit">Зміни внесено! Оновлення...</span>
+                <span className="confirmEdit">
+                  Користувача додано! Підтвердження надіслано...
+                </span>
               ) : null}
               {isLoading ? (
                 <div className="loadingSpinner d-flex">
@@ -267,7 +259,7 @@ function AdminEditUserForm(props) {
                 <Button
                   type="submit"
                   id="submitNewDataBtn"
-                  ref={submitButtonRef}
+                  ref={submitAddButtonRef}
                 ></Button>
               )}
             </Form>
@@ -278,4 +270,4 @@ function AdminEditUserForm(props) {
   );
 }
 
-export default AdminEditUserForm;
+export default AdminAddUserForm;
