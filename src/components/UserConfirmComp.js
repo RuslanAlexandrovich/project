@@ -27,3 +27,8 @@ export default function UserConfirmComp() {
     <div className="userConfirm">Data provided not valid!</div>
   );
 }
+
+// <h4>
+//   Вам на пошту прийшов лист, перейдіть за посиланням, щоб підтвердити
+//   аккаунт. Якщо лист не прийшов перевірте спам.
+// </h4>;

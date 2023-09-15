@@ -9,6 +9,7 @@ import parseJWT from "../helpers/JWTService";
 import HOME_URL from "../helpers/homeURL";
 import { isAdmin, isUser, isShow } from "../helpers/isAdmin";
 import isTokenValid from "../tokenTime/tokenValidTime";
+import { useLocation } from "react-router-dom";
 
 // const logOut = () => {
 //   AuthService.logout();
@@ -37,6 +38,13 @@ export default function Header() {
   const [show, setShow] = useState(false);
   const [admin, setAdmin] = useState(false);
   const [user, setUser] = useState(false);
+  const [activeLink, setActiveLink] = useState(""); // Стан для активного посилання
+
+  const setActive = (link) => {
+    setActiveLink(link);
+  };
+
+  const location = useLocation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,10 +56,12 @@ export default function Header() {
       if (!tokenIsValid) {
         setButton();
       }
+      // Отримуємо поточний шлях сторінки при завантаженні
+      setActive(location.pathname);
     };
 
     fetchData();
-  }, []);
+  }, [location]);
 
   // ======Вихід з кабінету LOGOUT======
   const setButton = async () => {
@@ -83,11 +93,41 @@ export default function Header() {
           <NavbarToggle aria-controls="responsive-navbar-nav" />
           <NavbarCollapse id="responsive-navbar-nav">
             <Nav className="me-auto header_button">
-              <Link to="/">Home</Link>
-              {!show ? <Link to="/registration">Registration</Link> : null}
-              {!show ? <Link to="/login">LogIn</Link> : null}
-              {show ? <Link to="/aboutuser">AboutUser</Link> : null}
-              {admin ? <Link to="/adminpage">AdminPage</Link> : null}
+              <Link to="/" className={activeLink === "/" ? "active" : ""}>
+                Home
+              </Link>
+              {!show ? (
+                <Link
+                  to="/registration"
+                  className={activeLink === "/registration" ? "active" : ""}
+                >
+                  Registration
+                </Link>
+              ) : null}
+              {!show ? (
+                <Link
+                  to="/login"
+                  className={activeLink === "/login" ? "active" : ""}
+                >
+                  LogIn
+                </Link>
+              ) : null}
+              {show ? (
+                <Link
+                  to="/aboutuser"
+                  className={activeLink === "/aboutuser" ? "active" : ""}
+                >
+                  AboutUser
+                </Link>
+              ) : null}
+              {admin ? (
+                <Link
+                  to="/adminpage"
+                  className={activeLink === "/adminpage" ? "active" : ""}
+                >
+                  AdminPage
+                </Link>
+              ) : null}
               {show ? (
                 <span className="exitBtn" onClick={logOut}>
                   Exit

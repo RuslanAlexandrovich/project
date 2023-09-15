@@ -24,9 +24,19 @@ main {
   text-decoration: none;
   margin-right: 10px;
 }
+.header_button a:hover {
+  text-decoration: underline;
+}
+.header_button .active {
+  text-decoration: underline;
+  color: white;
+}
 .exitBtn {
   color: white;
   cursor: pointer;
+}
+.exitBtn:hover {
+  text-decoration: underline;
 }
 
 /* ==============Registration================== */
@@ -59,7 +69,7 @@ form .title_form {
   display: flex !important;
 }
 .form-check-input {
-  margin-right: 20px;
+  margin-right: 10px;
 }
 form #submit {
   border: none;
@@ -81,7 +91,7 @@ form #submit:hover {
   margin-right: auto;
 }
 
-/* ==============Registration================== */
+/* ==============LogIn form================== */
 
 .form_login {
   margin-top: 100px;
@@ -115,7 +125,7 @@ form #submit:hover {
   flex-direction: column;
   justify-content: center;
   /* width: 50%; */
-  padding: 20px;
+  padding-right: 20px;
   /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75); */
 }
 .userInfo {
@@ -135,6 +145,9 @@ form #submit:hover {
   cursor: pointer;
   user-select: none;
 }
+.icon:hover {
+  color: blue;
+}
 .iconWrapper {
   margin-left: 10px;
 }
@@ -147,9 +160,14 @@ form #submit:hover {
   margin-left: 5px;
 }
 .newPassBtn {
+  border: 1px solid gray;
   margin-top: 5px;
+  background-color: white;
   width: fit-content;
   padding: 2px;
+}
+.newPassBtn:hover {
+  background-color: rgb(240, 240, 240);
 }
 
 /* ==============AdminPageComp================== */
@@ -162,6 +180,10 @@ form #submit:hover {
   padding: 10px;
   /* height: 4vw; */
 }
+.adminBtnWrapper {
+  display: flex;
+  width: 100%;
+}
 /* .searchBlock {
   display: flex;
   align-items: center;
@@ -169,6 +191,9 @@ form #submit:hover {
   padding: 5px;
   width: 100%;
 } */
+
+/* ========Рядок пошуку============*/
+
 .searchForm {
   display: flex;
   /* border: 1px solid red; */
@@ -185,6 +210,9 @@ form #submit:hover {
 .searchInput {
   min-width: 70%;
 }
+.returnAllUsers {
+  margin-left: 10px;
+}
 .searchUserBtn {
   margin-left: 10px;
   min-width: 30%;
@@ -193,17 +221,53 @@ form #submit:hover {
 /* ===========Картка користувача AdminPageComp======== */
 
 .allUsersBlock {
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  overflow-x: auto;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
   padding: 20px;
 }
-.userInfoAdmin {
+.tableUsers {
+  max-width: 100%;
+}
+.headTable {
+  border-bottom: 2px solid black;
+  margin-bottom: 10px;
+}
+th {
+  padding: 5px;
+  /* text-align: center; */
+}
+.tBody :nth-child(1) {
+  border-bottom: none;
+}
+
+tr :nth-child(7) {
+  min-width: 330px;
+}
+tr {
+  cursor: pointer;
+}
+.selected {
+  border: 2px solid orange;
+}
+td {
+  border-bottom: 1px solid gray;
+  padding: 5px;
+}
+.notFoundUserMessage {
+  color: red;
+}
+.headRow {
+}
+/* .userInfoAdmin {
   display: flex;
   flex-direction: column;
   border-bottom: 1px solid black;
   padding: 20px;
-}
-.nameRowCard {
+} */
+/* .nameRowCard {
   font-weight: 500;
   margin-bottom: 5px;
 }
@@ -211,17 +275,30 @@ form #submit:hover {
   font-weight: 400;
   margin-left: 10px;
 }
+.underlineRow {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}*/
 .adminBtnWrapper {
-  margin-top: 30px;
+  display: flex;
+  justify-content: end;
+  margin-bottom: 10px;
 }
-.DelUserAdmin {
+.DeleteBtn {
   background-color: white;
   color: red;
   border: 1px solid red;
   border-radius: 5px;
-  margin-right: 20px;
+  margin-left: 20px;
 }
-.EditUserAdmin {
+.EditBtn {
+  background-color: white;
+  color: orange;
+  border: 1px solid orange;
+  border-radius: 5px;
+  margin-left: 20px;
+}
+.AddBtn {
   background-color: white;
   color: green;
   border: 1px solid green;
@@ -230,12 +307,36 @@ form #submit:hover {
 
 /* ===========Форма редагування користувача AdminPageComp======== */
 
+.wrapperEditForm {
+}
 .form_EditForAdmin {
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
-  padding: 20px;
+  /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75); */
+  width: 100%;
 }
 #submitNewDataBtn {
+  display: none;
+}
+.modalSendForm {
   width: 100%;
+  margin-bottom: 10px;
+}
+.modalCancel {
+  width: 100%;
+}
+.wrappCheckAdmin {
+  margin-right: 20px;
+}
+.loading-spinner {
+  margin-left: auto;
+  margin-right: auto;
+}
+.errorRoles {
+  color: red;
+}
+.confirmEdit {
+  color: green;
+  display: flex;
+  justify-content: center;
 }
 /* ================Footer======================= */
 

@@ -31,6 +31,7 @@ function AboutUserComp() {
   const [surname, setSurName] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhone] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   //Запит ===================================================
   const UserInfo = async (data) => {
@@ -495,7 +496,7 @@ function AboutUserComp() {
                 <Form.Group className="mb-2">
                   <Form.Label className="App-label">Пароль *</Form.Label>
                   <Form.Control
-                    type="text"
+                    type={showPassword ? "text" : "password"}
                     id="password"
                     placeholder="******"
                     {...register("password", {
@@ -510,6 +511,14 @@ function AboutUserComp() {
                       символ.
                     </Form.Text>
                   )}
+                </Form.Group>
+                <Form.Group className="mb-3" controlId="formBasicCheckbox">
+                  <Form.Check
+                    type="checkbox"
+                    id="showPass"
+                    label="Видимий пароль"
+                    onChange={() => setShowPassword(!showPassword)}
+                  />
                 </Form.Group>
                 <Button type="submit">Зберегти</Button>
               </Form>

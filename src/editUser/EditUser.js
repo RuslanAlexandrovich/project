@@ -161,7 +161,7 @@ class EditUser {
   AdminDeleteUser = async (data) => {
     try {
       const id = data;
-      console.log(id);
+      console.log("ЩОЦЕЕЕЕЕЕЕЕ", id);
       const token = localStorage.getItem("token"); // Отримати токен з локального сховища
       if (!token) {
         // Перевірити, чи токен доступний
@@ -214,12 +214,39 @@ class EditUser {
         // Перевіряємо статус відповіді
         // Обробка успішної відповіді
         console.log("Дані користувача Змінено!");
+        // window.location.href = "/adminpage";
       } else {
         throw new Error("Зміна даних користувача не вдалася!");
       }
     } catch (error) {
       // Обробка помилки
       console.error("Помилка зміни користувача!", error);
+    }
+  };
+
+  AdminSearchallUser = async (data) => {
+    try {
+      console.log("AdminSearchAllUser.......", data);
+      const response = await axios.get(
+        SERVER_URL + `User/all?SearchWords=${data}`,
+        {
+          // params: data,
+          headers: authHeader(),
+        }
+      );
+      // Перевіряємо статус відповіді
+      if (response.status === 200) {
+        const responseData = response.data; // Отримуємо дані відповіді
+        const usersData = responseData.users;
+        // Обробка успішної відповіді
+        console.log("Successful new USERS.....:", responseData);
+        return usersData;
+      } else {
+        throw new Error("Failed data");
+      }
+    } catch (error) {
+      // Обробка помилки
+      console.error("Not answer:", error);
     }
   };
 }

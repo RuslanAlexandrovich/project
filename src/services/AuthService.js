@@ -17,6 +17,8 @@ class AuthService {
         },
       });
       const token = response.data.token;
+      // console.log("token RESPONSE...." + token);
+
       localStorage.setItem("token", token);
 
       if (isTokenValid() && respStatus(response)) {
