@@ -25,10 +25,10 @@ main {
   margin-right: 10px;
 }
 .header_button a:hover {
-  text-decoration: underline;
+  border-bottom: 2px solid white;
 }
 .header_button .active {
-  text-decoration: underline;
+  border-bottom: 2px solid white;
   color: white;
 }
 .exitBtn {
@@ -36,7 +36,7 @@ main {
   cursor: pointer;
 }
 .exitBtn:hover {
-  text-decoration: underline;
+  border-bottom: 2px solid white;
 }
 
 /* ==============Registration================== */
@@ -213,7 +213,7 @@ form #submit:hover {
 }
 .clear-search {
   position: absolute;
-  top: 10px;
+  top: 12px;
   right: 10px;
 }
 .returnAllUsers {
@@ -311,6 +311,34 @@ td {
   border-radius: 5px;
 }
 
+/* ===========Пагінація AdminPageComp======== */
+.paging {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.75);
+  border-radius: 3px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 5px;
+  overflow-x: auto;
+}
+.activePagin {
+  border: 3px solid gray;
+  font-weight: 500;
+  background-color: white;
+  border-radius: 3px;
+  margin: 0 5px 0 5px;
+}
+.notActivePagin {
+  border: 1px solid gray;
+  background-color: white;
+  border-radius: 3px;
+  margin: 0 5px 0 5px;
+}
+
 /* ===========Форма редагування користувача AdminPageComp======== */
 
 .wrapperEditForm {
@@ -340,7 +368,8 @@ td {
   color: red;
 }
 .confirmEdit {
-  color: green;
+  color: orange;
+  font-weight: 500;
   display: flex;
   justify-content: center;
 }

@@ -149,9 +149,11 @@ class EditUser {
         // Перевіряємо статус відповіді
         // Обробка успішної відповіді
         console.log("Пароль змінено!");
+        window.location.reload();
       } else {
         throw new Error("Зміна паролю користувача не вдалася");
       }
+      return response; // Повернути відповідь
     } catch (error) {
       // Обробка помилки
       console.error("Помилка зміни паролю користувача", error);
@@ -213,14 +215,20 @@ class EditUser {
       if (response.status === 200) {
         // Перевіряємо статус відповіді
         // Обробка успішної відповіді
+        const confirmServer = response.data.message;
+        // callback(confirmServer);
         console.log("Дані користувача Змінено!");
         // window.location.href = "/adminpage";
+        return { success: true, message: confirmServer };
       } else {
         throw new Error("Зміна даних користувача не вдалася!");
       }
     } catch (error) {
       // Обробка помилки
       console.error("Помилка зміни користувача!", error);
+      const errorServer = error.response.data.message;
+      // errorCallback(errorServer);
+      return { success: false, error: errorServer };
     }
   };
 
@@ -238,9 +246,15 @@ class EditUser {
       if (response.status === 200) {
         const responseData = response.data; // Отримуємо дані відповіді
         const usersData = responseData.users;
+        const totalPages = responseData.paging.total_pages;
+        const pageNumber = responseData.paging.page_number;
         // Обробка успішної відповіді
         console.log("Successful new USERS.....:", responseData);
-        return usersData;
+        return {
+          usersData,
+          totalPages,
+          pageNumber,
+        };
       } else {
         throw new Error("Failed data");
       }
@@ -263,6 +277,8 @@ class EditUser {
         // const usersData = responseData.users;
         // Обробка успішної відповіді
         console.log("Created new USERS.....OK......!");
+        const confirmServer = response.data.message;
+        return { success: true, message: confirmServer };
         // return usersData;
       } else {
         throw new Error("Failed data");
@@ -270,6 +286,8 @@ class EditUser {
     } catch (error) {
       // Обробка помилки
       console.error("Not answer:", error);
+      const errorServer = error.response.data.message;
+      return { success: false, error: errorServer };
     }
   };
 }

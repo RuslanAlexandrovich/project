@@ -22,7 +22,9 @@ function AdminAddUserForm(props) {
 
   const [isLoading, setIsLoading] = useState(false);
   const submitAddButtonRef = props.submitAddButtonRef; // Отримати submitAddButtonRef з пропс
-  const [editComplete, seteditComplete] = useState(false);
+  // const [editComplete, seteditComplete] = useState(false);
+
+  const [serverAnswer, setserverAnswer] = useState();
 
   const [isAdminChecked, setIsAdminChecked] = useState(false);
   const [isUserChecked, setIsUserChecked] = useState(false);
@@ -92,11 +94,35 @@ function AdminAddUserForm(props) {
             },
           ];
         }
-        await EditUser.AdminAddUser(data);
-        console.log("Дані надіслано...   ", data);
-        seteditComplete(true);
+
+        const result = await EditUser.AdminAddUser(data);
+
+        if (result.success) {
+          console.log("Отримані дані від сервера:", result.message);
+          setserverAnswer(result.message);
+          console.log("Дані надіслано...   ", data);
+          // setTimeout(() => window.location.reload(), 1500);
+        } else {
+          // Обробка помилки
+          console.error("Помилка:", result.error);
+          setserverAnswer(result.error);
+        }
+
+        // await EditUser.AdminAddUser(data, (errorCallback, callback) => {
+        //   if (errorCallback) {
+        //     // Обробка помилки
+        //     setserverAnswer(errorCallback);
+        //     console.error("Помилка:", errorCallback);
+        //   } else {
+        //     // Обробка успішної відповіді
+        //     console.log("Отримані дані від сервера:", callback);
+        //     setserverAnswer(callback);
+        //   }
+        // });
+        // console.log("Дані надіслано...   ", data);
+
+        // seteditComplete(true);
         // setTimeout(() => window.location.reload(), 1500);
-        // navigate("/userconfirm");
       } catch (error) {
         // Обробка помилок, якщо дані не були успішно надіслані
         console.log("Помилка відправки даних...", error);
@@ -240,11 +266,7 @@ function AdminAddUserForm(props) {
                   )}
                 </Form.Group>
               </div>
-              {editComplete ? (
-                <span className="confirmEdit">
-                  Користувача додано! Підтвердження надіслано...
-                </span>
-              ) : null}
+              <span className="confirmEdit">{serverAnswer}</span>
               {isLoading ? (
                 <div className="loadingSpinner d-flex">
                   <img

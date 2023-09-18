@@ -94,14 +94,14 @@ export default function Header() {
           <NavbarCollapse id="responsive-navbar-nav">
             <Nav className="me-auto header_button">
               <Link to="/" className={activeLink === "/" ? "active" : ""}>
-                Home
+                Домашня
               </Link>
               {!show ? (
                 <Link
                   to="/registration"
                   className={activeLink === "/registration" ? "active" : ""}
                 >
-                  Registration
+                  Реєстрація
                 </Link>
               ) : null}
               {!show ? (
@@ -109,7 +109,7 @@ export default function Header() {
                   to="/login"
                   className={activeLink === "/login" ? "active" : ""}
                 >
-                  LogIn
+                  Вхід
                 </Link>
               ) : null}
               {show ? (
@@ -117,7 +117,7 @@ export default function Header() {
                   to="/aboutuser"
                   className={activeLink === "/aboutuser" ? "active" : ""}
                 >
-                  AboutUser
+                  Кабінет
                 </Link>
               ) : null}
               {admin ? (
@@ -125,12 +125,12 @@ export default function Header() {
                   to="/adminpage"
                   className={activeLink === "/adminpage" ? "active" : ""}
                 >
-                  AdminPage
+                  Адміністратор
                 </Link>
               ) : null}
               {show ? (
                 <span className="exitBtn" onClick={logOut}>
-                  Exit
+                  Вийти
                 </span>
               ) : null}
             </Nav>

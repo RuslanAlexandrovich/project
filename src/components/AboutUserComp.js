@@ -16,6 +16,7 @@ import { surNameCheck } from "../pattern/allPattern";
 import { emailCheck } from "../pattern/allPattern";
 import { phoneCheck } from "../pattern/allPattern";
 import { passwordCheck } from "../pattern/allPattern";
+import loading from "../images/loading.gif";
 
 function AboutUserComp() {
   const {
@@ -32,6 +33,7 @@ function AboutUserComp() {
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhone] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   //Запит ===================================================
   const UserInfo = async (data) => {
@@ -250,10 +252,18 @@ function AboutUserComp() {
   };
   const onSubmitPassword = async (data) => {
     try {
-      EditUser.EditPassRes(data);
-      window.location.reload();
+      setIsLoading(true);
+      const response = await EditUser.EditPassRes(data);
+      if (response.status === 200) {
+        // Обробка успішної відповіді зі статусом 200
+        console.log("Пароль успішно змінено");
+      } else {
+        console.error("Зміна паролю не вдалася");
+      }
     } catch (error) {
       console.error("Помилка при збереженні:", error);
+    } finally {
+      setIsLoading(false);
     }
     console.log("password=>" + data.password);
   };
@@ -520,7 +530,17 @@ function AboutUserComp() {
                     onChange={() => setShowPassword(!showPassword)}
                   />
                 </Form.Group>
-                <Button type="submit">Зберегти</Button>
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? (
+                    <img
+                      src={loading}
+                      alt="Loading"
+                      style={{ width: "25px", height: "25px" }}
+                    />
+                  ) : (
+                    "Зберегти"
+                  )}
+                </Button>
               </Form>
             )}
           </Col>

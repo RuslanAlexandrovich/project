@@ -1,5 +1,5 @@
 export function loginCheck(value) {
-  const loginPattern = /^[A-Z][a-zA-Z0-9]{2,14}$/;
+  const loginPattern = /^[A-ZА-ЯІ][a-zа-яі0-9]{2,14}$/;
   return loginPattern.test(value);
 }
 export function nameCheck(value) {
@@ -24,7 +24,7 @@ export function phoneCheck(value) {
 
 export function passwordCheck(value) {
   const passwordPattern =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,}$/;
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&_]).{8,}$/;
   return passwordPattern.test(value);
 }
 

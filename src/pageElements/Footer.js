@@ -8,7 +8,7 @@ export default class Footer extends Component {
       <>
         <Navbar bg="dark" variant="dark">
           <Container className="Footer">
-            <NavbarBrand href="/">
+            {/* <NavbarBrand href="/">
               <img
                 src={logo}
                 height="30"
@@ -16,9 +16,9 @@ export default class Footer extends Component {
                 className="d-inline-block"
                 alt="Logo"
               />
-            </NavbarBrand>
+            </NavbarBrand> */}
             <div className="infoFooterContainer">
-              <span className="footerText">KAI</span>
+              <span className="footerText">© KAI</span>
             </div>
           </Container>
         </Navbar>

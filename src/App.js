@@ -17,6 +17,7 @@ function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(true); // Додайте стан для відстеження авторизації
   const [lastActivityTime, setLastActivityTime] = useState(Date.now());
+  const [tokenChecked, setTokenChecked] = useState(false);
 
   useEffect(() => {
     // ======припинення роботи useEffect=======
@@ -26,12 +27,15 @@ function App() {
       if (!isTokenValid()) {
         // Токен вже не дійсний, виконуємо розлогін
         AuthService.logout();
-        console.log("Перевірка та видалення токену 1");
+        console.log(
+          "Перевірка час життя токену скінчилось, видалення токену..."
+        );
+        // alert("Перевірка користувача! Війдіть до облікового запису повторно!");
+        // window.location.href = "/login";
         // CheckingToken = false;
-        // clearInterval(interval);
       }
     };
-    console.log("Перевірка життєдіяльності токену 2");
+    console.log("Перевірка життєдіяльності токену ...");
     // Викликаємо перевірку токену при завантаженні компонента і після кожного оновлення
     checkTokenValidity();
     // if (CheckingToken) {
@@ -48,6 +52,7 @@ function App() {
   };
 
   // Встановлюємо обробник події кліка або будь-якого іншого дійства для відстеження активності
+
   useEffect(() => {
     const activityTimeout = setTimeout(() => {
       // Перевірка, чи минула година з останньої активності

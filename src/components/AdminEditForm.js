@@ -22,7 +22,8 @@ function AdminEditUserForm(props) {
   const userId = props.userId; // Отримати userId з пропс
   const userObj = props.user; // Отримати userId з пропс
   const submitButtonRef = props.submitButtonRef; // Отримати submitButtonRef з пропс
-  const [editComplete, seteditComplete] = useState(false);
+
+  const [serverAnswer, setserverAnswer] = useState();
 
   const [isAdminChecked, setIsAdminChecked] = useState(false);
   const [isUserChecked, setIsUserChecked] = useState(false);
@@ -92,11 +93,35 @@ function AdminEditUserForm(props) {
             },
           ];
         }
-        await EditUser.AdminEditUser(data);
-        console.log("Дані надіслано...   ", data);
-        console.log("UserId...   ", userId);
-        seteditComplete(true);
-        setTimeout(() => window.location.reload(), 1500);
+        const result = await EditUser.AdminEditUser(data);
+
+        // Перевірка успішної відповіді
+        if (result.success) {
+          console.log("Отримані дані від сервера:", result.message);
+          setserverAnswer(result.message);
+          console.log("Дані надіслано...   ", data);
+          console.log("UserId...   ", userId);
+          // setTimeout(() => window.location.reload(), 1500);
+        } else {
+          // Обробка помилки
+          console.error("Помилка:", result.error);
+          setserverAnswer(result.error);
+        }
+
+        // await EditUser.AdminEditUser(data, (errorCallback, callback) => {
+        //   if (errorCallback) {
+        //     // Обробка помилки
+        //     setserverAnswer(errorCallback);
+        //     console.error("Помилка:", errorCallback);
+        //   } else {
+        //     // Обробка успішної відповіді
+        //     console.log("Отримані дані від сервера:", callback);
+        //     setserverAnswer(callback);
+        //   }
+        // });
+        // console.log("Дані надіслано...   ", data);
+        // console.log("UserId...   ", userId);
+        // setTimeout(() => window.location.reload(), 1500);
         // navigate("/userconfirm");
       } catch (error) {
         // Обробка помилок, якщо дані не були успішно надіслані
@@ -250,9 +275,7 @@ function AdminEditUserForm(props) {
                   )}
                 </Form.Group>
               </div>
-              {editComplete ? (
-                <span className="confirmEdit">Зміни внесено! Оновлення...</span>
-              ) : null}
+              <span className="confirmEdit">{serverAnswer}</span>
               {isLoading ? (
                 <div className="loadingSpinner d-flex">
                   <img

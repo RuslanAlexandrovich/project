@@ -12,9 +12,12 @@ import AdminAddForm from "../components/AdminAddForm";
 import SERVER_URL from "../helpers/Config";
 import { Modal } from "react-bootstrap";
 import { CloseCircleOutlined } from "@ant-design/icons"; // Імпорт іконки "X"
+import { Navigate } from "react-router";
 
 function AboutAllUser() {
   const [users, setUsers] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [selectedUser, setSelectedUser] = useState(null); //для передачі пропсів AdminEditForm
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false); // Стан для відображення модального вікна редагування
@@ -27,21 +30,31 @@ function AboutAllUser() {
   const submitAddButtonRef = useRef(null); // Створюємо реф для кнопки "Додати" в іншому компоненті
   const [searchUser, setSearchUser] = useState("");
 
-  const allUser = async (data) => {
+  const allUser = async (Page) => {
+    console.log("INDEX PAGE:", Page);
     try {
-      const response = await axios.get(SERVER_URL + "User/all", {
-        // params: data,
-        headers: authHeader(),
-      });
+      const pageQueryParam = typeof Page === "number" ? Page : 1;
+      const response = await axios.get(
+        SERVER_URL + `User/all?Page=${pageQueryParam}`,
+        {
+          // params: data,
+          headers: authHeader(),
+        }
+      );
       // Перевіряємо статус відповіді
       if (response.status === 200) {
         const responseData = response.data; // Отримуємо дані відповіді
         const usersData = responseData.users;
+        const totalPages = responseData.paging.total_pages;
+        const pageNumber = responseData.paging.page_number;
 
+        setPageNumber(pageNumber);
+        setTotalPages(totalPages); // Зберігаємо загальну кількість сторінок
         setUsers(usersData); // Зберігаємо всіх користувачів в стані
         setOriginalUsers(usersData);
         // Обробка успішної відповіді
-        console.log("Successful:", responseData);
+        console.log("Successful userAll:", responseData);
+        console.log("Successful pages:", pageNumber);
         return usersData;
       } else {
         throw new Error("Failed data");
@@ -55,22 +68,6 @@ function AboutAllUser() {
   useEffect(() => {
     allUser({}); // Можливо, вам потрібно передати необов'язкові дані
   }, []); // Пустий масив залежностей
-
-  // Функція для обробки кліку на іншій частині сторінки
-  // ===============Клік мимо користувачів=======================
-  // const handleOutsideClick = (e) => {
-  //   if (!e.target.closest(".tableUsers")) {
-  //     // Клік відбувся поза таблицею користувачів
-  //     // setSelectedUser(null); // Скидаємо вибраного користувача
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   document.addEventListener("click", handleOutsideClick);
-  //   return () => {
-  //     document.removeEventListener("click", handleOutsideClick);
-  //   };
-  // }, []);
 
   // ===============Видалення користувачів=======================
   const openDeleteModal = () => {
@@ -94,15 +91,6 @@ function AboutAllUser() {
   const handleDeleteUser = async () => {
     try {
       await deleteUser(selectedUser);
-      setSelectedUser(null);
-      setShowDeleteModal(false);
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
-  };
-  const handleAddUser = async (data) => {
-    try {
-      await EditUser.AdminAddUser();
       setSelectedUser(null);
       setShowDeleteModal(false);
     } catch (error) {
@@ -148,15 +136,23 @@ function AboutAllUser() {
       if (searchUser.trim() === "") {
         // Якщо поле пошуку порожнє, встановлюємо список користувачів в початковий стан
         setUsers(originalUsers);
+        setPageNumber(1);
       } else {
-        const newUsersFilter = await EditUser.AdminSearchallUser(searchUser);
-        if (newUsersFilter && newUsersFilter.length > 0) {
-          setUsers(newUsersFilter); // Зберігаємо всіх користувачів в стані
+        {
+          /* ====================Повертаємо дані запиту з компоненту EditUser========================= */
+        }
+
+        const { usersData, totalPages, pageNumber } =
+          await EditUser.AdminSearchallUser(searchUser);
+        if (usersData && usersData.length > 0) {
+          setUsers(usersData); // Зберігаємо всіх користувачів в стані
           setnotFoundMessage(false); // Результати пошуку є
         } else {
           setUsers(originalUsers);
           setnotFoundMessage(true); // Пошук нічого не знайшов, вивести повідомлення
         }
+        setPageNumber(pageNumber);
+        setTotalPages(totalPages);
       }
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -195,6 +191,8 @@ function AboutAllUser() {
                 onClick={() => {
                   allUser({});
                   setnotFoundMessage(false);
+                  setPageNumber(1);
+                  setTotalPages(1);
                 }}
               >
                 Скинути
@@ -309,6 +307,24 @@ function AboutAllUser() {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* ====================Блок пагінатора========================= */}
+
+        <div className="paging">
+          {Array.from({ length: totalPages }, (_, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                allUser(index + 1);
+              }}
+              className={
+                pageNumber === index + 1 ? "activePagin" : "notActivePagin"
+              }
+            >
+              {index + 1}
+            </button>
+          ))}
         </div>
 
         {/* =======================Вікно редагування користувача========================== */}

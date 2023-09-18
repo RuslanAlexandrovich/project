@@ -10,8 +10,10 @@ import authHeader from "../helpers/auth-header";
 import { useNavigate } from "react-router-dom";
 import SERVER_URL from "../helpers/Config";
 import { emailCheck } from "../pattern/allPattern";
+import loading from "../images/loading.gif";
 
 function SendEmailComp() {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -58,9 +60,11 @@ function SendEmailComp() {
 
   const onSubmit = async (data) => {
     try {
+      setIsLoading(true);
       await passwordReset(data);
       // window.location.reload(); // Перезавантажити сторінку тільки в разі успіху
     } catch (error) {
+      setIsLoading(false);
       // Обробка помилок, якщо дані не були успішно надіслані
       console.error("Помилка при відправці:", error);
     }
@@ -98,9 +102,19 @@ function SendEmailComp() {
                     </Form.Text>
                   )}
                 </Form.Group>
-                <Button type="submit" id="submit">
-                  Отримати пароль
-                </Button>
+                {isLoading ? (
+                  <img
+                    src={loading}
+                    height="60"
+                    width="60"
+                    alt="Завантаження..."
+                    className="loading-spinner"
+                  />
+                ) : (
+                  <Button type="submit" id="submit">
+                    Отримати пароль
+                  </Button>
+                )}
               </Form>
             </Col>
           </Row>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Navigate, useSearchParams } from "react-router-dom";
 import AuthService from "../services/AuthService";
-
+//https://kai.com/userconfirm?userid=jghsjfghdfjhdfkhk&code=jdhldjhdlfjhdfghf
 export default function UserConfirmComp() {
   const [userInfo, setUserInfo] = useState({});
   const [searchParams] = useSearchParams();

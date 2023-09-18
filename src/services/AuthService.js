@@ -7,6 +7,7 @@ import respStatus from "../helpers/responseStatus";
 class AuthService {
   logout = () => {
     localStorage.removeItem("token");
+    // window.location.href = "/login";
   };
 
   login = async (data, errorCallback) => {
