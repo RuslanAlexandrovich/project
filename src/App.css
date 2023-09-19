@@ -47,7 +47,7 @@ main {
   align-items: center;
 }
 .form_reg {
-  margin-top: 50px;
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -60,7 +60,7 @@ form .title_form {
   text-align: center;
 }
 .App-label {
-  font-size: 18px;
+  font-size: 16px;
 }
 .form-control::placeholder {
   font-size: 14px;
@@ -85,6 +85,15 @@ form #submit {
 }
 form #submit:hover {
   transform: scale(1.03);
+}
+.registerLoadingConfirm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: green;
+  font-size: 18px;
+  font-weight: 500;
 }
 .loading-spinner {
   margin-left: auto;
@@ -224,8 +233,15 @@ form #submit:hover {
   min-width: 30%;
 }
 
-/* ===========Картка користувача AdminPageComp======== */
-
+/* ===========Картка користувачів AdminPageComp======== */
+.AdminPage {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.wrappAdmPage {
+  flex: 1 1 auto;
+}
 .allUsersBlock {
   display: flex;
   flex-direction: column;
@@ -267,24 +283,6 @@ td {
 }
 .headRow {
 }
-/* .userInfoAdmin {
-  display: flex;
-  flex-direction: column;
-  border-bottom: 1px solid black;
-  padding: 20px;
-} */
-/* .nameRowCard {
-  font-weight: 500;
-  margin-bottom: 5px;
-}
-.valueRowCard {
-  font-weight: 400;
-  margin-left: 10px;
-}
-.underlineRow {
-  margin-top: 5px;
-  margin-bottom: 5px;
-}*/
 .adminBtnWrapper {
   display: flex;
   justify-content: end;
@@ -326,7 +324,7 @@ td {
   overflow-x: auto;
 }
 .activePagin {
-  border: 3px solid gray;
+  border: 2px solid gray;
   font-weight: 500;
   background-color: white;
   border-radius: 3px;

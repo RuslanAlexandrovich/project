@@ -190,16 +190,6 @@ class EditUser {
   AdminEditUser = async (data) => {
     try {
       const id = data.id;
-      // const newData = data;
-      // const newDataUser = {
-      //   id: data.id,
-      //   name: data.name,
-      //   surname: data.surname,
-      //   email: data.email,
-      //   phoneNumber: data.phone,
-      //   userName: data.login,
-      // };
-      // console.log(newDataUser);
       console.log("id AdminEditUser", id);
       console.log("data AdminEditUser", data);
       const token = localStorage.getItem("token"); // Отримати токен з локального сховища
@@ -217,7 +207,7 @@ class EditUser {
         // Обробка успішної відповіді
         const confirmServer = response.data.message;
         // callback(confirmServer);
-        console.log("Дані користувача Змінено!");
+        console.log("Дані користувача Змінено!", response);
         // window.location.href = "/adminpage";
         return { success: true, message: confirmServer };
       } else {

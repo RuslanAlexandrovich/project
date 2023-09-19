@@ -7,7 +7,6 @@ import respStatus from "../helpers/responseStatus";
 class AuthService {
   logout = () => {
     localStorage.removeItem("token");
-    // window.location.href = "/login";
   };
 
   login = async (data, errorCallback) => {
@@ -65,7 +64,7 @@ class AuthService {
         console.log("token ok!");
         localStorage.setItem("token", token);
         console.log(token);
-        window.location.href = "/aboutuser"; // Перезавантажити сторінку тільки в разі успіху
+        // window.location.href = "/aboutuser"; // Перезавантажити сторінку тільки в разі успіху
         return userdata;
       } else {
         console.log("token undefined!");

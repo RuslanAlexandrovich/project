@@ -262,7 +262,9 @@ function AdminAddUserForm(props) {
                     onChange={handleUserChange}
                   />
                   {isAtLeastOneChecked ? null : (
-                    <span className="ms-auto errorRoles">Оберіть роль</span>
+                    <span className="ms-auto errorRoles">
+                      Оберіть роль для користувача!
+                    </span>
                   )}
                 </Form.Group>
               </div>

@@ -1,5 +1,3 @@
-import "../App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useEffect, useRef } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
@@ -11,10 +9,9 @@ import AdminEditForm from "../components/AdminEditForm";
 import AdminAddForm from "../components/AdminAddForm";
 import SERVER_URL from "../helpers/Config";
 import { Modal } from "react-bootstrap";
-import { CloseCircleOutlined } from "@ant-design/icons"; // Імпорт іконки "X"
-import { Navigate } from "react-router";
+import { CloseCircleOutlined } from "@ant-design/icons";
 
-function AboutAllUser() {
+export function AboutAllUser() {
   const [users, setUsers] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -29,7 +26,7 @@ function AboutAllUser() {
   const submitButtonRef = useRef(null); // Створюємо реф для кнопки "Надіслати" в іншому компоненті
   const submitAddButtonRef = useRef(null); // Створюємо реф для кнопки "Додати" в іншому компоненті
   const [searchUser, setSearchUser] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState("");
   const [storedPage, setStoredPage] = useState(null);
 
   useEffect(() => {
@@ -114,8 +111,8 @@ function AboutAllUser() {
     try {
       // Ваш код для редагування користувача тут
       setTimeout(async () => {
-        // setShowEditModal(false);
-        // setSelectedUserIdForEdit(null);
+        setShowEditModal(false);
+        setSelectedUserIdForEdit(null);
         await afterEditUser(currentPage);
       }, 1500);
     } catch (error) {
@@ -126,7 +123,6 @@ function AboutAllUser() {
   // useEffect(() => {
   //   afterEditUser({}); // Можливо, вам потрібно передати необов'язкові дані
   // }, []); // Пустий масив залежностей
-
   // ===============Видалення користувачів=======================
   const openDeleteModal = () => {
     setShowDeleteModal(true);
@@ -157,7 +153,6 @@ function AboutAllUser() {
   };
 
   // ======================Вікно редагування користувача========================
-
   const openEditModalForSelectedUser = () => {
     if (selectedUser !== null) {
       setSelectedUserIdForEdit(selectedUser);
@@ -187,7 +182,6 @@ function AboutAllUser() {
   } = useForm();
 
   // ======================Форма пошуку Search користувача========================
-
   const onSubmit = async () => {
     // console.log("DATA SEARCH...." + data);
     try {
@@ -375,7 +369,7 @@ function AboutAllUser() {
               key={index}
               onClick={() => {
                 allUser(index + 1);
-                // localStorage.setItem("paginPage", index + 1);
+                localStorage.setItem("paginPage", index + 1);
                 setCurrentPage(index + 1);
                 setSelectedUserIdForEdit(null);
               }}
@@ -462,5 +456,3 @@ function AboutAllUser() {
     </div>
   );
 }
-
-export default AboutAllUser;

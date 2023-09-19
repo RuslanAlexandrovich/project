@@ -52,7 +52,7 @@ function RegisterComp() {
         <Row>
           <Col className="wrapper mb-4">
             <Form onSubmit={handleSubmit(onSubmit)} className="form_reg">
-              <h1 className="title_form">Реєстрація</h1>
+              <h2 className="title_form">Реєстрація</h2>
               <Form.Group className="mb-2" controlId="formBasicName">
                 <Form.Label className="App-label">Ім'я *</Form.Label>
                 <Form.Control
@@ -80,7 +80,7 @@ function RegisterComp() {
                     validate: (value) => surNameCheck(value),
                   })}
                 />
-                {errors.surName && (
+                {errors.surname && (
                   <Form.Text className="text-danger">
                     Прізвище має містити мінімум дві літери, з першою великою і
                     рештою малих літер.
@@ -110,12 +110,13 @@ function RegisterComp() {
                   id="phone"
                   placeholder="+380 (необов'язково)"
                   {...register("phone", {
+                    required: false,
                     validate: (value) => phoneCheck(value),
                   })}
                 />
                 {errors.phone && (
                   <Form.Text className="text-danger">
-                    Будь ласка, введіть номер телефону у форматі +380 і 9 цифр
+                    Будь ласка, введіть номер телефону у форматі 380 і 9 цифр
                     вашого телефону.
                   </Form.Text>
                 )}
@@ -148,13 +149,16 @@ function RegisterComp() {
                 />
               </Form.Group>
               {isLoading ? (
-                <img
-                  src={loading}
-                  height="60"
-                  width="60"
-                  alt="Завантаження..."
-                  className="loading-spinner"
-                />
+                <div className="registerLoadingConfirm">
+                  <img
+                    src={loading}
+                    height="30"
+                    width="30"
+                    alt="Завантаження..."
+                    className="loading-spinner"
+                  />
+                  <span>Лист підтвердження відправлено на пошту.</span>
+                </div>
               ) : (
                 <Button type="submit" id="submit">
                   Зареєструвати

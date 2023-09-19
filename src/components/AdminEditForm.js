@@ -107,22 +107,6 @@ function AdminEditUserForm(props) {
           console.error("Помилка:", result.error);
           setserverAnswer(result.error);
         }
-
-        // await EditUser.AdminEditUser(data, (errorCallback, callback) => {
-        //   if (errorCallback) {
-        //     // Обробка помилки
-        //     setserverAnswer(errorCallback);
-        //     console.error("Помилка:", errorCallback);
-        //   } else {
-        //     // Обробка успішної відповіді
-        //     console.log("Отримані дані від сервера:", callback);
-        //     setserverAnswer(callback);
-        //   }
-        // });
-        // console.log("Дані надіслано...   ", data);
-        // console.log("UserId...   ", userId);
-        // setTimeout(() => window.location.reload(), 1500);
-        // navigate("/userconfirm");
       } catch (error) {
         // Обробка помилок, якщо дані не були успішно надіслані
         console.log("Помилка відправки даних...", error);
@@ -170,7 +154,7 @@ function AdminEditUserForm(props) {
                     validate: (value) => loginCheck(value),
                   })}
                 />
-                {errors.login && (
+                {errors.userName && (
                   <Form.Text className="text-danger">
                     Логін повинен починатися з великої літери, від 3 до 15
                     символів, лише літери та цифри.
@@ -206,7 +190,7 @@ function AdminEditUserForm(props) {
                     validate: (value) => surNameCheck(value),
                   })}
                 />
-                {errors.surName && (
+                {errors.surname && (
                   <Form.Text className="text-danger">
                     Прізвище має містити мінімум дві літери, з першою великою і
                     рештою малих літер.
@@ -244,7 +228,7 @@ function AdminEditUserForm(props) {
                 />
                 {errors.phone && (
                   <Form.Text className="text-danger">
-                    Будь ласка, введіть номер телефону у форматі +380 і 9 цифр
+                    Будь ласка, введіть номер телефону у форматі 380 і 9 цифр
                     вашого телефону.
                   </Form.Text>
                 )}

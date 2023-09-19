@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Navigate, useSearchParams } from "react-router-dom";
 import AuthService from "../services/AuthService";
-//https://kai.com/userconfirm?userid=jghsjfghdfjhdfkhk&code=jdhldjhdlfjhdfghf
+
+// Замість цього http://kab.testkai.tk/account/confirm?userId=77cd219b-9b90-4ea9-b247-4555109d060f&code=CfDJ8INeSuIqRbpFkGfORPhI10DhuJXzj%2BpjU%2BC6rAzt%2B0chv
+// Треба так https://kai.com/userconfirm?userid=jghsjfghdfjhdfkhk&code=jdhldjhdlfjhdfghf
 export default function UserConfirmComp() {
   const [userInfo, setUserInfo] = useState({});
   const [searchParams] = useSearchParams();
@@ -22,7 +24,7 @@ export default function UserConfirmComp() {
   }, []);
 
   return userInfo ? (
-    <Navigate to="/" replace={true}></Navigate> //На сторінку підтвердження
+    <Navigate to="/" replace={true}></Navigate> //На головну авторизований користувач
   ) : (
     <div className="userConfirm">Data provided not valid!</div>
   );

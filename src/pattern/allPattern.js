@@ -18,8 +18,12 @@ export function emailCheck(value) {
 }
 
 export function phoneCheck(value) {
-  const emailPattern = /^380\d{0,9}$/;
-  return emailPattern.test(value);
+  let error;
+  if (value && value.length > 0) {
+    const emailPattern = /^380\d{0,9}$/;
+    return emailPattern.test(value);
+  }
+  return error;
 }
 
 export function passwordCheck(value) {
