@@ -244,6 +244,7 @@ function AboutAllUser() {
                   />
                 )}
               </Form.Group>
+              <div className="searchBtnWrapp">
               <Button
                 className="returnAllUsers btn-secondary"
                 onClick={() => {
@@ -258,9 +259,10 @@ function AboutAllUser() {
               <Button type="submit" id="submitSearch" className="searchUserBtn">
                 Пошук
               </Button>
-            </Form>
-            {/* </div> */}
-          </Col>
+              </div>
+              </Form>
+              {/* </div> */}
+            </Col>
         </Row>
 
         {/* =======================Попередження про видалення========================== */}

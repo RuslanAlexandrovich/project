@@ -20,13 +20,14 @@ class AuthService {
       // console.log("token RESPONSE...." + token);
 
       localStorage.setItem("token", token);
+      console.log(token);
 
       if (isTokenValid() && respStatus(response)) {
         let userdata = parseJWT(token);
         console.log("userdata", userdata);
         console.log("token ok!");
         console.log(token);
-        window.location.href = "/";
+        window.location.href = "/home";
       } else {
         console.log("token undefined or token time off!");
         this.logout();
@@ -64,7 +65,7 @@ class AuthService {
         console.log("token ok!");
         localStorage.setItem("token", token);
         console.log(token);
-        // window.location.href = "/aboutuser"; // Перезавантажити сторінку тільки в разі успіху
+        window.location.href = "/aboutuser"; // Перезавантажити сторінку тільки в разі успіху
         return userdata;
       } else {
         console.log("token undefined!");

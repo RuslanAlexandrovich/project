@@ -15,28 +15,60 @@ main {
 
 /* ===============Header============= */
 
+.headerStyle {
+  background-color: #E2E0E0;
+}
 .header_button {
-  margin-left: auto;
-  margin-right: 0;
+width: 100%;
 }
 .header_button a {
-  color: white;
+  color:#004C5D;
   text-decoration: none;
   margin-right: 10px;
+  font-weight: 500;
 }
 .header_button a:hover {
-  border-bottom: 2px solid white;
+  border-bottom: 2px solid #004C5D;
 }
 .header_button .active {
-  border-bottom: 2px solid white;
-  color: white;
+  border-bottom: 2px solid #004C5D;
+  color: #004C5D;
+}
+.enterStyle {
+  background-color: #004C5D!important;
+  color: white!important;
+  border-bottom: 1px!important;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .exitBtn {
-  color: white;
+  color: #004C5D;
   cursor: pointer;
 }
 .exitBtn:hover {
-  border-bottom: 2px solid white;
+  border-bottom: 2px solid #004C5D;
+}
+.dropSelect a {
+padding: 0;
+color: #004C5D!important;
+}
+.nav-item.show{
+  color: #004C5D!important;
+}
+.dropdown-toggle::after {
+  color: #004C5D;
+}
+
+.dropdown-menu.show {
+  display: flex;
+  flex-direction: column;
+  background-color: #E2E0E0;
+  color: #004C5D;
+  border: 1px solid grey;
+  padding: 10px;
+  margin-top: 5px;
 }
 
 /* ==============Registration================== */
@@ -54,6 +86,11 @@ main {
   width: 50%;
   padding: 20px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
+}
+.wrappTextLink {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 form .title_form {
   width: 100%;
@@ -73,9 +110,9 @@ form .title_form {
 }
 form #submit {
   border: none;
-  background-color: white;
+  background-color: #004C5D;
   border: 1px solid gray;
-  color: black;
+  color: white;
   min-width: 50%;
   height: 40px;
   font-size: 18px;
@@ -99,7 +136,31 @@ form #submit:hover {
   margin-left: auto;
   margin-right: auto;
 }
+.exitMailWrap {
+  display: flex;
+  margin-left: auto;
+}
+.mailUser {
+  color: rgb(55, 55, 255);
+}
+@media screen and (max-width:768px) {
+  .form_reg {
+    width: 70%;
+  }
+  .exitMailWrap {
+    margin-left: 0;
+    justify-content: space-between;
+  }
+  .header_button a {
+    width: fit-content;
+  }
+}
 
+@media screen and (max-width:576px) {
+  .form_reg {
+    width: 100%;
+  }
+}
 /* ==============LogIn form================== */
 
 .form_login {
@@ -183,16 +244,14 @@ form #submit:hover {
 
 .searchWrapper {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
   margin: 10px 10px 0 10px;
   padding: 10px;
   /* height: 4vw; */
 }
-.adminBtnWrapper {
-  display: flex;
-  width: 100%;
-}
+
 /* .searchBlock {
   display: flex;
   align-items: center;
@@ -217,8 +276,11 @@ form #submit:hover {
 #formBasicSearch {
   width: 100%;
 }
+.searchBtnWrapp {
+  width: fit-content!important;
+}
 .searchInput {
-  min-width: 70%;
+  min-width: 200px;
 }
 .clear-search {
   position: absolute;
@@ -232,8 +294,79 @@ form #submit:hover {
   margin-left: 10px;
   min-width: 30%;
 }
+@media screen and (max-width:768px) {
+  
+  .searchBtnWrapp {
+    width: fit-content!important;
+  }
+  .returnAllUsers {
+    margin: 10;
+    padding: 2px!important;
+}
+.searchUserBtn {
+  padding: 2px!important;
+}
+}
+@media screen and (max-width:576px) {
+  .searchForm{
+    flex-wrap: wrap;
+  }
+  .searchBtnWrapp {
+    margin-top: 5px;
+    width: 100%!important;
+    justify-content: center;
+  }
+  .returnAllUsers {
+    margin: 0!important;
+    max-width: 150px!important;
+}
+  .searchUserBtn {
+  padding: 2px!important;
+}
+}
 
 /* ===========Картка користувачів AdminPageComp======== */
+.adminBtnWrapper {
+  display: flex;
+  width: 100%;
+    justify-content: end;
+    margin-bottom: 10px;
+  }
+
+.DeleteBtn {
+  background-color: white;
+  color: red;
+  border: 1px solid red;
+  border-radius: 5px;
+  margin-left: 20px;
+}
+.EditBtn {
+  background-color: white;
+  color: orange;
+  border: 1px solid orange;
+  border-radius: 5px;
+  margin-left: 20px;
+}
+.AddBtn {
+  background-color: white;
+  color: green;
+  border: 1px solid green;
+  border-radius: 5px;
+}
+@media screen and (max-width:768px) {
+  .adminBtnWrapper {
+    justify-content: center;
+  }
+  .DeleteBtn,
+  .EditBtn {
+    padding: 2px;
+    margin-left: 10px;
+  }
+  .AddBtn {
+    padding: 2px;
+    margin-left: 0;
+  }
+}
 .AdminPage {
   display: flex;
   flex-direction: column;
@@ -283,31 +416,7 @@ td {
 }
 .headRow {
 }
-.adminBtnWrapper {
-  display: flex;
-  justify-content: end;
-  margin-bottom: 10px;
-}
-.DeleteBtn {
-  background-color: white;
-  color: red;
-  border: 1px solid red;
-  border-radius: 5px;
-  margin-left: 20px;
-}
-.EditBtn {
-  background-color: white;
-  color: orange;
-  border: 1px solid orange;
-  border-radius: 5px;
-  margin-left: 20px;
-}
-.AddBtn {
-  background-color: white;
-  color: green;
-  border: 1px solid green;
-  border-radius: 5px;
-}
+
 
 /* ===========Пагінація AdminPageComp======== */
 .paging {

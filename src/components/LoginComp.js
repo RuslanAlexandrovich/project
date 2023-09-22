@@ -48,7 +48,7 @@ function LoginComp() {
                 onSubmit={handleSubmit(onSubmit)}
                 className="form_reg form_login"
               >
-                <h1 className="title_form mb-4">Авторизація</h1>
+                <h1 className="title_form mb-4">Вхід</h1>
                 <Form.Group className="mb-2" controlId="formBasicEmail">
                   <Form.Label className="App-label">Пошта *</Form.Label>
                   <Form.Control
@@ -92,11 +92,12 @@ function LoginComp() {
                     onChange={() => setShowPassword(!showPassword)}
                   />
                 </Form.Group>
-                <Nav className="mb-4">
+                <Nav className="mb-4 d-flex justify-content-between">
                   <Link to="/sendemail">Забули пароль?</Link>
+                  <Link to="/registration">Реєстрація</Link>
                 </Nav>
                 <Button type="submit" id="submit">
-                  Авторизуватися
+                  Увійти
                 </Button>
                 <span className="errorMessage">{ServerMessage}</span>
               </Form>

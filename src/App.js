@@ -4,6 +4,7 @@ import { Link, Route, Routes } from "react-router-dom";
 import isTokenValid from "./tokenTime/tokenValidTime";
 import AuthService from "./services/AuthService";
 import { useEffect, useState } from "react";
+import { Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
@@ -17,7 +18,16 @@ function App() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(true); // Додайте стан для відстеження авторизації
   const [lastActivityTime, setLastActivityTime] = useState(Date.now());
-  const [tokenChecked, setTokenChecked] = useState(false);
+  const [tokenTrue, setTokenTrue] = useState(false);
+
+  useEffect(()=>{
+    const token = localStorage.getItem("token");
+    if (token){
+      setTokenTrue(true);
+    } else {
+      setTokenTrue(false);
+    }
+  })
 
   useEffect(() => {
     // ======припинення роботи useEffect=======
@@ -79,7 +89,9 @@ function App() {
       onClick={handleUserActivity}
     >
       <Routes>
-        <Route path="/" element={<Home />} />
+      <Route path="/" element={tokenTrue ? <Home /> : <Registration />} />
+        {/* <Route path="/" element={<Registration />} /> */}
+        <Route path="/home" element={<Home />} />
         <Route path="/registration" element={<Registration />} />
         <Route path="/login" element={<Login />} />
         <Route path="/sendemail" element={<SendEmail />} />

@@ -4,6 +4,7 @@ import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
+import { Link, Route, Routes } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import AuthService from "../services/AuthService";
 // import { useNavigate } from "react-router-dom";
@@ -108,7 +109,7 @@ function RegisterComp() {
                 <Form.Control
                   type="text"
                   id="phone"
-                  placeholder="+380 (необов'язково)"
+                  placeholder="380 (необов'язково)"
                   {...register("phone", {
                     required: false,
                     validate: (value) => phoneCheck(value),
@@ -140,7 +141,7 @@ function RegisterComp() {
                   </Form.Text>
                 )}
               </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicCheckbox">
+              <Form.Group className="mb-2" controlId="formBasicCheckbox">
                 <Form.Check
                   type="checkbox"
                   id="showPass"
@@ -148,6 +149,15 @@ function RegisterComp() {
                   onChange={() => setShowPassword(!showPassword)}
                 />
               </Form.Group>
+              <div className="wrappTextLink mb-2">
+                <span className="me-2 mb-0">Маєте обліковий запис?</span>
+                <Link
+                  to="/login"
+                  className="goToLogin"
+                >
+                  Авторизуватися
+                </Link>
+                </div>
               {isLoading ? (
                 <div className="registerLoadingConfirm">
                   <img
