@@ -276,87 +276,12 @@ function AboutUserComp() {
         <Row className="row-cols-xl-2 row-cols-md-2 row-cols-sm-1 mt-2">
           <Col className="userInfo col-12 col-xl-6 col-md-6 col-sm-12">
             <div className="wrapperAboutUserInfo">
-              <span className="nameRow">
-                Логін: <span className="nameObject">{userName}</span>
-                <span
-                  className="iconWrapper"
-                  onClick={() => {
-                    toggleEditingUserName();
-                    toggleFormUserName();
-                  }}
-                >
-                  {isEditingUserName ? (
-                    <span className="icon">&#10006;</span>
-                  ) : (
-                    <span className="icon">&#9998;</span>
-                  )}
-                </span>
-              </span>
-              <span className="nameRow">
-                Ім'я: <span className="nameObject">{name}</span>
-                <span
-                  className="iconWrapper"
-                  onClick={() => {
-                    toggleEditingName();
-                    toggleFormName();
-                  }}
-                >
-                  {isEditingName ? (
-                    <span className="icon">&#10006;</span>
-                  ) : (
-                    <span className="icon">&#9998;</span>
-                  )}
-                </span>
-              </span>
-              <span className="nameRow">
-                Прізвище: <span className="nameObject">{surname}</span>
-                <span
-                  className="iconWrapper"
-                  onClick={() => {
-                    toggleEditingSurName();
-                    toggleFormSurName();
-                  }}
-                >
-                  {isEditingSurName ? (
-                    <span className="icon">&#10006;</span>
-                  ) : (
-                    <span className="icon">&#9998;</span>
-                  )}
-                </span>
-              </span>
-              <span className="nameRow">
-                Пошта: <span className="nameObject">{email}</span>
-                <span
-                  className="iconWrapper"
-                  onClick={() => {
-                    toggleEditingEmail();
-                    toggleFormEmail();
-                  }}
-                >
-                  {isEditingEmail ? (
-                    <span className="icon">&#10006;</span>
-                  ) : (
-                    <span className="icon">&#9998;</span>
-                  )}
-                </span>
-              </span>
-              <span className="nameRow">
-                Телефон: <span className="nameObject">{phoneNumber}</span>
-                <span
-                  className="iconWrapper"
-                  onClick={() => {
-                    toggleEditingPhone();
-                    toggleFormPhone();
-                  }}
-                >
-                  {isEditingPhone ? (
-                    <span className="icon">&#10006;</span>
-                  ) : (
-                    <span className="icon">&#9998;</span>
-                  )}
-                </span>
-              </span>
-              <span>
+              <div className="userTitle">
+                <span className="nameRow">Логін:</span>
+                <span className="nameRow">Ім'я:</span>
+                <span className="nameRow">Прізвище:</span>
+                <span className="nameRow">Пошта:</span>
+                <span className="nameRow">Телефон:</span>
                 <button
                   className="newPassBtn"
                   onClick={() => {
@@ -364,9 +289,91 @@ function AboutUserComp() {
                     toggleFormPassword();
                   }}
                 >
-                  {isEditingPassword ? "Відмінити" : "Змінити пароль"}
+                  {isEditingPassword ? "Закрити" : "Пароль"}
                 </button>
-              </span>
+              </div>
+              <div className="userValue">
+                <div className="wrappValueIcon">
+                  <span className="nameObject">{userName}</span>
+                  <span
+                    className="iconWrapper"
+                    onClick={() => {
+                      toggleEditingUserName();
+                      toggleFormUserName();
+                    }}
+                  >
+                    {isEditingUserName ? (
+                      <span className="icon">&#10006;</span>
+                    ) : (
+                      <span className="icon">&#9998;</span>
+                    )}
+                  </span>
+                </div>
+                <div className="wrappValueIcon">
+                  <span className="nameObject">{name}</span>
+                  <span
+                    className="iconWrapper"
+                    onClick={() => {
+                      toggleEditingName();
+                      toggleFormName();
+                    }}
+                  >
+                    {isEditingName ? (
+                      <span className="icon">&#10006;</span>
+                    ) : (
+                      <span className="icon">&#9998;</span>
+                    )}
+                  </span>
+                </div>
+                <div className="wrappValueIcon">
+                  <span className="nameObject">{surname}</span>
+                  <span
+                    className="iconWrapper"
+                    onClick={() => {
+                      toggleEditingSurName();
+                      toggleFormSurName();
+                    }}
+                  >
+                    {isEditingSurName ? (
+                      <span className="icon">&#10006;</span>
+                    ) : (
+                      <span className="icon">&#9998;</span>
+                    )}
+                  </span>
+                </div>
+                <div className="wrappValueIcon">
+                  <span className="nameObject">{email}</span>
+                  <span
+                    className="iconWrapper"
+                    onClick={() => {
+                      toggleEditingEmail();
+                      toggleFormEmail();
+                    }}
+                  >
+                    {isEditingEmail ? (
+                      <span className="icon">&#10006;</span>
+                    ) : (
+                      <span className="icon">&#9998;</span>
+                    )}
+                  </span>
+                </div>
+                <div className="wrappValueIcon">
+                  <span className="nameObject">{phoneNumber}</span>
+                  <span
+                    className="iconWrapper"
+                    onClick={() => {
+                      toggleEditingPhone();
+                      toggleFormPhone();
+                    }}
+                  >
+                    {isEditingPhone ? (
+                      <span className="icon">&#10006;</span>
+                    ) : (
+                      <span className="icon">&#9998;</span>
+                    )}
+                  </span>
+                </div>
+              </div>
             </div>
           </Col>
           <Col className="wrappAbEdUsForm col-12 col-xl-6 col-md-6 col-sm-12">
@@ -375,7 +382,7 @@ function AboutUserComp() {
                 className="AboutUserForm editForm"
                 onSubmit={handleSubmit(onSubmitUserName)}
               >
-                <h2 className="title_form">Редагування</h2>
+                <h2 className="title_form">Зміна логіну</h2>
                 <Form.Group className=" mb-2" controlId="formBasicLogin">
                   <Form.Label className="App-label">Логін</Form.Label>
                   <Form.Control
@@ -393,12 +400,14 @@ function AboutUserComp() {
                     </Form.Text>
                   )}
                 </Form.Group>
-                <Button type="submit">Зберегти</Button>
+                <Button type="submit" className="userFormBtn">
+                  Зберегти
+                </Button>
               </Form>
             )}
             {showFormName && (
               <Form className="editForm" onSubmit={handleSubmit(onSubmitName)}>
-                <h2 className="title_form">Редагування</h2>
+                <h2 className="title_form">Зміна імені</h2>
                 <Form.Group className="mb-2" controlId="formBasicName">
                   <Form.Label className="App-label">Ім'я</Form.Label>
                   <Form.Control
@@ -416,7 +425,9 @@ function AboutUserComp() {
                     </Form.Text>
                   )}
                 </Form.Group>
-                <Button type="submit">Зберегти</Button>
+                <Button type="submit" className="userFormBtn">
+                  Зберегти
+                </Button>
               </Form>
             )}
             {showFormSurName && (
@@ -424,7 +435,7 @@ function AboutUserComp() {
                 className="editForm"
                 onSubmit={handleSubmit(onSubmitSurName)}
               >
-                <h2 className="title_form">Редагування</h2>
+                <h2 className="title_form">Зміна прізвища</h2>
                 <Form.Group className="mb-2" controlId="formBasicName">
                   <Form.Label className="App-label">Прізвище</Form.Label>
                   <Form.Control
@@ -442,7 +453,9 @@ function AboutUserComp() {
                     </Form.Text>
                   )}
                 </Form.Group>
-                <Button type="submit">Зберегти</Button>
+                <Button type="submit" className="userFormBtn">
+                  Зберегти
+                </Button>
               </Form>
             )}
             {showFormEmail && (
@@ -450,7 +463,7 @@ function AboutUserComp() {
                 className="editForm editEmail"
                 onSubmit={handleSubmit(onSubmitPhone)}
               >
-                <h2 className="title_form">Редагування</h2>
+                <h2 className="title_form">Зміна пошти</h2>
                 <Form.Group className="mb-2" controlId="formBasicEmail">
                   <Form.Label className="App-label">Пошта</Form.Label>
                   <Form.Control
@@ -467,7 +480,9 @@ function AboutUserComp() {
                     </Form.Text>
                   )}
                 </Form.Group>
-                <Button type="submit">Зберегти</Button>
+                <Button type="submit" className="userFormBtn">
+                  Зберегти
+                </Button>
               </Form>
             )}
             {showFormPhone && (
@@ -475,7 +490,7 @@ function AboutUserComp() {
                 onSubmit={handleSubmit(onSubmitPhone)}
                 className="editForm editPhone"
               >
-                <h2 className="title_form">Редагування</h2>
+                <h2 className="title_form">Зміна телефону</h2>
                 <Form.Group className="mb-2">
                   <Form.Label className="App-label">Номер телефону</Form.Label>
                   <Form.Control
@@ -494,7 +509,9 @@ function AboutUserComp() {
                     </Form.Text>
                   )}
                 </Form.Group>
-                <Button type="submit">Зберегти</Button>
+                <Button type="submit" className="userFormBtn">
+                  Зберегти
+                </Button>
               </Form>
             )}
             {showFormPassword && (
@@ -502,7 +519,7 @@ function AboutUserComp() {
                 onSubmit={handleSubmit(onSubmitPassword)}
                 className="editForm editPhone"
               >
-                <h2 className="title_form">Редагування</h2>
+                <h2 className="title_form">Зміна паролю</h2>
                 <Form.Group className="mb-2">
                   <Form.Label className="App-label">Пароль *</Form.Label>
                   <Form.Control
@@ -530,7 +547,11 @@ function AboutUserComp() {
                     onChange={() => setShowPassword(!showPassword)}
                   />
                 </Form.Group>
-                <Button type="submit" disabled={isLoading}>
+                <Button
+                  className="userFormBtn"
+                  type="submit"
+                  disabled={isLoading}
+                >
                   {isLoading ? (
                     <img
                       src={loading}

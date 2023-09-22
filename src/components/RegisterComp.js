@@ -151,13 +151,10 @@ function RegisterComp() {
               </Form.Group>
               <div className="wrappTextLink mb-2">
                 <span className="me-2 mb-0">Маєте обліковий запис?</span>
-                <Link
-                  to="/login"
-                  className="goToLogin"
-                >
-                  Авторизуватися
+                <Link to="/login" className="goToLogin">
+                  Увійти
                 </Link>
-                </div>
+              </div>
               {isLoading ? (
                 <div className="registerLoadingConfirm">
                   <img

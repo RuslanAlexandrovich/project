@@ -242,7 +242,7 @@ function AdminAddUserForm(props) {
               </Form.Group>
               <div className="rolesCheck">
                 <Form.Group
-                  className="mb-3 d-flex"
+                  className="mb-3 d-flex rolesWrap"
                   controlId="formBasicCheckboxRoles"
                 >
                   <Form.Check

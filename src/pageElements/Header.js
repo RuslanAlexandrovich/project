@@ -10,7 +10,7 @@ import {
 import NavbarToggle from "react-bootstrap/NavbarToggle";
 import NavbarCollapse from "react-bootstrap/NavbarCollapse";
 import { Link, Route, Routes } from "react-router-dom";
-import logo from "./logo192.png";
+import doc from "../images/doc.svg";
 import AuthService from "../services/AuthService";
 import parseJWT from "../helpers/JWTService";
 import HOME_URL from "../helpers/homeURL";
@@ -18,29 +18,6 @@ import { isAdmin, isUser, isShow } from "../helpers/isAdmin";
 import isTokenValid from "../tokenTime/tokenValidTime";
 import { useLocation } from "react-router-dom";
 
-// const logOut = () => {
-//   AuthService.logout();
-//   window.location.reload();
-//   window.location.href = HOME_URL;
-// };
-
-// const token = localStorage.getItem("token");
-// const userData = parseJWT(token);
-// console.log("Токен кнопки", userData);
-// let show = token ? true : false;
-// console.log("token", show);
-// let isAdmin;
-// if (
-//   userData && userData["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
-// ) {
-//   let roles =
-//     userData["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-//   isAdmin = roles && roles.includes("admin");
-// } else {
-//   // Якщо userData  мають значення null або undefined, встановити isAdmin в false.
-//   isAdmin = false;
-//   console.log("Admin... ", isAdmin);
-// }
 export default function Header() {
   const [show, setShow] = useState(false);
   const [admin, setAdmin] = useState(false);
@@ -109,13 +86,18 @@ export default function Header() {
 
   return (
     <>
-      <Navbar collapseOnSelect expand="md" className="headerStyle" variant="dark">
-        <Container>
-          <NavbarBrand href="/home">
+      <Navbar
+        collapseOnSelect
+        expand="md"
+        className="headerStyle"
+        variant="dark"
+      >
+        <Container className="headerContainer">
+          <NavbarBrand href="/home" className="">
             <img
-              src={logo}
+              src={doc}
               height="30"
-              width="30"
+              width="180"
               className="d-inline-block"
               alt="Logo"
             />
@@ -123,11 +105,14 @@ export default function Header() {
           <NavbarToggle aria-controls="responsive-navbar-nav" />
           <NavbarCollapse id="responsive-navbar-nav">
             <Nav className=" header_button">
-               {show ? (
-              <Link to="/home" className={activeLink === "/home" ? "active" : ""}>
-                Головна
-              </Link>
-                ) : null}
+              {show ? (
+                <Link
+                  to="/home"
+                  className={activeLink === "/home" ? "active" : ""}
+                >
+                  Головна
+                </Link>
+              ) : null}
               {/* {!show ? (
                 <Link
                   to="/registration"
@@ -139,35 +124,39 @@ export default function Header() {
               {!show ? (
                 <Link
                   to="/login"
-                  className={activeLink === "/login" ? "active ms-auto btn enterStyle" : "ms-auto btn enterStyle"}
+                  className={
+                    activeLink === "/login"
+                      ? "active ms-auto btn enterStyle"
+                      : "ms-auto btn enterStyle"
+                  }
                 >
                   Вхід
                 </Link>
               ) : null}
 
-             
               {show ? (
                 <div className="exitMailWrap">
-                  <NavDropdown 
-                  title={`${nameUser} ${surnameUser}`}
-                  className="dropSelect">
+                  <NavDropdown
+                    title={`${nameUser} ${surnameUser}`}
+                    className="dropSelect"
+                  >
                     <span className="mailUser">{mailUser}</span>
                     {show ? (
-                <Link
-                  to="/aboutuser"
-                  className={activeLink === "/aboutuser" ? "active" : ""}
-                >
-                  Кабінет
-                </Link>
-              ) : null}
+                      <Link
+                        to="/aboutuser"
+                        className={activeLink === "/aboutuser" ? "active" : ""}
+                      >
+                        Налаштування
+                      </Link>
+                    ) : null}
                     {admin ? (
-                <Link
-                  to="/adminpage"
-                  className={activeLink === "/adminpage" ? "active" : ""}
-                >
-                  Адміністратор
-                </Link>
-              ) : null}
+                      <Link
+                        to="/adminpage"
+                        className={activeLink === "/adminpage" ? "active" : ""}
+                      >
+                        Адміністратор
+                      </Link>
+                    ) : null}
                   </NavDropdown>
                   <span className="exitBtn btn enterStyle" onClick={logOut}>
                     Вийти

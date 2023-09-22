@@ -15,60 +15,100 @@ main {
 
 /* ===============Header============= */
 
+.headerContainer {
+  min-width: 280px;
+  display: flex;
+  justify-content: center !important;
+}
+
 .headerStyle {
-  background-color: #E2E0E0;
+  background-color: #e2e0e0;
+}
+.navbar-toggler {
+  color: #004c5d !important;
+  background-color: #004c5d !important;
+  box-shadow: none !important;
 }
 .header_button {
-width: 100%;
+  display: flex;
+  justify-content: center !important;
+  width: 100%;
+  padding-left: 50px;
 }
 .header_button a {
-  color:#004C5D;
+  height: fit-content !important;
+  color: #004c5d;
   text-decoration: none;
-  margin-right: 10px;
+  margin-top: auto;
+  margin-bottom: auto;
   font-weight: 500;
 }
 .header_button a:hover {
-  border-bottom: 2px solid #004C5D;
+  border-bottom: 2px solid #004c5d;
 }
 .header_button .active {
-  border-bottom: 2px solid #004C5D;
-  color: #004C5D;
+  margin-top: auto;
+  margin-bottom: auto;
+  border-bottom: 2px solid #004c5d;
+  color: #004c5d;
 }
 .enterStyle {
-  background-color: #004C5D!important;
-  color: white!important;
-  border-bottom: 1px!important;
+  background-color: #004c5d !important;
+  color: white !important;
+  border-bottom: 1px !important;
   height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
+.enterStyle:hover {
+  background-color: #004c5dc5 !important;
+}
 .exitBtn {
-  color: #004C5D;
+  color: #004c5d;
   cursor: pointer;
 }
 .exitBtn:hover {
-  border-bottom: 2px solid #004C5D;
+  border-bottom: 2px solid #004c5d;
+}
+.dropSelect {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-right: 20px;
 }
 .dropSelect a {
-padding: 0;
-color: #004C5D!important;
+  padding: 0;
+  color: #004c5d !important;
 }
-.nav-item.show{
-  color: #004C5D!important;
+.nav-item.show {
+  color: #004c5d !important;
 }
 .dropdown-toggle::after {
-  color: #004C5D;
+  color: #004c5d;
 }
 
 .dropdown-menu.show {
   display: flex;
   flex-direction: column;
-  background-color: #E2E0E0;
-  color: #004C5D;
+  background-color: #e2e0e0;
+  color: #004c5d;
   border: 1px solid grey;
   padding: 10px;
-  margin-top: 5px;
+  margin-top: 14px;
+}
+@media screen and (max-width: 768px) {
+  .headerContainer {
+    justify-content: space-between !important;
+  }
+  .header_button {
+    padding-left: 0;
+  }
+}
+@media screen and (max-width: 576px) {
+  .dropSelect {
+    margin-right: 10px !important;
+  }
 }
 
 /* ==============Registration================== */
@@ -110,18 +150,18 @@ form .title_form {
 }
 form #submit {
   border: none;
-  background-color: #004C5D;
-  border: 1px solid gray;
+  background-color: #004c5d;
+  border: 1px solid #004c5d;
   color: white;
   min-width: 50%;
   height: 40px;
   font-size: 18px;
   margin-left: auto;
   margin-right: auto;
-  transition: all 0.5s ease;
+  /* transition: all 0.5s ease; */
 }
 form #submit:hover {
-  transform: scale(1.03);
+  background-color: #004c5dbe;
 }
 .registerLoadingConfirm {
   display: flex;
@@ -143,7 +183,7 @@ form #submit:hover {
 .mailUser {
   color: rgb(55, 55, 255);
 }
-@media screen and (max-width:768px) {
+@media screen and (max-width: 768px) {
   .form_reg {
     width: 70%;
   }
@@ -156,7 +196,7 @@ form #submit:hover {
   }
 }
 
-@media screen and (max-width:576px) {
+@media screen and (max-width: 576px) {
   .form_reg {
     width: 100%;
   }
@@ -164,7 +204,16 @@ form #submit:hover {
 /* ==============LogIn form================== */
 
 .form_login {
-  margin-top: 100px;
+  margin-top: 50px;
+}
+
+/* ==============Home page and Comp================== */
+.HomePage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* ==============AboutUserComp================== */
@@ -207,10 +256,22 @@ form #submit:hover {
 }
 .wrapperAboutUserInfo {
   display: flex;
-  flex-direction: column;
   flex: 1 1 auto;
-  justify-content: space-between;
 }
+.userTitle {
+  display: flex;
+  flex-direction: column;
+}
+.userValue {
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+}
+.wrappValueIcon {
+  margin-bottom: 5px;
+  border-bottom: 1px solid grey;
+}
+
 .icon {
   cursor: pointer;
   user-select: none;
@@ -227,19 +288,46 @@ form #submit:hover {
 }
 .nameObject {
   font-weight: 400;
-  margin-left: 5px;
 }
 .newPassBtn {
-  border: 1px solid gray;
+  border: 1px solid #004c5d;
+  border-radius: 5px;
   margin-top: 5px;
-  background-color: white;
+  background-color: #004c5d;
+  color: white;
   width: fit-content;
   padding: 2px;
 }
 .newPassBtn:hover {
-  background-color: rgb(240, 240, 240);
+  background-color: #004c5dc4;
+}
+.userFormBtn {
+  background-color: #004c5d !important;
+  border: #004c5d;
+}
+.userFormBtn:hover {
+  background-color: #004c5dcc !important;
+}
+@media screen and (max-width: 576px) {
+  .userInfo {
+    padding: 5px;
+  }
+  .wrappValueIcon {
+    display: flex;
+  }
+  .nameRow {
+    font-size: 14px;
+  }
+  .nameObject {
+    font-size: 14px;
+  }
 }
 
+/* ==============Add Form Admin================== */
+
+.rolesWrap {
+  flex-wrap: wrap;
+}
 /* ==============AdminPageComp================== */
 
 .searchWrapper {
@@ -277,7 +365,7 @@ form #submit:hover {
   width: 100%;
 }
 .searchBtnWrapp {
-  width: fit-content!important;
+  width: fit-content !important;
 }
 .searchInput {
   min-width: 200px;
@@ -292,46 +380,47 @@ form #submit:hover {
 }
 .searchUserBtn {
   margin-left: 10px;
-  min-width: 30%;
+  /* min-width: 30%; */
 }
-@media screen and (max-width:768px) {
-  
+@media screen and (max-width: 768px) {
   .searchBtnWrapp {
-    width: fit-content!important;
+    width: fit-content !important;
   }
   .returnAllUsers {
     margin: 10;
-    padding: 2px!important;
+    padding: 2px !important;
+  }
+  .searchUserBtn {
+    padding: 5px !important;
+  }
 }
-.searchUserBtn {
-  padding: 2px!important;
-}
-}
-@media screen and (max-width:576px) {
-  .searchForm{
+@media screen and (max-width: 576px) {
+  .searchForm {
     flex-wrap: wrap;
+    padding: 0;
   }
   .searchBtnWrapp {
-    margin-top: 5px;
-    width: 100%!important;
+    margin-top: 10px;
+    width: 100% !important;
     justify-content: center;
   }
   .returnAllUsers {
-    margin: 0!important;
-    max-width: 150px!important;
-}
+    margin: 0 !important;
+    max-width: 150px !important;
+  }
   .searchUserBtn {
-  padding: 2px!important;
-}
+    padding: 2px !important;
+    width: 70px !important;
+  }
 }
 
 /* ===========Картка користувачів AdminPageComp======== */
 .adminBtnWrapper {
   display: flex;
   width: 100%;
-    justify-content: end;
-    margin-bottom: 10px;
-  }
+  justify-content: end;
+  margin-bottom: 10px;
+}
 
 .DeleteBtn {
   background-color: white;
@@ -353,7 +442,7 @@ form #submit:hover {
   border: 1px solid green;
   border-radius: 5px;
 }
-@media screen and (max-width:768px) {
+@media screen and (max-width: 768px) {
   .adminBtnWrapper {
     justify-content: center;
   }
@@ -416,7 +505,6 @@ td {
 }
 .headRow {
 }
-
 
 /* ===========Пагінація AdminPageComp======== */
 .paging {
@@ -484,16 +572,67 @@ td {
 
 .Footer {
   display: flex;
-}
-.infoFooterContainer {
-  display: flex;
-  align-items: center;
+  width: 100%;
   justify-content: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.footerStyle {
+  background-color: #e2e0e0;
+}
+.rowFooter {
+}
+.callMe {
+  display: flex;
+  flex-direction: column;
   width: 100%;
 }
-.footerText {
-  color: white;
-  font-size: 20px;
+.kyivstar {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+.footNumber {
+  font-size: 14px;
+  font-weight: 500;
+}
+.workTime {
+  font-size: 14px;
+  padding: 0 10px 0 10px;
+  margin-bottom: 5px;
+}
+.workMail {
+  font-weight: 500;
+}
+.questionBlock {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.questionLink {
+  color: black;
+  font-size: 16px;
+  font-weight: 400;
+}
+.warningPost {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.Programs {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+@media screen and (max-width: 992px) {
+  .colStyle {
+    padding-bottom: 10px;
+  }
+}
+@media screen and (max-width: 576px) {
+  .colStyle {
+    padding-bottom: 25px;
+  }
 }
 
 /* ================otherComponents======================= */
