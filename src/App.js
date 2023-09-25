@@ -20,40 +20,36 @@ function App() {
   const [lastActivityTime, setLastActivityTime] = useState(Date.now());
   const [tokenTrue, setTokenTrue] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token){
-      setTokenTrue(true);
-    } else {
+    if (token) {
       setTokenTrue(false);
     }
-  })
+  });
 
-  useEffect(() => {
-    // ======припинення роботи useEffect=======
-    // let CheckingToken = true;
-
-    const checkTokenValidity = () => {
-      if (!isTokenValid()) {
-        // Токен вже не дійсний, виконуємо розлогін
-        AuthService.logout();
-        console.log(
-          "Перевірка час життя токену скінчилось, видалення токену..."
-        );
-        // alert("Перевірка користувача! Війдіть до облікового запису повторно!");
-        // window.location.href = "/login";
-        // CheckingToken = false;
+  const checkTokenValidity = () => {
+    if (!tokenTrue && !isTokenValid()) {
+      // Токен вже не дійсний, виконуємо розлогін
+      AuthService.logout();
+      console.log("Перевірка час життя токену скінчилось, видалення токену...");
+      if (window.location.pathname !== "/login") {
+        window.location.href = "/login";
       }
-    };
+      setTokenTrue(true);
+    }
+  };
+  useEffect(() => {
     console.log("Перевірка життєдіяльності токену ...");
-    // Викликаємо перевірку токену при завантаженні компонента і після кожного оновлення
+    // Викликаємо перевірку токену при завантаженні компонента
     checkTokenValidity();
-    // if (CheckingToken) {
+
     // Встановлюємо інтервал для періодичної перевірки токену (наприклад, кожні 5 хвилин)
-    const interval = setInterval(checkTokenValidity, 5 * 60 * 1000); // 5 хвилин у мілісекундах
+    const interval = setInterval(() => {
+      checkTokenValidity();
+    }, 1 * 60 * 1000); // 5 хвилин у мілісекундах
+
     // Зупиняємо інтервал при розмонтуванні компонента
     return () => clearInterval(interval);
-    // }
   }, []);
 
   // Оновлюємо час останньої активності користувача при кожній активності
@@ -89,7 +85,7 @@ function App() {
       onClick={handleUserActivity}
     >
       <Routes>
-      <Route path="/" element={tokenTrue ? <Home /> : <Registration />} />
+        <Route path="/" element={tokenTrue ? <Home /> : <Registration />} />
         {/* <Route path="/" element={<Registration />} /> */}
         <Route path="/home" element={<Home />} />
         <Route path="/registration" element={<Registration />} />

@@ -17,6 +17,9 @@ import { emailCheck } from "../pattern/allPattern";
 import { phoneCheck } from "../pattern/allPattern";
 import { passwordCheck } from "../pattern/allPattern";
 import loading from "../images/loading.gif";
+import editValue from "../images/editValue.png";
+import closeEdit from "../images/closeEdit.png";
+import closeForm from "../images/closeForm.png";
 
 function AboutUserComp() {
   const {
@@ -303,9 +306,9 @@ function AboutUserComp() {
                     }}
                   >
                     {isEditingUserName ? (
-                      <span className="icon">&#10006;</span>
+                      <img src={closeEdit} width="19"></img>
                     ) : (
-                      <span className="icon">&#9998;</span>
+                      <img src={editValue} width="18"></img>
                     )}
                   </span>
                 </div>
@@ -319,9 +322,9 @@ function AboutUserComp() {
                     }}
                   >
                     {isEditingName ? (
-                      <span className="icon">&#10006;</span>
+                      <img src={closeEdit} width="19"></img>
                     ) : (
-                      <span className="icon">&#9998;</span>
+                      <img src={editValue} width="18"></img>
                     )}
                   </span>
                 </div>
@@ -335,9 +338,9 @@ function AboutUserComp() {
                     }}
                   >
                     {isEditingSurName ? (
-                      <span className="icon">&#10006;</span>
+                      <img src={closeEdit} width="19"></img>
                     ) : (
-                      <span className="icon">&#9998;</span>
+                      <img src={editValue} width="18"></img>
                     )}
                   </span>
                 </div>
@@ -351,9 +354,9 @@ function AboutUserComp() {
                     }}
                   >
                     {isEditingEmail ? (
-                      <span className="icon">&#10006;</span>
+                      <img src={closeEdit} width="19"></img>
                     ) : (
-                      <span className="icon">&#9998;</span>
+                      <img src={editValue} width="18"></img>
                     )}
                   </span>
                 </div>
@@ -367,9 +370,9 @@ function AboutUserComp() {
                     }}
                   >
                     {isEditingPhone ? (
-                      <span className="icon">&#10006;</span>
+                      <img src={closeEdit} width="19"></img>
                     ) : (
-                      <span className="icon">&#9998;</span>
+                      <img src={editValue} width="18"></img>
                     )}
                   </span>
                 </div>
@@ -382,12 +385,22 @@ function AboutUserComp() {
                 className="AboutUserForm editForm"
                 onSubmit={handleSubmit(onSubmitUserName)}
               >
+                <img
+                  src={closeForm}
+                  width="30"
+                  className="ms-auto closeForm"
+                  onClick={() => {
+                    toggleEditingUserName();
+                    toggleFormUserName();
+                  }}
+                ></img>
                 <h2 className="title_form">Зміна логіну</h2>
                 <Form.Group className=" mb-2" controlId="formBasicLogin">
                   <Form.Label className="App-label">Логін</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="Логін"
+                    defaultValue={userName}
                     {...register("login", {
                       required: true,
                       validate: (value) => loginCheck(value),
@@ -407,12 +420,22 @@ function AboutUserComp() {
             )}
             {showFormName && (
               <Form className="editForm" onSubmit={handleSubmit(onSubmitName)}>
+                <img
+                  src={closeForm}
+                  width="30"
+                  className="ms-auto closeForm"
+                  onClick={() => {
+                    toggleEditingName();
+                    toggleFormName();
+                  }}
+                ></img>
                 <h2 className="title_form">Зміна імені</h2>
                 <Form.Group className="mb-2" controlId="formBasicName">
                   <Form.Label className="App-label">Ім'я</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="Ім'я"
+                    defaultValue={name}
                     {...register("name", {
                       required: true,
                       validate: (value) => nameCheck(value),
@@ -435,12 +458,22 @@ function AboutUserComp() {
                 className="editForm"
                 onSubmit={handleSubmit(onSubmitSurName)}
               >
+                <img
+                  src={closeForm}
+                  width="30"
+                  className="ms-auto closeForm"
+                  onClick={() => {
+                    toggleEditingSurName();
+                    toggleFormSurName();
+                  }}
+                ></img>
                 <h2 className="title_form">Зміна прізвища</h2>
                 <Form.Group className="mb-2" controlId="formBasicName">
                   <Form.Label className="App-label">Прізвище</Form.Label>
                   <Form.Control
                     type="text"
                     placeholder="Прізвище"
+                    defaultValue={surname}
                     {...register("surname", {
                       required: true,
                       validate: (value) => surNameCheck(value),
@@ -463,12 +496,22 @@ function AboutUserComp() {
                 className="editForm editEmail"
                 onSubmit={handleSubmit(onSubmitPhone)}
               >
+                <img
+                  src={closeForm}
+                  width="30"
+                  className="ms-auto closeForm"
+                  onClick={() => {
+                    toggleEditingEmail();
+                    toggleFormEmail();
+                  }}
+                ></img>
                 <h2 className="title_form">Зміна пошти</h2>
                 <Form.Group className="mb-2" controlId="formBasicEmail">
                   <Form.Label className="App-label">Пошта</Form.Label>
                   <Form.Control
                     type="email"
                     placeholder="Email"
+                    defaultValue={email}
                     {...register("email", {
                       required: true,
                       validate: (value) => emailCheck(value),
@@ -490,13 +533,23 @@ function AboutUserComp() {
                 onSubmit={handleSubmit(onSubmitPhone)}
                 className="editForm editPhone"
               >
+                <img
+                  src={closeForm}
+                  width="30"
+                  className="ms-auto closeForm"
+                  onClick={() => {
+                    toggleEditingPhone();
+                    toggleFormPhone();
+                  }}
+                ></img>
                 <h2 className="title_form">Зміна телефону</h2>
                 <Form.Group className="mb-2">
                   <Form.Label className="App-label">Номер телефону</Form.Label>
                   <Form.Control
                     type="text"
                     id="phone"
-                    placeholder="380 (необов'язково)"
+                    placeholder="380"
+                    defaultValue={phoneNumber}
                     {...register("phone", {
                       required: true,
                       validate: (value) => phoneCheck(value),
@@ -519,6 +572,15 @@ function AboutUserComp() {
                 onSubmit={handleSubmit(onSubmitPassword)}
                 className="editForm editPhone"
               >
+                <img
+                  src={closeForm}
+                  width="30"
+                  className="ms-auto closeForm"
+                  onClick={() => {
+                    toggleEditingPassword();
+                    toggleFormPassword();
+                  }}
+                ></img>
                 <h2 className="title_form">Зміна паролю</h2>
                 <Form.Group className="mb-2">
                   <Form.Label className="App-label">Пароль *</Form.Label>

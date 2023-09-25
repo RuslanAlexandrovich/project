@@ -39,30 +39,36 @@ main {
   height: fit-content !important;
   color: #004c5d;
   text-decoration: none;
-  margin-top: auto;
-  margin-bottom: auto;
+  /* margin-top: auto;
+  margin-bottom: auto; */
+  padding: 3px;
   font-weight: 500;
 }
 .header_button a:hover {
   border-bottom: 2px solid #004c5d;
 }
 .header_button .active {
-  margin-top: auto;
-  margin-bottom: auto;
+  /* margin-top: auto;
+  margin-bottom: auto; */
+  padding: 3px;
   border-bottom: 2px solid #004c5d;
   color: #004c5d;
 }
 .enterStyle {
   background-color: #004c5d !important;
   color: white !important;
-  border-bottom: 1px !important;
+  border-bottom: 0 !important;
   height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 3px 10px 3px 10px !important;
 }
 .enterStyle:hover {
   background-color: #004c5dc5 !important;
+}
+.enterStyle .active {
+  padding: 10px !important;
 }
 .exitBtn {
   color: #004c5d;
@@ -76,10 +82,13 @@ main {
   flex-direction: column;
   justify-content: center;
   margin-right: 20px;
+  padding-left: 3px;
 }
 .dropSelect a {
   padding: 0;
   color: #004c5d !important;
+}
+.dropSelect .active {
 }
 .nav-item.show {
   color: #004c5d !important;
@@ -91,11 +100,17 @@ main {
 .dropdown-menu.show {
   display: flex;
   flex-direction: column;
-  background-color: #e2e0e0;
+  /* background-color: #e2e0e0; */
   color: #004c5d;
-  border: 1px solid grey;
+  /* border: 1px solid grey; */
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
   padding: 10px;
   margin-top: 14px;
+  min-height: 120px;
+  border-radius: 0;
+}
+.mailUser {
+  margin-bottom: 10px;
 }
 @media screen and (max-width: 768px) {
   .headerContainer {
@@ -104,10 +119,30 @@ main {
   .header_button {
     padding-left: 0;
   }
+  .dropdown-menu.show {
+    padding-top: 5px;
+    background-color: #e2e0e0;
+    margin-top: 5px;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-radius: 0;
+    min-height: fit-content;
+    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+  }
+  .exitBtn {
+    margin-top: auto;
+  }
 }
 @media screen and (max-width: 576px) {
   .dropSelect {
     margin-right: 10px !important;
+  }
+  #root {
+    min-width: 280px !important;
+  }
+  .exitBtn {
+    padding: 5px !important;
   }
 }
 
@@ -202,9 +237,12 @@ form #submit:hover {
   }
 }
 /* ==============LogIn form================== */
-
+.Login {
+  height: 100%;
+}
 .form_login {
-  margin-top: 50px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
 /* ==============Home page and Comp================== */
@@ -233,10 +271,17 @@ form #submit:hover {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  position: relative;
   /* width: 50%; */
   padding: 20px;
+  margin-bottom: 10px;
   /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75); */
   border: 1px solid black;
+}
+.closeForm {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 .wrappAbEdUsForm {
   margin-top: 0;
@@ -268,6 +313,9 @@ form #submit:hover {
   margin-left: 10px;
 }
 .wrappValueIcon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 5px;
   border-bottom: 1px solid grey;
 }
@@ -281,6 +329,7 @@ form #submit:hover {
 }
 .iconWrapper {
   margin-left: 10px;
+  /* margin-bottom: 2px; */
 }
 .nameRow {
   font-weight: 500;
@@ -442,6 +491,20 @@ form #submit:hover {
   color: green;
   border: 1px solid green;
   border-radius: 5px;
+}
+.btnAfter768 {
+  margin-right: 15px;
+  border-radius: 50%;
+  padding: 2px;
+}
+.addGreenCircle {
+  border: 2px solid green;
+}
+.activeCircleEdit {
+  border: 2px solid orange;
+}
+.activeCircleDelete {
+  border: 2px solid Red;
 }
 @media screen and (max-width: 768px) {
   .adminBtnWrapper {

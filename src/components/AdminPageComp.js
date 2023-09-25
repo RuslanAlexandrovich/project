@@ -13,6 +13,9 @@ import SERVER_URL from "../helpers/Config";
 import { Modal } from "react-bootstrap";
 import { CloseCircleOutlined } from "@ant-design/icons"; // Імпорт іконки "X"
 import { Navigate } from "react-router";
+import addUser from "../images/addUser.png";
+import editUser from "../images/editUser.png";
+import deleteUserBtn from "../images/deleteUserBtn.png";
 
 function AboutAllUser() {
   const [users, setUsers] = useState([]);
@@ -31,6 +34,7 @@ function AboutAllUser() {
   const [searchUser, setSearchUser] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [storedPage, setStoredPage] = useState(null);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const storedPage = localStorage.getItem("paginPage");
@@ -41,6 +45,20 @@ function AboutAllUser() {
     } else {
       allUser({});
     }
+  }, []);
+
+  useEffect(() => {
+    // Функція для відслідковування зміни розміру вікна
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    // Додаємо слухача подій для зміни розміру вікна
+    window.addEventListener("resize", handleResize);
+
+    // Прибираємо слухача подій при розмонтуванні компонента
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const allUser = async (Page) => {
@@ -245,24 +263,28 @@ function AboutAllUser() {
                 )}
               </Form.Group>
               <div className="searchBtnWrapp">
-              <Button
-                className="returnAllUsers btn-secondary"
-                onClick={() => {
-                  allUser({});
-                  setnotFoundMessage(false);
-                  setPageNumber(1);
-                  setTotalPages(1);
-                }}
-              >
-                Скинути
-              </Button>
-              <Button type="submit" id="submitSearch" className="searchUserBtn">
-                Пошук
-              </Button>
+                <Button
+                  className="returnAllUsers btn-secondary"
+                  onClick={() => {
+                    allUser({});
+                    setnotFoundMessage(false);
+                    setPageNumber(1);
+                    setTotalPages(1);
+                  }}
+                >
+                  Скинути
+                </Button>
+                <Button
+                  type="submit"
+                  id="submitSearch"
+                  className="searchUserBtn"
+                >
+                  Пошук
+                </Button>
               </div>
-              </Form>
-              {/* </div> */}
-            </Col>
+            </Form>
+            {/* </div> */}
+          </Col>
         </Row>
 
         {/* =======================Попередження про видалення========================== */}
@@ -289,30 +311,61 @@ function AboutAllUser() {
 
         <div className="allUsersBlock mt-3 mb-2">
           <div className="adminBtnWrapper">
-            <button
-              className="btn btn-success AddBtn"
-              onClick={openAddUserModal}
-            >
-              Додати
-            </button>
-            <button
-              className={`btn btn-warning EditBtn ${
-                !selectedUser ? "disabled" : ""
-              }`}
-              onClick={openEditModalForSelectedUser}
-            >
-              Редагувати
-            </button>
-
-            <button
-              className={`btn btn-danger DeleteBtn ${
-                !selectedUser ? "disabled" : ""
-              }`}
-              onClick={selectedUser ? openDeleteModal : null}
-              disabled={!selectedUser}
-            >
-              Видалити
-            </button>
+            {windowWidth < 768 ? (
+              <img
+                src={addUser}
+                width="40"
+                onClick={openAddUserModal}
+                className="btnAfter768 addGreenCircle"
+              ></img>
+            ) : (
+              <button
+                className="btn btn-success AddBtn"
+                onClick={openAddUserModal}
+              >
+                Додати
+              </button>
+            )}
+            {windowWidth < 768 ? (
+              <img
+                src={editUser}
+                width="40"
+                onClick={openEditModalForSelectedUser}
+                className={`btnAfter768 ${
+                  !selectedUser ? "" : "activeCircleEdit"
+                }`}
+              ></img>
+            ) : (
+              <button
+                className={`btn btn-warning EditBtn ${
+                  !selectedUser ? "disabled" : ""
+                }`}
+                onClick={openEditModalForSelectedUser}
+              >
+                Редагувати
+              </button>
+            )}
+            {windowWidth < 768 ? (
+              <img
+                src={deleteUserBtn}
+                width="40"
+                onClick={selectedUser ? openDeleteModal : null}
+                disabled={!selectedUser}
+                className={`btnAfter768 ${
+                  !selectedUser ? "" : "activeCircleDelete"
+                }`}
+              ></img>
+            ) : (
+              <button
+                className={`btn btn-danger DeleteBtn ${
+                  !selectedUser ? "disabled" : ""
+                }`}
+                onClick={selectedUser ? openDeleteModal : null}
+                disabled={!selectedUser}
+              >
+                Видалити
+              </button>
+            )}
           </div>
           <table className="tableUsers">
             <thead className="headTable">

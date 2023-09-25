@@ -41,8 +41,8 @@ function LoginComp() {
   return (
     <>
       <div className="App">
-        <Container>
-          <Row>
+        <Container className="h-100">
+          <Row className="h-100">
             <Col className="wrapper">
               <Form
                 onSubmit={handleSubmit(onSubmit)}

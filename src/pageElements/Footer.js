@@ -20,7 +20,7 @@ export default class Footer extends Component {
                       src={kyivstar}
                       height="25"
                       width="25"
-                      className="d-inline-block"
+                      className="d-inline-block me-1"
                       alt="Logo"
                     />
                     <span className="footNumber">+38 067 569 4987</span>
@@ -30,12 +30,12 @@ export default class Footer extends Component {
                       src={kyivstar}
                       height="25"
                       width="25"
-                      className="d-inline-block"
+                      className="d-inline-block me-1"
                       alt="Logo"
                     />
                     <span className="footNumber">+38 067 569 8771</span>
                   </div>
-                  <span className="workTime">(Пн-Пт 10:00 - 17:00)</span>
+                  <span className="workTime">(Пн-Пт 10:00-17:00)</span>
                   <span className="workMail">
                     Напишіть:&nbsp;
                     <strong>
