@@ -145,7 +145,7 @@ function RegisterComp() {
                 <Form.Check
                   type="checkbox"
                   id="showPass"
-                  label="Видимий пароль"
+                  label="Показати пароль"
                   onChange={() => setShowPassword(!showPassword)}
                 />
               </Form.Group>

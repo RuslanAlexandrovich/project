@@ -19,11 +19,13 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(true); // Додайте стан для відстеження авторизації
   const [lastActivityTime, setLastActivityTime] = useState(Date.now());
   const [tokenTrue, setTokenTrue] = useState(false);
+  const [logged, setLogged] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       setTokenTrue(false);
+      setLogged(true);
     }
   });
 
@@ -85,10 +87,14 @@ function App() {
       onClick={handleUserActivity}
     >
       <Routes>
-        <Route path="/" element={tokenTrue ? <Home /> : <Registration />} />
+        <Route
+          path="/"
+          element={!logged ? <Login /> : <Navigate to="/home" />}
+        />
         {/* <Route path="/" element={<Registration />} /> */}
-        <Route path="/home" element={<Home />} />
+
         <Route path="/registration" element={<Registration />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/sendemail" element={<SendEmail />} />
         <Route path="/aboutuser" element={<AboutUser />} />
