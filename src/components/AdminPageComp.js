@@ -35,8 +35,9 @@ function AboutAllUser() {
   const submitAddButtonRef = useRef(null); // Створюємо реф для кнопки "Додати" в іншому компоненті
   const [searchUser, setSearchUser] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [storedPage, setStoredPage] = useState(null);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [asnwerServDel, setAnswerServDel] = useState("");
+  // const [storedPage, setStoredPage] = useState(null);
+  // const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     const storedPage = localStorage.getItem("paginPage");
@@ -52,7 +53,7 @@ function AboutAllUser() {
   useEffect(() => {
     // Функція для відслідковування зміни розміру вікна
     const handleResize = () => {
-      setWindowWidth(window.innerWidth);
+      // setWindowWidth(window.innerWidth);
     };
     // Додаємо слухача подій для зміни розміру вікна
     window.addEventListener("resize", handleResize);
@@ -133,12 +134,12 @@ function AboutAllUser() {
       // Ваш код для редагування користувача тут
       setTimeout(async () => {
         await afterEditUser(currentPage);
+        setSelectedUser(null);
       }, 1500);
     } catch (error) {
       console.error("Error editing user:", error);
     }
   };
-
 
   // ===============Видалення користувачів=======================
   const openDeleteModal = () => {
@@ -150,11 +151,27 @@ function AboutAllUser() {
 
   const deleteUser = async () => {
     try {
-      await EditUser.AdminDeleteUser(selectedUser);
-      // console.log("ADMINPAGECOMP", data);
-      setUsers((prevUsers) =>
-        prevUsers.filter((user) => user.id !== selectedUser)
-      );
+      const response = await EditUser.AdminDeleteUser(selectedUser);
+      if (response.success !== true) {
+        setAnswerServDel(response.error);
+        setTimeout(() => {
+          setSelectedUser(null);
+          setShowDeleteModal(false);
+          setAnswerServDel("");
+        }, 3000);
+        return;
+      } else {
+        setUsers((prevUsers) =>
+          prevUsers.filter((user) => user.id !== selectedUser)
+        );
+        setAnswerServDel(response.message);
+        await afterEditUser(currentPage);
+        setTimeout(() => {
+          setSelectedUser(null);
+          setShowDeleteModal(false);
+          setAnswerServDel("");
+        }, 1500);
+      }
     } catch (error) {
       console.error("Помилка Запиту на видалення:", error);
     }
@@ -162,8 +179,6 @@ function AboutAllUser() {
   const handleDeleteUser = async () => {
     try {
       await deleteUser(selectedUser);
-      setSelectedUser(null);
-      setShowDeleteModal(false);
     } catch (error) {
       console.error("Error deleting user:", error);
     }
@@ -218,6 +233,7 @@ function AboutAllUser() {
         if (usersData && usersData.length > 0) {
           setUsers(usersData); // Зберігаємо всіх користувачів в стані
           setnotFoundMessage(false); // Результати пошуку є
+          setCurrentPage(1); //====================================================Почати з цього=========================================
         } else {
           setUsers(originalUsers);
           setnotFoundMessage(true); // Пошук нічого не знайшов, вивести повідомлення
@@ -258,18 +274,19 @@ function AboutAllUser() {
                 )} */}
               </Form.Group>
               <div className="searchBtnWrapp">
-                <img 
-                className=" deleteTextIcon"
-                src={deleteText}
-                width="33"
-                height="33"
-                onClick={() => {
-                  allUser({});
-                  setnotFoundMessage(false);
-                  setPageNumber(1);
-                  setTotalPages(1);
-                  setSearchUser("");
-                }}></img>
+                <img
+                  className=" deleteTextIcon"
+                  src={deleteText}
+                  width="33"
+                  height="33"
+                  onClick={() => {
+                    allUser({});
+                    setnotFoundMessage(false);
+                    setPageNumber(1);
+                    setTotalPages(1);
+                    setSearchUser("");
+                  }}
+                ></img>
                 {/* <Button
                   className="returnAllUsers btn-secondary"
                   onClick={() => {
@@ -288,11 +305,11 @@ function AboutAllUser() {
                   className="searchUserBtn"
                 >
                   <img
-                className="searchUserIcon"
-                src={searchGlass}
-                width="22"
-                height="22">
-                </img>
+                    className="searchUserIcon"
+                    src={searchGlass}
+                    width="22"
+                    height="22"
+                  ></img>
                 </Button>
               </div>
             </Form>
@@ -306,7 +323,13 @@ function AboutAllUser() {
           <Modal.Header closeButton>
             <Modal.Title>Підтвердіть видалення</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Ви впевнені, що хочете видалити користувача?</Modal.Body>
+          <Modal.Body>
+            {asnwerServDel ? (
+              <span style={{ color: "orange" }}>{asnwerServDel}</span>
+            ) : (
+              "Ви впевнені, що хочете видалити користувача?"
+            )}
+          </Modal.Body>
           <Modal.Footer>
             <button
               className="btn btn-secondary cancelDeleteBtn"
@@ -314,7 +337,10 @@ function AboutAllUser() {
             >
               Скасувати
             </button>
-            <button className="btn btn-danger confirmDeleteBtn" onClick={handleDeleteUser}>
+            <button
+              className="btn btn-danger confirmDeleteBtn"
+              onClick={handleDeleteUser}
+            >
               Видалити
             </button>
           </Modal.Footer>
@@ -325,12 +351,12 @@ function AboutAllUser() {
         <div className="allUsersBlock mt-3 mb-2">
           <div className="adminBtnWrapper">
             {/* {windowWidth < 768 ? ( */}
-              <img
-                src={addUser}
-                width="40"
-                onClick={openAddUserModal}
-                className="btnAfter768 addGreenCircle"
-              ></img>
+            <img
+              src={addUser}
+              width="40"
+              onClick={openAddUserModal}
+              className="btnAfter768 addGreenCircle"
+            ></img>
             {/* ) : (
               <button
                 className="btn btn-success AddBtn"
@@ -340,14 +366,14 @@ function AboutAllUser() {
               </button> */}
             {/* )}
             {windowWidth < 768 ? ( */}
-              <img
-                src={editUser}
-                width="40"
-                onClick={openEditModalForSelectedUser}
-                className={`btnAfter768 ${
-                  !selectedUser ? "" : "activeCircleEdit"
-                }`}
-              ></img>
+            <img
+              src={editUser}
+              width="40"
+              onClick={openEditModalForSelectedUser}
+              className={`btnAfter768 ${
+                !selectedUser ? "" : "activeCircleEdit"
+              }`}
+            ></img>
             {/* ) : (
               <button
                 className={`btn btn-warning EditBtn ${
@@ -359,16 +385,16 @@ function AboutAllUser() {
               </button>
             )} */}
             {/* {windowWidth < 768 ? ( */}
-              <img
-                src={deleteUserBtn}
-                width="40"
-                onClick={selectedUser ? openDeleteModal : null}
-                disabled={!selectedUser}
-                className={`btnAfter768 ${
-                  !selectedUser ? "" : "activeCircleDelete"
-                }`}
-              ></img>
-             {/* ) : (
+            <img
+              src={deleteUserBtn}
+              width="40"
+              onClick={selectedUser ? openDeleteModal : null}
+              disabled={!selectedUser}
+              className={`btnAfter768 ${
+                !selectedUser ? "" : "activeCircleDelete"
+              }`}
+            ></img>
+            {/* ) : (
                <button
                 className={`btn btn-danger DeleteBtn ${
                   !selectedUser ? "disabled" : ""
@@ -475,26 +501,26 @@ function AboutAllUser() {
             )}
 
             {/* <Modal.Footer> */}
-            <div className="editFormBtns"> 
-            <button
-              onClick={() => {
-                handleSubmitButtonClick();
-                handleEditUser();
-              }}
-              className="btn btn-primary modalSendForm me-2"
-            >
-              Застосувати
-            </button>
-            <button
-              className="btn btn-secondary modalCancel ms-2"
-              onClick={() => {
-                setShowEditModal(false);
-                setSelectedUserIdForEdit(null); // Скидання обраного користувача при закритті модального вікна
-              }}
-            >
-              Скасувати
-            </button></div>
-           
+            <div className="editFormBtns">
+              <button
+                onClick={() => {
+                  handleSubmitButtonClick();
+                  handleEditUser();
+                }}
+                className="btn btn-primary modalSendForm me-2"
+              >
+                Застосувати
+              </button>
+              <button
+                className="btn btn-secondary modalCancel ms-2"
+                onClick={() => {
+                  setShowEditModal(false);
+                  setSelectedUserIdForEdit(null); // Скидання обраного користувача при закритті модального вікна
+                }}
+              >
+                Скасувати
+              </button>
+            </div>
           </Modal.Body>
           {/* </Modal.Footer> */}
         </Modal>
@@ -518,20 +544,20 @@ function AboutAllUser() {
             />
             {/* <Modal.Footer> */}
             <div className="addFormBtns">
-            <button
-              onClick={handleSubmitAddUserButtonClick}
-              className="btn btn-primary modalSendForm me-2"
-            >
-              Додати
-            </button>
-            <button
-              className="btn btn-secondary modalCancel ms-2"
-              onClick={() => {
-                setshowAddUserModal(false);
-              }}
-            >
-              Скасувати
-            </button>
+              <button
+                onClick={handleSubmitAddUserButtonClick}
+                className="btn btn-primary modalSendForm me-2"
+              >
+                Додати
+              </button>
+              <button
+                className="btn btn-secondary modalCancel ms-2"
+                onClick={() => {
+                  setshowAddUserModal(false);
+                }}
+              >
+                Скасувати
+              </button>
             </div>
           </Modal.Body>
           {/* </Modal.Footer> */}

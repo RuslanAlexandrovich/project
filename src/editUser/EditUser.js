@@ -177,13 +177,17 @@ class EditUser {
       if (response.status === 200) {
         // Перевіряємо статус відповіді
         // Обробка успішної відповіді
+        const confirmServerDel = response.data.message;
         console.log("Користувача видалено!");
+        return { success: true, message: confirmServerDel };
       } else {
         throw new Error("Видалення користувача не вдалося!");
       }
     } catch (error) {
       // Обробка помилки
+      const errorServerDel = error.response.data.message;
       console.error("Помилка видалення користувача", error);
+      return { success: false, error: errorServerDel };
     }
   };
 

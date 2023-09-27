@@ -31,7 +31,8 @@ main {
 }
 .header_button {
   display: flex;
-  justify-content: center !important;
+  /* justify-content: space-between !important; */
+  align-items: center;
   width: 100%;
   padding-left: 50px;
 }
@@ -41,16 +42,19 @@ main {
   text-decoration: none;
   /* margin-top: auto;
   margin-bottom: auto; */
-  padding: 3px;
+  padding: 0;
   font-weight: 500;
 }
 .header_button a:hover {
   border-bottom: 2px solid #004c5d;
 }
+.header_button a:hover {
+  padding: 0;
+}
 .header_button .active {
   /* margin-top: auto;
   margin-bottom: auto; */
-  padding: 3px;
+  padding: 0;
   border-bottom: 2px solid #004c5d;
   color: #004c5d;
 }
@@ -117,6 +121,8 @@ main {
     justify-content: space-between !important;
   }
   .header_button {
+    display: flex;
+    align-items: normal;
     padding-left: 0;
   }
   .dropdown-menu.show {
@@ -385,7 +391,7 @@ form #submit:hover {
 
 .searchWrapper {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
   margin: 10px 10px 0 10px;
@@ -405,6 +411,7 @@ form #submit:hover {
 
 .searchForm {
   display: flex;
+  align-items: center;
   /* border: 1px solid red; */
   width: 100%;
   padding: 10px;
@@ -421,43 +428,47 @@ form #submit:hover {
   width: fit-content !important;
 }
 .searchInput {
-  min-width: 200px;
+  min-width: 100px;
 }
-.clear-search {
+/* .clear-search {
   position: absolute;
   top: 12px;
   right: 10px;
-}
+} */
 .searchBtnWrapp {
   display: flex;
   align-items: center;
 }
 .deleteTextIcon {
   cursor: pointer;
-  margin-left: 20px!important;
+  margin-left: 10px !important;
   padding: 4px;
   border-radius: 50%;
   transition: all 0.2s ease-in;
-  
 }
 .deleteTextIcon:hover {
-  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
 }
 .searchUserBtn {
-  margin-left: 20px;
-  padding: 5px! important;
+  margin-left: 10px;
+  margin-bottom: 3px;
+  padding: 5px !important;
   height: fit-content;
   width: 35px;
   background-color: white;
   border: none;
   border-radius: 50%;
-  
+
   /* min-width: 30%; */
+}
+.searchUserBtn.btn-primary:active {
+  background-color: white;
+  transition: none;
 }
 .searchUserBtn:hover {
   background-color: white;
   /* box-shadow: 0px 7px 4px -4px rgba(0,0,0,0.75); */
-  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
 }
 @media screen and (max-width: 768px) {
   .searchBtnWrapp {
@@ -474,12 +485,12 @@ form #submit:hover {
 }
 @media screen and (max-width: 576px) {
   .searchForm {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     padding: 0;
   }
   .searchBtnWrapp {
-    margin-top: 10px;
-    width: 100% !important;
+    /* margin-top: 10px; */
+    width: fit-content !important;
     justify-content: center;
   }
   /* .returnAllUsers {
@@ -489,11 +500,28 @@ form #submit:hover {
   .searchUserBtn {
     /* padding: 2px !important;
     width: 40px !important; */
-    margin-left: 50px;
+    /* margin-left: 50px; */
   }
 }
+@media screen and (max-width: 350px) {
+  .searchUserBtn {
+    margin-left: 5px;
+    width: 30px;
+    height: 30px;
+  }
+  .searchUserIcon {
+    width: 18px;
+    height: 18px;
+    margin-bottom: 8px;
+  }
+  .deleteTextIcon {
+    margin-left: 5px !important;
+    width: 28px;
+    height: 28px;
+  }
+}
+/* ======================Картка користувачів AdminPageComp=================== */
 
-/* ===========Картка користувачів AdminPageComp======== */
 .adminBtnWrapper {
   display: flex;
   width: 100%;
@@ -532,19 +560,19 @@ form #submit:hover {
   border: 2px solid green;
 }
 .addGreenCircle:hover {
-  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
 }
 .activeCircleEdit {
   border: 2px solid orange;
 }
 .activeCircleEdit:hover {
-  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
 }
 .activeCircleDelete {
   border: 2px solid Red;
 }
 .activeCircleDelete:hover {
-  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
 }
 @media screen and (max-width: 768px) {
   /* .adminBtnWrapper {
@@ -598,11 +626,11 @@ tr {
   cursor: pointer;
 }
 tr:hover {
-  background-color: #DAEAEA;
+  background-color: #daeaea;
 }
 .selected {
   border: 2px solid orange;
-  background-color: #DAEAEA;
+  background-color: #daeaea;
 }
 td {
   border-bottom: 1px solid gray;
@@ -619,11 +647,11 @@ td {
 /* ===========Delete Modal AdminPageComp======== */
 
 .cancelDeleteBtn {
-  background-color: #616C70;
+  background-color: #4a585e;
   border: none;
 }
 .cancelDeleteBtn:hover {
-  background-color: #4A585E;
+  background-color: #616c70;
 }
 .confirmDeleteBtn {
   background-color: #004c5d;
@@ -632,6 +660,66 @@ td {
 .confirmDeleteBtn:hover {
   background-color: #004c5dc4;
 }
+
+/* ===========Edit Modal AdminPageComp======== */
+
+.modalSendForm {
+  width: 100%;
+  background-color: #004c5d;
+  border: none;
+}
+.modalSendForm:hover {
+  background-color: #004c5dc4;
+}
+.modalCancel {
+  width: 100%;
+  background-color: #4a585e;
+  border: none;
+}
+.modalCancel:hover {
+  background-color: #616c70;
+}
+
+/* ===========Форма редагування користувача AdminPageComp======== */
+
+.wrapperEditForm {
+}
+.editFormBtns {
+  display: flex;
+}
+.addFormBtns {
+  display: flex;
+}
+.inputId input[type="text"]:active,
+:hover,
+:focus {
+  outline: 0;
+  outline-offset: 0;
+}
+.form_EditForAdmin {
+  /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75); */
+  width: 100%;
+}
+#submitNewDataBtn {
+  display: none;
+}
+.wrappCheckAdmin {
+  margin-right: 20px;
+}
+.loading-spinner {
+  margin-left: auto;
+  margin-right: auto;
+}
+.errorRoles {
+  color: red;
+}
+.confirmEdit {
+  color: orange;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+}
+
 /* ===========Пагінація AdminPageComp======== */
 .paging {
   display: flex;
@@ -658,51 +746,6 @@ td {
   background-color: white;
   border-radius: 3px;
   margin: 0 5px 0 5px;
-}
-
-/* ===========Форма редагування користувача AdminPageComp======== */
-
-.wrapperEditForm {
-}
-.editFormBtns {
-  display: flex;
-}
-.addFormBtns {
-  display: flex;
-}
-.inputId input[type="text"]:active, :hover, :focus {
-  outline: 0;
-  outline-offset: 0;
-
-}
-.form_EditForAdmin {
-  /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75); */
-  width: 100%;
-}
-#submitNewDataBtn {
-  display: none;
-}
-.modalSendForm {
-  width: 100%;
-}
-.modalCancel {
-  width: 100%;
-}
-.wrappCheckAdmin {
-  margin-right: 20px;
-}
-.loading-spinner {
-  margin-left: auto;
-  margin-right: auto;
-}
-.errorRoles {
-  color: red;
-}
-.confirmEdit {
-  color: orange;
-  font-weight: 500;
-  display: flex;
-  justify-content: center;
 }
 /* ================Footer======================= */
 
