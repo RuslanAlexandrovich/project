@@ -22,6 +22,7 @@ function AdminAddUserForm(props) {
 
   const [isLoading, setIsLoading] = useState(false);
   const submitAddButtonRef = props.submitAddButtonRef; // Отримати submitAddButtonRef з пропс
+  const closeModal = props.onCloseModal;
   // const [editComplete, seteditComplete] = useState(false);
 
   const [serverAnswer, setserverAnswer] = useState();
@@ -97,9 +98,16 @@ function AdminAddUserForm(props) {
 
         const result = await EditUser.AdminAddUser(data);
 
+       
+
         if (result.success) {
+          if (result.success !== true){
+            setserverAnswer(result.message);
+            return;
+          }
           console.log("Отримані дані від сервера:", result.message);
           setserverAnswer(result.message);
+          setTimeout(() => closeModal(), 1500);
           console.log("Дані надіслано...   ", data);
           // setTimeout(() => window.location.reload(), 1500);
         } else {

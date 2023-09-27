@@ -16,6 +16,8 @@ import { Navigate } from "react-router";
 import addUser from "../images/addUser.png";
 import editUser from "../images/editUser.png";
 import deleteUserBtn from "../images/deleteUserBtn.png";
+import deleteText from "../images/deleteText.png";
+import searchGlass from "../images/searchGlass.png";
 
 function AboutAllUser() {
   const [users, setUsers] = useState([]);
@@ -65,9 +67,7 @@ function AboutAllUser() {
     console.log("INDEX PAGE:", Page);
     try {
       let pageQueryParam = typeof Page === "number" ? Page : 1;
-      // if (currentPage) {
-      //   pageQueryParam = currentPage;
-      // }
+
       const response = await axios.get(
         SERVER_URL + `User/all?Page=${pageQueryParam}`,
         {
@@ -132,8 +132,6 @@ function AboutAllUser() {
     try {
       // Ваш код для редагування користувача тут
       setTimeout(async () => {
-        // setShowEditModal(false);
-        // setSelectedUserIdForEdit(null);
         await afterEditUser(currentPage);
       }, 1500);
     } catch (error) {
@@ -141,9 +139,6 @@ function AboutAllUser() {
     }
   };
 
-  // useEffect(() => {
-  //   afterEditUser({}); // Можливо, вам потрібно передати необов'язкові дані
-  // }, []); // Пустий масив залежностей
 
   // ===============Видалення користувачів=======================
   const openDeleteModal = () => {
@@ -253,33 +248,51 @@ function AboutAllUser() {
                   value={searchUser}
                   onChange={(e) => setSearchUser(e.target.value)}
                 />
-                {searchUser && ( // Показуємо символ "X" лише якщо є введений текст
+                {/* {searchUser && ( // Показуємо символ "X" лише якщо є введений текст
                   <CloseCircleOutlined
                     className="clear-search"
                     onClick={() => {
                       setSearchUser(""); // Скидуємо значення поля пошуку
                     }}
                   />
-                )}
+                )} */}
               </Form.Group>
               <div className="searchBtnWrapp">
-                <Button
+                <img 
+                className=" deleteTextIcon"
+                src={deleteText}
+                width="33"
+                height="33"
+                onClick={() => {
+                  allUser({});
+                  setnotFoundMessage(false);
+                  setPageNumber(1);
+                  setTotalPages(1);
+                  setSearchUser("");
+                }}></img>
+                {/* <Button
                   className="returnAllUsers btn-secondary"
                   onClick={() => {
                     allUser({});
                     setnotFoundMessage(false);
                     setPageNumber(1);
                     setTotalPages(1);
+                    setSearchUser("");
                   }}
                 >
                   Скинути
-                </Button>
+                </Button> */}
                 <Button
                   type="submit"
                   id="submitSearch"
                   className="searchUserBtn"
                 >
-                  Пошук
+                  <img
+                className="searchUserIcon"
+                src={searchGlass}
+                width="22"
+                height="22">
+                </img>
                 </Button>
               </div>
             </Form>
@@ -296,12 +309,12 @@ function AboutAllUser() {
           <Modal.Body>Ви впевнені, що хочете видалити користувача?</Modal.Body>
           <Modal.Footer>
             <button
-              className="btn btn-secondary"
+              className="btn btn-secondary cancelDeleteBtn"
               onClick={() => setShowDeleteModal(false)}
             >
               Скасувати
             </button>
-            <button className="btn btn-danger" onClick={handleDeleteUser}>
+            <button className="btn btn-danger confirmDeleteBtn" onClick={handleDeleteUser}>
               Видалити
             </button>
           </Modal.Footer>
@@ -311,22 +324,22 @@ function AboutAllUser() {
 
         <div className="allUsersBlock mt-3 mb-2">
           <div className="adminBtnWrapper">
-            {windowWidth < 768 ? (
+            {/* {windowWidth < 768 ? ( */}
               <img
                 src={addUser}
                 width="40"
                 onClick={openAddUserModal}
                 className="btnAfter768 addGreenCircle"
               ></img>
-            ) : (
+            {/* ) : (
               <button
                 className="btn btn-success AddBtn"
                 onClick={openAddUserModal}
               >
                 Додати
-              </button>
-            )}
-            {windowWidth < 768 ? (
+              </button> */}
+            {/* )}
+            {windowWidth < 768 ? ( */}
               <img
                 src={editUser}
                 width="40"
@@ -335,7 +348,7 @@ function AboutAllUser() {
                   !selectedUser ? "" : "activeCircleEdit"
                 }`}
               ></img>
-            ) : (
+            {/* ) : (
               <button
                 className={`btn btn-warning EditBtn ${
                   !selectedUser ? "disabled" : ""
@@ -344,8 +357,8 @@ function AboutAllUser() {
               >
                 Редагувати
               </button>
-            )}
-            {windowWidth < 768 ? (
+            )} */}
+            {/* {windowWidth < 768 ? ( */}
               <img
                 src={deleteUserBtn}
                 width="40"
@@ -355,8 +368,8 @@ function AboutAllUser() {
                   !selectedUser ? "" : "activeCircleDelete"
                 }`}
               ></img>
-            ) : (
-              <button
+             {/* ) : (
+               <button
                 className={`btn btn-danger DeleteBtn ${
                   !selectedUser ? "disabled" : ""
                 }`}
@@ -365,7 +378,7 @@ function AboutAllUser() {
               >
                 Видалити
               </button>
-            )}
+            )} */}
           </div>
           <table className="tableUsers">
             <thead className="headTable">
@@ -455,28 +468,33 @@ function AboutAllUser() {
                 userId={selectedUserIdForEdit}
                 user={selectedUserData}
                 submitButtonRef={submitButtonRef}
+                onCloseModal={() => {
+                  setShowEditModal(false); // Закриття модального вікна
+                }}
               />
             )}
 
             {/* <Modal.Footer> */}
+            <div className="editFormBtns"> 
             <button
               onClick={() => {
                 handleSubmitButtonClick();
                 handleEditUser();
               }}
-              className="btn btn-primary modalSendForm"
+              className="btn btn-primary modalSendForm me-2"
             >
-              Надіслати
+              Застосувати
             </button>
             <button
-              className="btn btn-secondary modalCancel"
+              className="btn btn-secondary modalCancel ms-2"
               onClick={() => {
                 setShowEditModal(false);
                 setSelectedUserIdForEdit(null); // Скидання обраного користувача при закритті модального вікна
               }}
             >
-              Закрити
-            </button>
+              Скасувати
+            </button></div>
+           
           </Modal.Body>
           {/* </Modal.Footer> */}
         </Modal>
@@ -493,23 +511,28 @@ function AboutAllUser() {
           <Modal.Body>
             <AdminAddForm
               // user={selectedUserData}
+              onCloseModal={() => {
+                setshowAddUserModal(false); // Закриття модального вікна
+              }}
               submitAddButtonRef={submitAddButtonRef}
             />
             {/* <Modal.Footer> */}
+            <div className="addFormBtns">
             <button
               onClick={handleSubmitAddUserButtonClick}
-              className="btn btn-primary modalSendForm"
+              className="btn btn-primary modalSendForm me-2"
             >
-              Надіслати
+              Додати
             </button>
             <button
-              className="btn btn-secondary modalCancel"
+              className="btn btn-secondary modalCancel ms-2"
               onClick={() => {
                 setshowAddUserModal(false);
               }}
             >
-              Закрити
+              Скасувати
             </button>
+            </div>
           </Modal.Body>
           {/* </Modal.Footer> */}
         </Modal>

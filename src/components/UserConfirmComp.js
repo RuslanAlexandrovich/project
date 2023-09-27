@@ -24,7 +24,7 @@ export default function UserConfirmComp() {
   }, []);
 
   return userInfo ? (
-    <Navigate to="/home" replace={true}></Navigate> //На головну авторизований користувач
+    <Navigate to="/login" replace={true}></Navigate> //На головну авторизований користувач
   ) : (
     <div className="userConfirm">Data provided not valid!</div>
   );

@@ -285,15 +285,7 @@ function AboutUserComp() {
                 <span className="nameRow">Прізвище:</span>
                 <span className="nameRow">Пошта:</span>
                 <span className="nameRow">Телефон:</span>
-                <button
-                  className="newPassBtn"
-                  onClick={() => {
-                    toggleEditingPassword();
-                    toggleFormPassword();
-                  }}
-                >
-                  {isEditingPassword ? "Закрити" : "Пароль"}
-                </button>
+                <span className="nameRow">Пароль:</span>
               </div>
               <div className="userValue">
                 <div className="wrappValueIcon">
@@ -376,6 +368,31 @@ function AboutUserComp() {
                     )}
                   </span>
                 </div>
+                <div className="wrappValueIcon ">
+                  <span>********</span>
+                  <span
+                    className="iconWrapper"
+                    onClick={() => {
+                      toggleEditingPassword();
+                    toggleFormPassword();
+                    }}
+                  >
+                    {isEditingPassword ? (
+                      <img src={closeEdit} width="19"></img>
+                    ) : (
+                      <img src={editValue} width="18"></img>
+                    )}
+                  </span>
+                </div>
+                {/* <button
+                  className="newPassBtn"
+                  onClick={() => {
+                    toggleEditingPassword();
+                    toggleFormPassword();
+                  }}
+                >
+                  {isEditingPassword ? "Закрити" : "Пароль"}
+                </button> */}
               </div>
             </div>
           </Col>
@@ -544,7 +561,7 @@ function AboutUserComp() {
                 ></img>
                 <h2 className="title_form">Зміна телефону</h2>
                 <Form.Group className="mb-2">
-                  <Form.Label className="App-label">Номер телефону</Form.Label>
+                  <Form.Label className="App-label">Номер телефону (380 ** *** ** **)</Form.Label>
                   <Form.Control
                     type="text"
                     id="phone"

@@ -81,7 +81,7 @@ export default function Header() {
   const logOut = () => {
     setmailUser("");
     AuthService.logout();
-    window.location.href = "/registration";
+    window.location.href = "/login";
   };
 
   return (

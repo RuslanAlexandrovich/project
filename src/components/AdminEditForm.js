@@ -21,6 +21,7 @@ function AdminEditUserForm(props) {
   const [isLoading, setIsLoading] = useState(false);
   const userId = props.userId; // Отримати userId з пропс
   const userObj = props.user; // Отримати userId з пропс
+  const closeModal = props.onCloseModal;
   const submitButtonRef = props.submitButtonRef; // Отримати submitButtonRef з пропс
 
   const [serverAnswer, setserverAnswer] = useState();
@@ -97,11 +98,18 @@ function AdminEditUserForm(props) {
 
         // Перевірка успішної відповіді
         if (result.success) {
+
+          if (result.success !== true){
+            setserverAnswer(result.message);
+            console.log("Результат запиту:", result.success);
+            return;
+          }
+          
           console.log("Отримані дані від сервера:", result.message);
           setserverAnswer(result.message);
           console.log("Дані надіслано...   ", data);
           console.log("UserId...   ", userId);
-          // setTimeout(() => window.location.reload(), 1500);
+          setTimeout(() => closeModal(), 1500);
         } else {
           // Обробка помилки
           console.error("Помилка:", result.error);
@@ -126,11 +134,12 @@ function AdminEditUserForm(props) {
               onSubmit={handleSubmit(onSubmit)}
               className="form_EditForAdmin"
             >
-              <Form.Group className="mb-2" controlId="formBasicId">
+              <Form.Group className="mb-2 inputId" controlId="formBasicId" >
                 {/* <Form.Label className="App-label">Id</Form.Label> */}
                 <Form.Control
                   type="text"
                   value={userId}
+                  readOnly
                   {...register("id", {
                     required: true,
                     // validate: (value) => nameCheck(value),

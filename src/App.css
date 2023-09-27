@@ -338,7 +338,10 @@ form #submit:hover {
 .nameObject {
   font-weight: 400;
 }
-.newPassBtn {
+.wrappValueIconPassword {
+  justify-content: end;
+}
+/* .newPassBtn {
   border: 1px solid #004c5d;
   border-radius: 5px;
   margin-top: 5px;
@@ -349,7 +352,7 @@ form #submit:hover {
 }
 .newPassBtn:hover {
   background-color: #004c5dc4;
-}
+} */
 .userFormBtn {
   background-color: #004c5d !important;
   border: #004c5d;
@@ -425,23 +428,48 @@ form #submit:hover {
   top: 12px;
   right: 10px;
 }
-.returnAllUsers {
-  margin-left: 10px;
+.searchBtnWrapp {
+  display: flex;
+  align-items: center;
+}
+.deleteTextIcon {
+  cursor: pointer;
+  margin-left: 20px!important;
+  padding: 4px;
+  border-radius: 50%;
+  transition: all 0.2s ease-in;
+  
+}
+.deleteTextIcon:hover {
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
 }
 .searchUserBtn {
-  margin-left: 10px;
+  margin-left: 20px;
+  padding: 5px! important;
+  height: fit-content;
+  width: 35px;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  
   /* min-width: 30%; */
+}
+.searchUserBtn:hover {
+  background-color: white;
+  /* box-shadow: 0px 7px 4px -4px rgba(0,0,0,0.75); */
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
 }
 @media screen and (max-width: 768px) {
   .searchBtnWrapp {
     width: fit-content !important;
   }
-  .returnAllUsers {
-    margin: 10;
+  /* .returnAllUsers {
+    margin-left: 20px!important;
     padding: 2px !important;
-  }
+  } */
   .searchUserBtn {
-    padding: 5px !important;
+    /* padding: 0 !important; */
+    /* width: fit-content!important; */
   }
 }
 @media screen and (max-width: 576px) {
@@ -454,13 +482,14 @@ form #submit:hover {
     width: 100% !important;
     justify-content: center;
   }
-  .returnAllUsers {
+  /* .returnAllUsers {
     margin: 0 !important;
     max-width: 150px !important;
-  }
+  } */
   .searchUserBtn {
-    padding: 2px !important;
-    width: 70px !important;
+    /* padding: 2px !important;
+    width: 40px !important; */
+    margin-left: 50px;
   }
 }
 
@@ -468,11 +497,10 @@ form #submit:hover {
 .adminBtnWrapper {
   display: flex;
   width: 100%;
-  justify-content: end;
   margin-bottom: 10px;
 }
 
-.DeleteBtn {
+/* .DeleteBtn {
   background-color: white;
   color: red;
   border: 1px solid red;
@@ -491,25 +519,37 @@ form #submit:hover {
   color: green;
   border: 1px solid green;
   border-radius: 5px;
-}
+} */
 .btnAfter768 {
   margin-right: 15px;
   border-radius: 50%;
   padding: 2px;
 }
+.btnAfter768:hover {
+  /* box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75); */
+}
 .addGreenCircle {
   border: 2px solid green;
+}
+.addGreenCircle:hover {
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
 }
 .activeCircleEdit {
   border: 2px solid orange;
 }
+.activeCircleEdit:hover {
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+}
 .activeCircleDelete {
   border: 2px solid Red;
 }
+.activeCircleDelete:hover {
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+}
 @media screen and (max-width: 768px) {
-  .adminBtnWrapper {
+  /* .adminBtnWrapper {
     justify-content: center;
-  }
+  } */
   .DeleteBtn,
   .EditBtn {
     padding: 2px;
@@ -557,8 +597,12 @@ tr :nth-child(7) {
 tr {
   cursor: pointer;
 }
+tr:hover {
+  background-color: #DAEAEA;
+}
 .selected {
   border: 2px solid orange;
+  background-color: #DAEAEA;
 }
 td {
   border-bottom: 1px solid gray;
@@ -570,6 +614,24 @@ td {
 .headRow {
 }
 
+/* ===============================Modal Windows AdminPageComp======== */
+
+/* ===========Delete Modal AdminPageComp======== */
+
+.cancelDeleteBtn {
+  background-color: #616C70;
+  border: none;
+}
+.cancelDeleteBtn:hover {
+  background-color: #4A585E;
+}
+.confirmDeleteBtn {
+  background-color: #004c5d;
+  border: none;
+}
+.confirmDeleteBtn:hover {
+  background-color: #004c5dc4;
+}
 /* ===========Пагінація AdminPageComp======== */
 .paging {
   display: flex;
@@ -602,6 +664,17 @@ td {
 
 .wrapperEditForm {
 }
+.editFormBtns {
+  display: flex;
+}
+.addFormBtns {
+  display: flex;
+}
+.inputId input[type="text"]:active, :hover, :focus {
+  outline: 0;
+  outline-offset: 0;
+
+}
 .form_EditForAdmin {
   /* box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75); */
   width: 100%;
@@ -611,7 +684,6 @@ td {
 }
 .modalSendForm {
   width: 100%;
-  margin-bottom: 10px;
 }
 .modalCancel {
   width: 100%;
