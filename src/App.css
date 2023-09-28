@@ -16,7 +16,7 @@ main {
 /* ===============Header============= */
 
 .headerContainer {
-  min-width: 280px;
+  min-width: 100%!important;
   display: flex;
   justify-content: center !important;
 }
@@ -28,6 +28,10 @@ main {
   color: #004c5d !important;
   background-color: #004c5d !important;
   box-shadow: none !important;
+}
+.collapse.show {
+  /* max-width: 50%; */
+  min-height: 100%!important;
 }
 .header_button {
   display: flex;
@@ -46,16 +50,16 @@ main {
   font-weight: 500;
 }
 .header_button a:hover {
-  border-bottom: 2px solid #004c5d;
-}
-.header_button a:hover {
+  /* border-bottom: 2px solid #004c5d; */
+  background-color: #d6d4d4;
   padding: 0;
 }
 .header_button .active {
   /* margin-top: auto;
   margin-bottom: auto; */
   padding: 0;
-  border-bottom: 2px solid #004c5d;
+  /* border-bottom: 2px solid #004c5d; */
+  background-color: #d6d4d4;
   color: #004c5d;
 }
 .enterStyle {
@@ -78,9 +82,9 @@ main {
   color: #004c5d;
   cursor: pointer;
 }
-.exitBtn:hover {
+/* .exitBtn:hover {
   border-bottom: 2px solid #004c5d;
-}
+} */
 .dropSelect {
   display: flex;
   flex-direction: column;
@@ -90,6 +94,7 @@ main {
 }
 .dropSelect a {
   padding: 0;
+  width: fit-content;
   color: #004c5d !important;
 }
 .dropSelect .active {
@@ -116,6 +121,50 @@ main {
 .mailUser {
   margin-bottom: 10px;
 }
+/* =================================SideMenu========================== */
+.leftSideMenu {
+  display: flex;
+  flex-direction: column;
+  background-color: #e2e0e0;
+  padding-top: 10px;
+  width: 50px;
+  overflow-x: hidden;
+  position: absolute;
+  left: 0;
+  top: 50px;
+  transition: all 0.2s ease-in;
+  z-index: 1;
+}
+.sideMenuName {
+  display: none;
+  color: #004c5d;
+  text-decoration: none;
+  font-weight: 500;
+}
+.sideMenuName:hover {
+  background-color: #d6d4d4;
+}
+.leftSideMenu:hover {
+  width: 200px;
+}
+.sideMenuRow {
+  display: flex;
+  padding: 10px;
+  color: #004c5d;
+  text-decoration: none;
+  font-weight: 500;
+}
+.sideMenuRowDown {
+  font-size: 8px;
+  color: #004c5d;
+  font-weight: 500;
+  border: none;
+  overflow-y: none;
+}
+.sideMenuRow:hover {
+  background-color: #d6d4d4;
+  cursor: pointer;
+}
 @media screen and (max-width: 768px) {
   .headerContainer {
     justify-content: space-between !important;
@@ -123,6 +172,9 @@ main {
   .header_button {
     display: flex;
     align-items: normal;
+    padding-left: 0;
+  }
+  .dropSelect {
     padding-left: 0;
   }
   .dropdown-menu.show {
@@ -134,10 +186,38 @@ main {
     border-left: none;
     border-radius: 0;
     min-height: fit-content;
-    box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.3);
+    box-shadow: none;
+  }
+  .mailUser {
+    margin-bottom: 3px;
   }
   .exitBtn {
     margin-top: auto;
+    margin-left: auto;
+    width: fit-content;
+  }
+  .leftSideMenu {
+    position: static;
+    width: fit-content;
+    padding-top: 0;
+    height: 25px;
+    background-color: #e2e0e0;
+    overflow-y: hidden;
+  }
+  .leftSideMenu:hover{
+    cursor: pointer;
+  }
+  .sideMenuName {
+    display: block;
+    width: fit-content;
+  }
+  .sideMenuRow {
+    padding: 0;
+    padding-left: 10px;
+    margin-bottom: 5px;
+  }
+  .iconSideMenu {
+    display: none;
   }
 }
 @media screen and (max-width: 576px) {

@@ -17,6 +17,7 @@ import HOME_URL from "../helpers/homeURL";
 import { isAdmin, isUser, isShow } from "../helpers/isAdmin";
 import isTokenValid from "../tokenTime/tokenValidTime";
 import { useLocation } from "react-router-dom";
+import example from "../images/example.png";
 
 export default function Header() {
   const [show, setShow] = useState(false);
@@ -26,9 +27,19 @@ export default function Header() {
   const [nameUser, setnameUser] = useState("");
   const [surnameUser, setsurnameUser] = useState("");
   const [activeLink, setActiveLink] = useState(""); // Стан для активного посилання
+  const [styleSideMenu, setStyleSideMenu] = useState(false); // Стан для активного посилання
 
   const setActive = (link) => {
     setActiveLink(link);
+  };
+
+  const toggleSideMenuStyle = () => {
+    setStyleSideMenu(!styleSideMenu);
+  };
+
+  const sideMenuStyle = {
+    height: "fit-content",
+    width: "fit-content",
   };
 
   const location = useLocation();
@@ -92,7 +103,7 @@ export default function Header() {
         className="headerStyle"
         variant="dark"
       >
-        <Container className="headerContainer">
+        <Container className="headerContainer m-0">
           <NavbarBrand href="/home" className="">
             <img
               src={doc}
@@ -104,6 +115,7 @@ export default function Header() {
           </NavbarBrand>
           <NavbarToggle aria-controls="responsive-navbar-nav" />
           <NavbarCollapse id="responsive-navbar-nav">
+            
             <Nav className=" header_button">
               {show ? (
                 <Link
@@ -158,12 +170,67 @@ export default function Header() {
                       </Link>
                     ) : null}
                   </NavDropdown>
-                  <span className="exitBtn btn enterStyle" onClick={logOut}>
-                    Вийти
-                  </span>
                 </div>
               ) : null}
             </Nav>
+            {show ? (
+            <div className="leftSideMenu"
+            style={styleSideMenu ? sideMenuStyle : {}}>
+              <span className="sideMenuName"
+                  onClick={toggleSideMenuStyle}
+              >Side Menu {styleSideMenu ? <span className="sideMenuRowDown">&#9650;</span> : <span className="sideMenuRowDown">&#9660;</span>}</span>
+              <a className="sideMenuRow">
+                <img 
+                className="me-3 iconSideMenu"
+                src={example}
+                width="30"
+                height="30"
+                ></img>
+                example
+              </a>
+              <a className="sideMenuRow">
+                <img 
+                className="me-3 iconSideMenu"
+                src={example}
+                width="30"
+                height="30"
+                ></img>
+                example
+              </a>
+              <a className="sideMenuRow">
+                <img 
+                className="me-3 iconSideMenu"
+                src={example}
+                width="30"
+                height="30"
+                ></img>
+                example
+              </a>
+              <a className="sideMenuRow">
+                <img 
+                className="me-3 iconSideMenu"
+                src={example}
+                width="30"
+                height="30"
+                ></img>
+                example
+              </a>
+              <a className="sideMenuRow">
+                <img 
+                className="me-3 iconSideMenu"
+                src={example}
+                width="30"
+                height="30"
+                ></img>
+                example
+              </a>
+            </div>
+             ) : null}
+              {show ? (
+            <span className="exitBtn btn enterStyle" onClick={logOut}>
+                    Вийти
+                  </span>
+                   ) : null}
           </NavbarCollapse>
         </Container>
       </Navbar>

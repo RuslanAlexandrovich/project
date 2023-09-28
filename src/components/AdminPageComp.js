@@ -36,7 +36,8 @@ function AboutAllUser() {
   const [searchUser, setSearchUser] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [asnwerServDel, setAnswerServDel] = useState("");
-  // const [storedPage, setStoredPage] = useState(null);
+  const [indicateSearchForm, setIndicateSearchForm] = useState(false);
+  // const [numberPagePagin, setNumberPagePagin] = useState(1);
   // const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -65,7 +66,8 @@ function AboutAllUser() {
   }, []);
 
   const allUser = async (Page) => {
-    console.log("INDEX PAGE:", Page);
+    // console.log("INDEX PAGE:", Page);
+    setIndicateSearchForm(false);
     try {
       let pageQueryParam = typeof Page === "number" ? Page : 1;
 
@@ -88,8 +90,8 @@ function AboutAllUser() {
         setUsers(usersData); // Зберігаємо всіх користувачів в стані
         setOriginalUsers(usersData);
         // Обробка успішної відповіді
-        console.log("Successful userAll:", responseData);
-        console.log("Successful pages:", pageNumber);
+        // console.log("Successful userAll:", responseData);
+        // console.log("Successful pages:", pageNumber);
         return usersData;
       } else {
         throw new Error("Failed data");
@@ -138,6 +140,48 @@ function AboutAllUser() {
       }, 1500);
     } catch (error) {
       console.error("Error editing user:", error);
+    }
+  };
+
+  const AdminSearchFormUser = async (data, pageNumber) => {
+    setIndicateSearchForm(true);
+    try {
+      console.log("AdminSearchFormUser DATA.......", data);
+      console.log("AdminSearchFormUser NUMBER.......", pageNumber);
+      const response = await axios.get(
+        SERVER_URL + `User/all?Page=${pageNumber}&SearchWords=${data}`,
+        {
+          // params: data,
+          headers: authHeader(),
+        }
+      );
+      // Перевіряємо статус відповіді
+      if (response.status === 200) {
+        const responseData = response.data; // Отримуємо дані відповіді
+        const usersData = responseData.users;
+        const totalPages = responseData.paging.total_pages;
+        const NewpageNumber = responseData.paging.page_number;
+        // Обробка успішної відповіді
+        console.log("Successful new USERS.....:", responseData);
+
+        if (usersData && usersData.length > 0) {
+          setUsers(usersData); // Зберігаємо всіх користувачів в стані
+          setnotFoundMessage(false); // Результати пошуку є
+          // setCurrentPage(1); //====================================================Почати з цього=========================================
+          setPageNumber(NewpageNumber);
+          setOriginalUsers(usersData);
+        setTotalPages(totalPages);
+        } else {
+          setUsers(originalUsers);
+          setnotFoundMessage(true); // Пошук нічого не знайшов, вивести повідомлення
+        }
+
+      } else {
+        throw new Error("Failed data");
+      }
+    } catch (error) {
+      // Обробка помилки
+      console.error("Not answer:", error);
     }
   };
 
@@ -217,33 +261,44 @@ function AboutAllUser() {
   // ======================Форма пошуку Search користувача========================
 
   const onSubmit = async () => {
-    // console.log("DATA SEARCH...." + data);
-    try {
-      if (searchUser.trim() === "") {
-        // Якщо поле пошуку порожнє, встановлюємо список користувачів в початковий стан
-        setUsers(originalUsers);
-        setPageNumber(1);
-      } else {
-        {
-          /* ====================Повертаємо дані запиту з компоненту EditUser AdminSearchallUser========================= */
-        }
+console.log ("дані форми пошуку...", searchUser);
+    if (searchUser.trim() === "") {
+            // Якщо поле пошуку порожнє, встановлюємо список користувачів в початковий стан
+            setUsers(originalUsers);
+            // setPageNumber(1);
+          } else {
+            AdminSearchFormUser(searchUser, pageNumber);
+          }
 
-        const { usersData, totalPages, pageNumber } =
-          await EditUser.AdminSearchallUser(searchUser);
-        if (usersData && usersData.length > 0) {
-          setUsers(usersData); // Зберігаємо всіх користувачів в стані
-          setnotFoundMessage(false); // Результати пошуку є
-          setCurrentPage(1); //====================================================Почати з цього=========================================
-        } else {
-          setUsers(originalUsers);
-          setnotFoundMessage(true); // Пошук нічого не знайшов, вивести повідомлення
-        }
-        setPageNumber(pageNumber);
-        setTotalPages(totalPages);
-      }
-    } catch (error) {
-      console.error("Error deleting user:", error);
-    }
+  //   try {
+  //     if (searchUser.trim() === "") {
+  //       // Якщо поле пошуку порожнє, встановлюємо список користувачів в початковий стан
+  //       setUsers(originalUsers);
+  //       setPageNumber(1);
+  //       setIndicateSearchForm(true);
+  //     } else {
+  //       {
+  //         /* ====================Повертаємо дані запиту з компоненту EditUser AdminSearchallUser========================= */
+  //       }
+
+  //       const { usersData, totalPages, pageNumber } =
+  //         await EditUser.AdminSearchallUser(searchUser);
+  //       if (usersData && usersData.length > 0) {
+  //         setUsers(usersData); // Зберігаємо всіх користувачів в стані
+  //         // setOriginalUsers(usersData);//====================================================Почати з цього=========================================
+  //         setnotFoundMessage(false); // Результати пошуку є
+  //         setCurrentPage(1); //====================================================Почати з цього=========================================
+  //         setPageNumber(pageNumber);
+  //       setTotalPages(totalPages);
+  //       } else {
+  //         setUsers(originalUsers);
+  //         setnotFoundMessage(true); // Пошук нічого не знайшов, вивести повідомлення
+  //       }
+        
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting user:", error);
+  //   }
   };
 
   return (
@@ -468,10 +523,19 @@ function AboutAllUser() {
             <button
               key={index}
               onClick={() => {
-                allUser(index + 1);
-                // localStorage.setItem("paginPage", index + 1);
+                if(indicateSearchForm){
+                  AdminSearchFormUser(searchUser, index + 1);
+                } else {
+                  allUser(index + 1);
+                }
                 setCurrentPage(index + 1);
                 setSelectedUserIdForEdit(null);
+                // setNumberPagePagin(index + 1);
+                // {indicateSearchForm ? AdminSearchFormUser(numberPagePagin) : allUser(index + 1);}
+
+                // setCurrentPage(index + 1);
+                // setSelectedUserIdForEdit(null);
+                
               }}
               className={
                 pageNumber === index + 1 ? "activePagin" : "notActivePagin"

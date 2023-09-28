@@ -226,37 +226,37 @@ class EditUser {
     }
   };
 
-  AdminSearchallUser = async (data) => {
-    try {
-      console.log("AdminSearchAllUser.......", data);
-      const response = await axios.get(
-        SERVER_URL + `User/all?SearchWords=${data}`,
-        {
-          // params: data,
-          headers: authHeader(),
-        }
-      );
-      // Перевіряємо статус відповіді
-      if (response.status === 200) {
-        const responseData = response.data; // Отримуємо дані відповіді
-        const usersData = responseData.users;
-        const totalPages = responseData.paging.total_pages;
-        const pageNumber = responseData.paging.page_number;
-        // Обробка успішної відповіді
-        console.log("Successful new USERS.....:", responseData);
-        return {
-          usersData,
-          totalPages,
-          pageNumber,
-        };
-      } else {
-        throw new Error("Failed data");
-      }
-    } catch (error) {
-      // Обробка помилки
-      console.error("Not answer:", error);
-    }
-  };
+  // AdminSearchallUser = async (data) => {
+  //   try {
+  //     console.log("AdminSearchAllUser.......", data);
+  //     const response = await axios.get(
+  //       SERVER_URL + `User/all?SearchWords=${data}`,
+  //       {
+  //         // params: data,
+  //         headers: authHeader(),
+  //       }
+  //     );
+  //     // Перевіряємо статус відповіді
+  //     if (response.status === 200) {
+  //       const responseData = response.data; // Отримуємо дані відповіді
+  //       const usersData = responseData.users;
+  //       const totalPages = responseData.paging.total_pages;
+  //       const pageNumber = responseData.paging.page_number;
+  //       // Обробка успішної відповіді
+  //       console.log("Successful new USERS.....:", responseData);
+  //       return {
+  //         usersData,
+  //         totalPages,
+  //         pageNumber,
+  //       };
+  //     } else {
+  //       throw new Error("Failed data");
+  //     }
+  //   } catch (error) {
+  //     // Обробка помилки
+  //     console.error("Not answer:", error);
+  //   }
+  // };
 
   AdminAddUser = async (data) => {
     try {

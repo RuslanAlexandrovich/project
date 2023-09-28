@@ -83,7 +83,7 @@ function App() {
   return (
     <div
       className="AppMain"
-      onMouseMove={handleUserActivity}
+      // onMouseMove={handleUserActivity}
       onClick={handleUserActivity}
     >
       <Routes>
