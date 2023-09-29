@@ -115,7 +115,6 @@ export default function Header() {
           </NavbarBrand>
           <NavbarToggle aria-controls="responsive-navbar-nav" />
           <NavbarCollapse id="responsive-navbar-nav">
-            
             <Nav className=" header_button">
               {show ? (
                 <Link
@@ -173,7 +172,7 @@ export default function Header() {
                 </div>
               ) : null}
             </Nav>
-            {show ? (
+            {/* {show ? (
             <div className="leftSideMenu"
             style={styleSideMenu ? sideMenuStyle : {}}>
               <span className="sideMenuName"
@@ -225,12 +224,12 @@ export default function Header() {
                 example
               </a>
             </div>
-             ) : null}
-              {show ? (
-            <span className="exitBtn btn enterStyle" onClick={logOut}>
-                    Вийти
-                  </span>
-                   ) : null}
+             ) : null} */}
+            {show ? (
+              <span className="exitBtn btn enterStyle" onClick={logOut}>
+                Вийти
+              </span>
+            ) : null}
           </NavbarCollapse>
         </Container>
       </Navbar>

@@ -12,6 +12,7 @@ import SendEmail from "./pages/SendEmail";
 import AboutUser from "./pages/AboutUser";
 import AdminPage from "./pages/AdminPage";
 import UserConfirmComp from "./components/UserConfirmComp";
+import LeftSideMenu from "../src/components/LeftSideMenu";
 
 function App() {
   // =======Перевірка часу життя токену та Активності користувача=======
@@ -86,21 +87,27 @@ function App() {
       // onMouseMove={handleUserActivity}
       onClick={handleUserActivity}
     >
-      <Routes>
-        <Route
-          path="/"
-          element={!logged ? <Login /> : <Navigate to="/home" />}
-        />
-        {/* <Route path="/" element={<Registration />} /> */}
+      <div className="LeftMenu">
+        {" "}
+        <LeftSideMenu />
+      </div>
+      <div className="appInMAINapp">
+        <Routes>
+          <Route
+            path="/"
+            element={!logged ? <Login /> : <Navigate to="/home" />}
+          />
+          {/* <Route path="/" element={<Registration />} /> */}
 
-        <Route path="/registration" element={<Registration />} />
-        <Route path="/home" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/sendemail" element={<SendEmail />} />
-        <Route path="/aboutuser" element={<AboutUser />} />
-        <Route path="/adminpage" element={<AdminPage />} />
-        <Route path="/userconfirm" element={<UserConfirmComp />} />
-      </Routes>
+          <Route path="/registration" element={<Registration />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/sendemail" element={<SendEmail />} />
+          <Route path="/aboutuser" element={<AboutUser />} />
+          <Route path="/adminpage" element={<AdminPage />} />
+          <Route path="/userconfirm" element={<UserConfirmComp />} />
+        </Routes>
+      </div>
     </div>
   );
 }

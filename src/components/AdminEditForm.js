@@ -98,14 +98,13 @@ function AdminEditUserForm(props) {
 
         // Перевірка успішної відповіді
         if (result.success) {
-
-          if (result.success !== true){
+          if (result.success !== true) {
             setserverAnswer(result.message);
             console.log("Результат запиту:", result.success);
             return;
           }
-          
-          console.log("Отримані дані від сервера:", result.message);
+
+          console.log("Отримані дані від сервера:", result);
           setserverAnswer(result.message);
           console.log("Дані надіслано...   ", data);
           console.log("UserId...   ", userId);
@@ -134,7 +133,7 @@ function AdminEditUserForm(props) {
               onSubmit={handleSubmit(onSubmit)}
               className="form_EditForAdmin"
             >
-              <Form.Group className="mb-2 inputId" controlId="formBasicId" >
+              <Form.Group className="mb-2 inputId" controlId="formBasicId">
                 {/* <Form.Label className="App-label">Id</Form.Label> */}
                 <Form.Control
                   type="text"

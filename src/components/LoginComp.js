@@ -11,9 +11,11 @@ import AuthService from "../services/AuthService";
 // import { useNavigate } from "react-router-dom";
 import { emailCheck } from "../pattern/allPattern";
 import { passwordCheck } from "../pattern/allPattern";
+import loading from "../images/loading.gif";
 
 function LoginComp() {
   const [ServerMessage, setServerMessage] = useState(""); // Визначення стану ServerMessage
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -27,14 +29,19 @@ function LoginComp() {
 
   const onSubmit = async (data) => {
     try {
-      await AuthService.login(data, (errorMessage) => {
-        // Обробка тексту помилки тут
-        // console.error("Помилка входу:", errorMessage);
+      setIsLoading(true);
+      const resp = await AuthService.login(data, (errorMessage) => {
+        console.error("Повернуті дані ...", errorMessage);
         setServerMessage(errorMessage); // Оновлення стану ServerMessage з текстом помилки
+        if (resp === 200) {
+          setIsLoading(false);
+        }
       });
     } catch (error) {
       // Обробка помилок, якщо дані не були успішно надіслані
       console.error("Помилка входу...");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -96,9 +103,19 @@ function LoginComp() {
                   <Link to="/sendemail">Забули пароль?</Link>
                   <Link to="/registration">Реєстрація</Link>
                 </Nav>
-                <Button type="submit" id="submit">
-                  Увійти
-                </Button>
+                {isLoading ? (
+                  <img
+                    src={loading}
+                    height="30"
+                    width="30"
+                    alt="Завантаження..."
+                    className="loading-spinner"
+                  />
+                ) : (
+                  <Button type="submit" id="submit">
+                    Увійти
+                  </Button>
+                )}
                 <span className="errorMessage">{ServerMessage}</span>
               </Form>
             </Col>

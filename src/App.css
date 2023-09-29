@@ -4,8 +4,14 @@ main {
 }
 .AppMain {
   display: flex;
+  /* flex-direction: column; */
+  height: 100%;
+}
+.appInMAINapp {
+  display: flex;
   flex-direction: column;
   height: 100%;
+  width: 100%;
 }
 .App {
   display: flex;
@@ -16,7 +22,7 @@ main {
 /* ===============Header============= */
 
 .headerContainer {
-  min-width: 100%!important;
+  min-width: 100% !important;
   display: flex;
   justify-content: center !important;
 }
@@ -31,7 +37,7 @@ main {
 }
 .collapse.show {
   /* max-width: 50%; */
-  min-height: 100%!important;
+  min-height: 100% !important;
 }
 .header_button {
   display: flex;
@@ -128,10 +134,11 @@ main {
   background-color: #e2e0e0;
   padding-top: 10px;
   width: 50px;
+  min-height: 100%;
   overflow-x: hidden;
-  position: absolute;
+  /* position: absolute;
   left: 0;
-  top: 50px;
+  top: 50px; */
   transition: all 0.2s ease-in;
   z-index: 1;
 }
@@ -146,6 +153,10 @@ main {
 }
 .leftSideMenu:hover {
   width: 200px;
+  height: 100%;
+  position: sticky;
+  left: 0;
+  top: 59px;
 }
 .sideMenuRow {
   display: flex;
@@ -204,7 +215,7 @@ main {
     background-color: #e2e0e0;
     overflow-y: hidden;
   }
-  .leftSideMenu:hover{
+  .leftSideMenu:hover {
     cursor: pointer;
   }
   .sideMenuName {
@@ -835,9 +846,11 @@ td {
   justify-content: center;
   padding-top: 10px;
   padding-bottom: 10px;
+  z-index: 2;
 }
 .footerStyle {
   background-color: #e2e0e0;
+  z-index: 2;
 }
 .rowFooter {
 }

@@ -18,7 +18,7 @@ class AuthService {
       });
       const token = response.data.token;
       // console.log("token RESPONSE...." + token);
-
+      console.log("Відповідь при вході.....", response.message);
       localStorage.setItem("token", token);
       console.log(token);
 
@@ -36,16 +36,17 @@ class AuthService {
     } catch (error) {
       if (error.response) {
         // Якщо є відповідь від сервера (помилка з сервера)
-        const errorMessage = error.response.data.message;
+        const errorMessage = error.response.data.messages;
         console.error("Помилка, відповідь сервера:", errorMessage);
         errorCallback(errorMessage);
 
         // Тут ви можете використовувати `errorMessage` на ваш вибір
-      } else {
-        // Якщо немає відповіді від сервера (помилка мережі або інша помилка)
-        console.error("Помилка:", error.message);
       }
-      console.error("Login error:", error);
+      //  else {
+      //   // Якщо немає відповіді від сервера (помилка мережі або інша помилка)
+      //   console.error("Помилка:", error.message);
+      // }
+      // console.error("Login error:", error);
     }
     console.log(data);
   };

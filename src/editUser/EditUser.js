@@ -177,7 +177,7 @@ class EditUser {
       if (response.status === 200) {
         // Перевіряємо статус відповіді
         // Обробка успішної відповіді
-        const confirmServerDel = response.data.message;
+        const confirmServerDel = response.data.messages;
         console.log("Користувача видалено!");
         return { success: true, message: confirmServerDel };
       } else {
@@ -185,7 +185,7 @@ class EditUser {
       }
     } catch (error) {
       // Обробка помилки
-      const errorServerDel = error.response.data.message;
+      const errorServerDel = error.response.data.messages;
       console.error("Помилка видалення користувача", error);
       return { success: false, error: errorServerDel };
     }
@@ -209,7 +209,7 @@ class EditUser {
       if (response.status === 200) {
         // Перевіряємо статус відповіді
         // Обробка успішної відповіді
-        const confirmServer = response.data.message;
+        const confirmServer = response.data.messages;
         // callback(confirmServer);
         console.log("Дані користувача Змінено!", response);
         // window.location.href = "/adminpage";
@@ -220,7 +220,7 @@ class EditUser {
     } catch (error) {
       // Обробка помилки
       console.error("Помилка зміни користувача!", error);
-      const errorServer = error.response.data.message;
+      const errorServer = error.response.data.messages;
       // errorCallback(errorServer);
       return { success: false, error: errorServer };
     }
@@ -271,7 +271,7 @@ class EditUser {
         // const usersData = responseData.users;
         // Обробка успішної відповіді
         console.log("Created new USERS.....OK......!");
-        const confirmServer = response.data.message;
+        const confirmServer = response.data.messages;
         return { success: true, message: confirmServer };
         // return usersData;
       } else {
@@ -280,7 +280,7 @@ class EditUser {
     } catch (error) {
       // Обробка помилки
       console.error("Not answer:", error);
-      const errorServer = error.response.data.message;
+      const errorServer = error.response.data.messages;
       return { success: false, error: errorServer };
     }
   };
