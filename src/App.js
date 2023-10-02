@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import SendEmail from "./pages/SendEmail";
 import AboutUser from "./pages/AboutUser";
 import AdminPage from "./pages/AdminPage";
+import RegionPage from "./pages/RegionPage";
 import UserConfirmComp from "./components/UserConfirmComp";
 import LeftSideMenu from "../src/components/LeftSideMenu";
 
@@ -88,7 +89,6 @@ function App() {
       onClick={handleUserActivity}
     >
       <div className="LeftMenu">
-        {" "}
         <LeftSideMenu />
       </div>
       <div className="appInMAINapp">
@@ -106,6 +106,7 @@ function App() {
           <Route path="/aboutuser" element={<AboutUser />} />
           <Route path="/adminpage" element={<AdminPage />} />
           <Route path="/userconfirm" element={<UserConfirmComp />} />
+          <Route path="/regions" element={<RegionPage />} />
         </Routes>
       </div>
     </div>

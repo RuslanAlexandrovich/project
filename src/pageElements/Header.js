@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { Component, useEffect, useState, useRef } from "react";
 import {
   Button,
   Container,
@@ -27,19 +27,65 @@ export default function Header() {
   const [nameUser, setnameUser] = useState("");
   const [surnameUser, setsurnameUser] = useState("");
   const [activeLink, setActiveLink] = useState(""); // Стан для активного посилання
-  const [styleSideMenu, setStyleSideMenu] = useState(false); // Стан для активного посилання
+
+  // Бокове меню в хідері ===========================================================
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [dropMenuLiContacts, setDropMenuLiContacts] = useState(false); // Стан відображення Li в SideMenu
+  const [dropMenuLiComunication, setDropMenuLiComunication] = useState(false); // Стан відображення Li в SideMenu
+  const [dropMenuLiDirectory, setDropMenuLiDirectory] = useState(false); // Стан відображення Li в SideMenu
+
+  const toggleDropLiContacts = () => {
+    setDropMenuLiContacts(!dropMenuLiContacts);
+  };
+  const toggleDropLiComunication = () => {
+    setDropMenuLiComunication(!dropMenuLiComunication);
+  };
+  const toggleDropLiDirectory = () => {
+    setDropMenuLiDirectory(!dropMenuLiDirectory);
+  };
+
+  useEffect(() => {
+    // Функція для відслідковування зміни розміру вікна
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      // setStyleSideMenu(window.innerWidth > 768);
+    };
+    // Додаємо слухача подій для зміни розміру вікна
+    window.addEventListener("resize", handleResize);
+
+    // Прибираємо слухача подій при розмонтуванні компонента
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  // =====================Обробник кліку за межами бокового меню в хідері=============================
+
+  const wrapperRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+      // Клік здійснений поза wrapperForSideInHeader
+      // Закриваємо всі меню
+      setDropMenuLiContacts(false);
+      setDropMenuLiComunication(false);
+      setDropMenuLiDirectory(false);
+    }
+  };
+
+  // Додаємо обробник кліку при монтуванні компонента
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
+  // Хідер ===========================================================
 
   const setActive = (link) => {
     setActiveLink(link);
-  };
-
-  const toggleSideMenuStyle = () => {
-    setStyleSideMenu(!styleSideMenu);
-  };
-
-  const sideMenuStyle = {
-    height: "fit-content",
-    width: "fit-content",
   };
 
   const location = useLocation();
@@ -109,7 +155,7 @@ export default function Header() {
               src={doc}
               height="30"
               width="180"
-              className="d-inline-block"
+              className="d-inline-block headerLogo"
               alt="Logo"
             />
           </NavbarBrand>
@@ -124,14 +170,6 @@ export default function Header() {
                   Головна
                 </Link>
               ) : null}
-              {/* {!show ? (
-                <Link
-                  to="/registration"
-                  className={activeLink === "/registration" ? "active" : ""}
-                >
-                  Реєстрація
-                </Link>
-              ) : null} */}
               {!show ? (
                 <Link
                   to="/login"
@@ -165,71 +203,106 @@ export default function Header() {
                         to="/adminpage"
                         className={activeLink === "/adminpage" ? "active" : ""}
                       >
-                        Адміністратор
+                        Користувачі
                       </Link>
                     ) : null}
                   </NavDropdown>
+                  {windowWidth < 768 ? (
+                    <div
+                      className="
+                    wrapperForSideInHeader"
+                      ref={wrapperRef}
+                    >
+                      <ul className="sideMenuUl">
+                        <div
+                          className="d-flex sideMenuDivRow"
+                          onClick={toggleDropLiContacts}
+                        >
+                          Контакти
+                          <span className="sideMenuRowDown">&#9660;</span>
+                        </div>
+                        <li
+                          className={
+                            dropMenuLiContacts ? "openDropLi" : "inSideMenuLi"
+                          }
+                        >
+                          <a>Контактні особи</a>
+                        </li>
+                      </ul>
+                      <ul className="sideMenuUl">
+                        <div
+                          className="d-flex sideMenuDivRow"
+                          onClick={toggleDropLiComunication}
+                        >
+                          Комунікації
+                          <span className="sideMenuRowDown">&#9660;</span>
+                        </div>
+                        <li
+                          className={
+                            dropMenuLiComunication
+                              ? "openDropLi"
+                              : "inSideMenuLi"
+                          }
+                        >
+                          <a>Приклад</a>
+                        </li>
+                      </ul>
+                      <ul className="sideMenuUl">
+                        <div
+                          className="d-flex sideMenuDivRow"
+                          onClick={toggleDropLiDirectory}
+                        >
+                          Довідники
+                          <span className="sideMenuRowDown">&#9660;</span>
+                        </div>
+                        <li
+                          className={
+                            dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"
+                          }
+                        >
+                          <Link
+                            to="/regions"
+                            className={
+                              activeLink === "/regions"
+                                ? "activeSideBtn"
+                                : "notActiveSideBtn"
+                            }
+                          >
+                            Регіони
+                          </Link>
+                        </li>
+                        <li
+                          className={
+                            dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"
+                          }
+                        >
+                          <a>Регіональні менеджери</a>
+                        </li>
+                        <li
+                          className={
+                            dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"
+                          }
+                        >
+                          <a>Групи контактних осіб</a>
+                        </li>
+                        <li
+                          className={
+                            dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"
+                          }
+                        >
+                          <a>Типи заходів</a>
+                        </li>
+                      </ul>
+                    </div>
+                  ) : null}
                 </div>
               ) : null}
+              {show ? (
+                <span className="exitBtn btn enterStyle" onClick={logOut}>
+                  Вийти
+                </span>
+              ) : null}
             </Nav>
-            {/* {show ? (
-            <div className="leftSideMenu"
-            style={styleSideMenu ? sideMenuStyle : {}}>
-              <span className="sideMenuName"
-                  onClick={toggleSideMenuStyle}
-              >Side Menu {styleSideMenu ? <span className="sideMenuRowDown">&#9650;</span> : <span className="sideMenuRowDown">&#9660;</span>}</span>
-              <a className="sideMenuRow">
-                <img 
-                className="me-3 iconSideMenu"
-                src={example}
-                width="30"
-                height="30"
-                ></img>
-                example
-              </a>
-              <a className="sideMenuRow">
-                <img 
-                className="me-3 iconSideMenu"
-                src={example}
-                width="30"
-                height="30"
-                ></img>
-                example
-              </a>
-              <a className="sideMenuRow">
-                <img 
-                className="me-3 iconSideMenu"
-                src={example}
-                width="30"
-                height="30"
-                ></img>
-                example
-              </a>
-              <a className="sideMenuRow">
-                <img 
-                className="me-3 iconSideMenu"
-                src={example}
-                width="30"
-                height="30"
-                ></img>
-                example
-              </a>
-              <a className="sideMenuRow">
-                <img 
-                className="me-3 iconSideMenu"
-                src={example}
-                width="30"
-                height="30"
-                ></img>
-                example
-              </a>
-            </div>
-             ) : null} */}
-            {show ? (
-              <span className="exitBtn btn enterStyle" onClick={logOut}>
-                Вийти
-              </span>
-            ) : null}
           </NavbarCollapse>
         </Container>
       </Navbar>

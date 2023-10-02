@@ -52,19 +52,19 @@ function AboutAllUser() {
     }
   }, []);
 
-  useEffect(() => {
-    // Функція для відслідковування зміни розміру вікна
-    const handleResize = () => {
-      // setWindowWidth(window.innerWidth);
-    };
-    // Додаємо слухача подій для зміни розміру вікна
-    window.addEventListener("resize", handleResize);
+  // useEffect(() => {
+  //   // Функція для відслідковування зміни розміру вікна
+  //   const handleResize = () => {
+  //     // setWindowWidth(window.innerWidth);
+  //   };
+  //   // Додаємо слухача подій для зміни розміру вікна
+  //   window.addEventListener("resize", handleResize);
 
-    // Прибираємо слухача подій при розмонтуванні компонента
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  //   // Прибираємо слухача подій при розмонтуванні компонента
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, []);
 
   const allUser = async (Page) => {
     // console.log("INDEX PAGE:", Page);

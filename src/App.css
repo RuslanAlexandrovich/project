@@ -25,12 +25,15 @@ main {
   min-width: 100% !important;
   display: flex;
   justify-content: center !important;
+  user-select: none;
 }
 
 .headerStyle {
   background-color: #e2e0e0;
 }
 .navbar-toggler {
+  width: 40px;
+  padding: 1px;
   color: #004c5d !important;
   background-color: #004c5d !important;
   box-shadow: none !important;
@@ -84,13 +87,13 @@ main {
 .enterStyle .active {
   padding: 10px !important;
 }
+.exitMailWrap {
+}
 .exitBtn {
   color: #004c5d;
   cursor: pointer;
 }
-/* .exitBtn:hover {
-  border-bottom: 2px solid #004c5d;
-} */
+
 .dropSelect {
   display: flex;
   flex-direction: column;
@@ -127,45 +130,121 @@ main {
 .mailUser {
   margin-bottom: 10px;
 }
+@media screen and (max-width: 768px) {
+  .header_button {
+    padding-left: 5px !important;
+  }
+  .exitBtn {
+    margin-top: 5px !important;
+  }
+}
+@media screen and (max-width: 576px) {
+  .headerLogo {
+    width: 150px;
+  }
+}
 /* =================================SideMenu========================== */
 .leftSideMenu {
+  position: relative;
   display: flex;
   flex-direction: column;
   background-color: #e2e0e0;
-  padding-top: 10px;
+  padding-top: 40px;
   width: 50px;
-  min-height: 100%;
+  height: 100%;
   overflow-x: hidden;
-  /* position: absolute;
-  left: 0;
-  top: 50px; */
   transition: all 0.2s ease-in;
   z-index: 1;
+  user-select: none;
 }
 .sideMenuName {
-  display: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: end;
+  width: fit-content;
+  border-radius: 50%;
   color: #004c5d;
   text-decoration: none;
   font-weight: 500;
+  margin-bottom: 20px;
+}
+.iconSideMenu {
+  margin-left: 5px;
+}
+.hiddenlogo {
+  display: none;
+}
+.sideLogo {
+  position: absolute;
+  top: 5px;
+  right: 10px;
 }
 .sideMenuName:hover {
+  cursor: pointer;
   background-color: #d6d4d4;
 }
-.leftSideMenu:hover {
-  width: 200px;
+.leftSideMenu.showSide {
+  width: 100%;
   height: 100%;
-  position: sticky;
-  left: 0;
-  top: 59px;
 }
-.sideMenuRow {
-  display: flex;
-  padding: 10px;
+.activeBurger {
+  border-radius: 5px;
+  background-color: #d6d4d4;
+}
+.sideMenuUl {
+  padding: 0;
+  margin-top: 10px;
+  margin-bottom: 0;
+  width: 200px;
   color: #004c5d;
-  text-decoration: none;
   font-weight: 500;
+  cursor: pointer;
 }
+.sideMenuDivRow {
+  padding: 5px;
+}
+.sideMenuDivRow:hover {
+  background-color: #d6d4d4;
+}
+.inSideMenuLi {
+  display: none;
+}
+.openDropLi {
+  font-size: 14px;
+  padding: 10px;
+  width: 100%;
+  margin-top: 3px;
+  margin-right: 3px;
+  margin-bottom: 3px;
+  list-style-type: none;
+}
+.openDropLi:hover {
+  background-color: #d6d4d4;
+}
+.activeSideBtn {
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  height: 100%;
+  color: #004c5d;
+  border-bottom: 1px solid #004c5d;
+}
+.notActiveSideBtn {
+  display: flex;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: #004c5d;
+  width: 100%;
+  height: 100%;
+}
+
 .sideMenuRowDown {
+  display: flex;
+  align-items: center;
+  margin-left: 3px;
   font-size: 8px;
   color: #004c5d;
   font-weight: 500;
@@ -195,6 +274,7 @@ main {
     border-top: none;
     border-right: none;
     border-left: none;
+    border-bottom: none;
     border-radius: 0;
     min-height: fit-content;
     box-shadow: none;
@@ -207,28 +287,56 @@ main {
     margin-left: auto;
     width: fit-content;
   }
+  .LeftMenu {
+    display: flex;
+  }
   .leftSideMenu {
-    position: static;
-    width: fit-content;
-    padding-top: 0;
-    height: 25px;
+    display: none;
+    /* padding-top: 40px;
+    position: absolute;
+    left: 1px;
+    top: 10px;
+    width: 40px;
+    height: 40px;
     background-color: #e2e0e0;
     overflow-y: hidden;
-  }
-  .leftSideMenu:hover {
-    cursor: pointer;
+    overflow-x: hidden;
+    transition: all 0s; */
   }
   .sideMenuName {
-    display: block;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    width: 30px;
+    border-radius: 5px;
     width: fit-content;
+    height: fit-content;
+  }
+  .showSide {
+    cursor: pointer;
+    height: fit-content !important;
+    width: fit-content;
+    padding-bottom: 10px;
   }
   .sideMenuRow {
     padding: 0;
     padding-left: 10px;
-    margin-bottom: 5px;
+    /* margin-bottom: 5px; */
+    margin-top: 5px;
   }
   .iconSideMenu {
     display: none;
+  }
+  .sideMenuUl {
+    margin: 0;
+  }
+  .sideMenuDivRow {
+    padding: 0;
+    width: fit-content;
+  }
+  .openDropLi {
+    padding: 5px;
+    margin-top: 3px;
   }
 }
 @media screen and (max-width: 576px) {
@@ -310,6 +418,7 @@ form #submit:hover {
 }
 .exitMailWrap {
   display: flex;
+  flex-direction: column;
   margin-left: auto;
 }
 .mailUser {
@@ -321,7 +430,9 @@ form #submit:hover {
   }
   .exitMailWrap {
     margin-left: 0;
+    padding-bottom: 10px;
     justify-content: space-between;
+    border-bottom: 1px solid grey;
   }
   .header_button a {
     width: fit-content;
@@ -359,7 +470,7 @@ form #submit:hover {
   height: 100%;
 }
 .AbUsInfoCont {
-  min-width: 280px;
+  min-width: 300px;
   flex: 1 1 auto;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
 }
@@ -438,18 +549,7 @@ form #submit:hover {
 .wrappValueIconPassword {
   justify-content: end;
 }
-/* .newPassBtn {
-  border: 1px solid #004c5d;
-  border-radius: 5px;
-  margin-top: 5px;
-  background-color: #004c5d;
-  color: white;
-  width: fit-content;
-  padding: 2px;
-}
-.newPassBtn:hover {
-  background-color: #004c5dc4;
-} */
+
 .userFormBtn {
   background-color: #004c5d !important;
   border: #004c5d;
@@ -490,14 +590,6 @@ form #submit:hover {
   /* height: 4vw; */
 }
 
-/* .searchBlock {
-  display: flex;
-  align-items: center;
-  border: 1px solid black;
-  padding: 5px;
-  width: 100%;
-} */
-
 /* ========Рядок пошуку============*/
 
 .searchForm {
@@ -521,11 +613,7 @@ form #submit:hover {
 .searchInput {
   min-width: 100px;
 }
-/* .clear-search {
-  position: absolute;
-  top: 12px;
-  right: 10px;
-} */
+
 .searchBtnWrapp {
   display: flex;
   align-items: center;
@@ -565,14 +653,6 @@ form #submit:hover {
   .searchBtnWrapp {
     width: fit-content !important;
   }
-  /* .returnAllUsers {
-    margin-left: 20px!important;
-    padding: 2px !important;
-  } */
-  .searchUserBtn {
-    /* padding: 0 !important; */
-    /* width: fit-content!important; */
-  }
 }
 @media screen and (max-width: 576px) {
   .searchForm {
@@ -583,15 +663,6 @@ form #submit:hover {
     /* margin-top: 10px; */
     width: fit-content !important;
     justify-content: center;
-  }
-  /* .returnAllUsers {
-    margin: 0 !important;
-    max-width: 150px !important;
-  } */
-  .searchUserBtn {
-    /* padding: 2px !important;
-    width: 40px !important; */
-    /* margin-left: 50px; */
   }
 }
 @media screen and (max-width: 350px) {
@@ -619,26 +690,6 @@ form #submit:hover {
   margin-bottom: 10px;
 }
 
-/* .DeleteBtn {
-  background-color: white;
-  color: red;
-  border: 1px solid red;
-  border-radius: 5px;
-  margin-left: 20px;
-}
-.EditBtn {
-  background-color: white;
-  color: orange;
-  border: 1px solid orange;
-  border-radius: 5px;
-  margin-left: 20px;
-}
-.AddBtn {
-  background-color: white;
-  color: green;
-  border: 1px solid green;
-  border-radius: 5px;
-} */
 .btnAfter768 {
   margin-right: 15px;
   border-radius: 50%;
@@ -716,8 +767,18 @@ tr :nth-child(7) {
 tr {
   cursor: pointer;
 }
+
 tr:hover {
   background-color: #daeaea;
+}
+thead > tr:nth-child(1):hover {
+  background-color: white;
+}
+thead > tr:nth-child(2):hover {
+  background-color: white;
+}
+tbody > tr:nth-child(1):hover {
+  background-color: white;
 }
 .selected {
   border: 2px solid orange;
@@ -837,6 +898,16 @@ td {
   background-color: white;
   border-radius: 3px;
   margin: 0 5px 0 5px;
+}
+
+/* =============================Region Comp=============================== */
+
+.wrappRegionBlock {
+}
+.RegionsBlock {
+}
+.tBodyRegions > tr {
+  border-bottom: 1px solid gray;
 }
 /* ================Footer======================= */
 
