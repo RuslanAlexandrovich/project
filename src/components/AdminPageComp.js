@@ -13,9 +13,9 @@ import SERVER_URL from "../helpers/Config";
 import { Modal } from "react-bootstrap";
 import { CloseCircleOutlined } from "@ant-design/icons"; // Імпорт іконки "X"
 import { Navigate } from "react-router";
-import addUser from "../images/addUser.png";
-import editUser from "../images/editUser.png";
-import deleteUserBtn from "../images/deleteUserBtn.png";
+import addUser from "../images/addUser.svg";
+import editUser from "../images/editUser.svg";
+import deleteUserBtn from "../images/deleteUserBtn.svg";
 import deleteText from "../images/deleteText.png";
 import searchGlass from "../images/searchGlass.png";
 
@@ -52,19 +52,7 @@ function AboutAllUser() {
     }
   }, []);
 
-  // useEffect(() => {
-  //   // Функція для відслідковування зміни розміру вікна
-  //   const handleResize = () => {
-  //     // setWindowWidth(window.innerWidth);
-  //   };
-  //   // Додаємо слухача подій для зміни розміру вікна
-  //   window.addEventListener("resize", handleResize);
 
-  //   // Прибираємо слухача подій при розмонтуванні компонента
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, []);
 
   const allUser = async (Page) => {
     // console.log("INDEX PAGE:", Page);
@@ -264,7 +252,7 @@ function AboutAllUser() {
     watch,
   } = useForm();
 
-  // ======================Форма пошуку Search користувача========================
+  // ====================== пошук Search користувача========================
 
   const onSubmit = async () => {
     console.log("дані форми пошуку...", searchUser);

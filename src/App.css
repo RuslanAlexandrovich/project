@@ -781,7 +781,7 @@ tbody > tr:nth-child(1):hover {
   background-color: white;
 }
 .selected {
-  border: 2px solid orange;
+  border: 2px solid orange!important;
   background-color: #daeaea;
 }
 td {
@@ -906,8 +906,13 @@ td {
 }
 .RegionsBlock {
 }
+.tableRegions {
+}
 .tBodyRegions > tr {
   border-bottom: 1px solid gray;
+}
+.tBodyRegions td:nth-child(4) {
+  min-width: 500px!important;
 }
 /* ================Footer======================= */
 

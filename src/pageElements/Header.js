@@ -276,7 +276,16 @@ export default function Header() {
                             dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"
                           }
                         >
-                          <a>Регіональні менеджери</a>
+                          <Link
+                            to="/regionalmanager"
+                            className={
+                              activeLink === "/regionalmanager"
+                                ? "activeSideBtn"
+                                : "notActiveSideBtn"
+                            }
+                          >
+                            Регіональні менеджери
+                          </Link>
                         </li>
                         <li
                           className={

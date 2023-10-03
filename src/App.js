@@ -12,6 +12,7 @@ import SendEmail from "./pages/SendEmail";
 import AboutUser from "./pages/AboutUser";
 import AdminPage from "./pages/AdminPage";
 import RegionPage from "./pages/RegionPage";
+import RegionalManagerPage from "./pages/RegionalManagerPage";
 import UserConfirmComp from "./components/UserConfirmComp";
 import LeftSideMenu from "../src/components/LeftSideMenu";
 
@@ -107,6 +108,7 @@ function App() {
           <Route path="/adminpage" element={<AdminPage />} />
           <Route path="/userconfirm" element={<UserConfirmComp />} />
           <Route path="/regions" element={<RegionPage />} />
+          <Route path="/regionalmanager" element={<RegionalManagerPage />} />
         </Routes>
       </div>
     </div>

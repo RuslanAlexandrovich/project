@@ -15,17 +15,17 @@ import deleteText from "../images/deleteText.png";
 import searchGlass from "../images/searchGlass.png";
 import loading from "../images/loading.gif";
 
-function RegionPageComp() {
+function RegionalManagerComp() {
 
-  const [RegionsList, setRegionsList] = useState([]);
+  const [managerList, setManagerList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
-  const [originalRegionList, setOriginalRegionList] = useState([]);
-  const [searchRegion, setSearchRegion] = useState("");
-  const [selectedRegion, setSelectedRegion] = useState(null);
+  const [originalManagerList, setOriginalManagerList] = useState([]);
+  const [searchManager, setSearchManager] = useState("");
+  const [selectedManager, setSelectedManager] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [showAddedRegionModal, setShowAddedRegionModal] = useState(false);
+  const [showAddedManagerModal, setShowAddedManagerModal] = useState(false);
   const [filterSearch, setFilterSearch] = useState("");
 
   const [numberPagePagin, setNumberPagePagin] = useState(1);
@@ -36,13 +36,13 @@ function RegionPageComp() {
     if (storedPage) {
       const Page = parseInt(storedPage, 10);
       console.log("СТОРІНКА.....", Page);
-      GetAllRegions();
+      GetAllManager();
     } else {
-      GetAllRegions({});
+        GetAllManager({});
     }
   }, []);
 
-  const GetAllRegions = async (Page) => {
+  const GetAllManager = async (Page) => {
     console.log("INDEX PAGE:", Page);
     setIndicateSearchForm(false);
     setFilterSearch("");
@@ -50,7 +50,7 @@ function RegionPageComp() {
       let numPaginPage = typeof Page === "number" ? Page : 1;
 
       const response = await axios.get(
-        SERVER_URL + `Region/Region/All?Page=${numPaginPage}`,
+        SERVER_URL + `Region/RegionalManager/All?Page=${numPaginPage}`,
         {
           // params: data,
           headers: authHeader(),
@@ -60,18 +60,18 @@ function RegionPageComp() {
       // Перевіряємо статус відповіді
       if (response.status === 200) {
         const responseData = response.data; // Отримуємо дані відповіді
-        const Regions = responseData.entries;
+        const Manager = responseData.entries;
         const totalPages = responseData.paging.total_pages;
         const pageNumber = responseData.paging.page_number;
 
         setPageNumber(pageNumber);
         setTotalPages(totalPages); // Зберігаємо загальну кількість сторінок
-        setRegionsList(Regions); // Зберігаємо всі регіони в стані
-        setOriginalRegionList(Regions);
+        setManagerList(Manager); // Зберігаємо всі регіони в стані
+        setOriginalManagerList(Manager);
         // Обробка успішної відповіді
         console.log("Successful regionsAll:", response);
         console.log("Successful pages:", pageNumber);
-        return Regions;
+        return Manager;
       } else {
         throw new Error("Failed data");
       }
@@ -81,7 +81,7 @@ function RegionPageComp() {
     }
   };
 
-  const SearchAllRegions = async (searchWord, Page) => {
+  const SearchAllManager = async (searchWord, Page) => {
     console.log("INDEX PAGE:", Page);
     setIndicateSearchForm(true);
     try {
@@ -89,7 +89,7 @@ function RegionPageComp() {
       let searchWords = searchWord !== "" ? searchWord : "";
 
       const response = await axios.get(
-        SERVER_URL + `Region/Region/All?Page=${numPaginPage}&SearchWords=${searchWords}`,
+        SERVER_URL + `/Region/RegionalManager/All?Page=${numPaginPage}&SearchWords=${searchWords}`,
         {
           // params: data,
           headers: authHeader(),
@@ -99,18 +99,18 @@ function RegionPageComp() {
       // Перевіряємо статус відповіді
       if (response.status === 200) {
         const responseData = response.data; // Отримуємо дані відповіді
-        const Regions = responseData.entries;
+        const Manager = responseData.entries;
         const totalPages = responseData.paging.total_pages;
         const pageNumber = responseData.paging.page_number;
 
         setPageNumber(pageNumber);
         setTotalPages(totalPages); // Зберігаємо загальну кількість сторінок
-        setRegionsList(Regions); // Зберігаємо всі регіони в стані
-        setOriginalRegionList(Regions);
+        setManagerList(Manager); // Зберігаємо всі регіони в стані
+        setOriginalManagerList(Manager);
         // Обробка успішної відповіді
         console.log("Successful regionsAll:", response);
         console.log("Successful pages:", pageNumber);
-        return Regions;
+        return Manager;
       } else {
         throw new Error("Failed data");
       }
@@ -120,10 +120,10 @@ function RegionPageComp() {
     }
   };
 
-  const addRegion = async (data) => {
+  const addManager = async (data) => {
     try {
       console.log("Add Regions Row.......", data);
-      const response = await axios.post(SERVER_URL + "Region/Region", data, {
+      const response = await axios.post(SERVER_URL + "Region/RegionalManager", data, {
         // params: data,
         headers: authHeader(),
       });
@@ -148,22 +148,22 @@ function RegionPageComp() {
   };
 
   const AddedRegionWidow = () => {
-    setShowAddedRegionModal(true);
+    setShowAddedManagerModal(true);
   };
 
-  const editRegion = async (data) => {
+//   const editRegion = async (data) => {
 
-  };
+//   };
 
 
   const onSubmit = async () => {
-    console.log("дані форми пошуку...", searchRegion);
-    if (searchRegion.trim() === "") {
+    console.log("дані форми пошуку...", searchManager);
+    if (searchManager.trim() === "") {
       // Якщо поле пошуку порожнє, встановлюємо список користувачів в початковий стан
-      setRegionsList(originalRegionList);
+      setManagerList(originalManagerList);
     } else {
       // Викликаємо функцію пошуку та передаємо стартову сторінку
-      SearchAllRegions(searchRegion, 1);
+      SearchAllManager(searchManager, 1);
     }
   };
 
@@ -188,9 +188,9 @@ function RegionPageComp() {
                 <Form.Control
                   className="searchInput"
                   type="text"
-                  placeholder="Знайти користувача"
-                  value={searchRegion}
-                  onChange={(e) => setSearchRegion(e.target.value)}
+                  placeholder="Знайти менеджера"
+                  value={searchManager}
+                  onChange={(e) => setSearchManager(e.target.value)}
                 />
               </Form.Group>
               <div className="searchBtnWrapp">
@@ -200,11 +200,11 @@ function RegionPageComp() {
                   width="33"
                   height="33"
                   onClick={() => {
-                    GetAllRegions({});
+                    GetAllManager({});
                     // setnotFoundMessage(false);
                     setPageNumber(1);
                     setTotalPages(1);
-                    setSearchRegion("");
+                    setSearchManager("");
                   }}
                 ></img>
                 <Button
@@ -238,7 +238,7 @@ function RegionPageComp() {
                     width="40"
                     // onClick={openEditModalForSelectedUser}
                     className={`btnAfter768 ${
-                      !selectedRegion ? "" : "activeCircleEdit"
+                      !selectedManager ? "" : "activeCircleEdit"
                     }`}
                   ></img>
                    <img
@@ -247,7 +247,7 @@ function RegionPageComp() {
               // onClick={selectedUser ? openDeleteModal : null}
               // disabled={!selectedUser}
               className={`btnAfter768 ${
-                !selectedRegion ? "" : "activeCircleDelete"
+                !selectedManager ? "" : "activeCircleDelete"
               }`}
             ></img>
                 </div>
@@ -255,11 +255,11 @@ function RegionPageComp() {
                 {/* =======================Вікно Додавання Регіону========================== */}
 
         <Modal
-          show={showAddedRegionModal}
-          onHide={() => setShowAddedRegionModal(false)}
+          show={showAddedManagerModal}
+          onHide={() => setShowAddedManagerModal(false)}
         >
           <Modal.Header closeButton>
-            <Modal.Title>Додавання регіону</Modal.Title>
+            <Modal.Title>Редагування Менеджер\Регіон</Modal.Title>
           </Modal.Header>
           <Modal.Body>
           <Form
@@ -315,14 +315,14 @@ function RegionPageComp() {
               <button
                 type="submit"
                 className="btn btn-primary modalSendForm me-2"
-                onClick={handleSubmit(addRegion)}
+                onClick={handleSubmit(addManager)}
               >
                 Додати
               </button>
               <button
                 className="btn btn-secondary modalCancel ms-2"
                 onClick={() => {
-                  setShowAddedRegionModal(false);
+                    setShowAddedManagerModal(false);
                 }}
               >
                 Скасувати
@@ -334,9 +334,8 @@ function RegionPageComp() {
                   <thead className="headTable headTableRegions">
                     <tr className="headRow">
                       <th>№</th>
-                      <th>Код</th>
-                      <th>Регіон</th>
-                      <th>Примітки</th>
+                      <th>UserId</th>
+                      <th>RegionId</th>
                     </tr>
                     <tr>
                       <th colSpan="8" style={{ padding: "5px" }}></th>
@@ -346,18 +345,17 @@ function RegionPageComp() {
                     <tr>
                       <td colSpan="8" style={{ padding: "3px" }}></td>
                     </tr>
-                    {RegionsList.map((region, index) => (
+                    {managerList.map((manager, index) => (
                 <tr
-                  key={region.id}
-                  className={selectedRegion === region.id ? "selected" : ""}
+                  key={manager.id}
+                  className={selectedManager === manager.id ? "selected" : ""}
                   onClick={() => {
-                    setSelectedRegion(region.id);
+                    setSelectedManager(manager.id);
                   }}
                 >
                   <td>{index + 1}</td>
-                  <td>{region.regionCode}</td>
-                  <td>{region.regionName}</td>
-                  <td>{region.regionNote}</td>
+                  <td>{manager.userId}</td>
+                  <td>{manager.regionId}</td>
                 </tr>
               ))}
                   </tbody>
@@ -374,9 +372,9 @@ function RegionPageComp() {
               }}
               onClick={() => {
                 if (indicateSearchForm) {
-                  SearchAllRegions(searchRegion, index + 1);
+                  SearchAllManager(searchManager, index + 1);
                 } else {
-                  GetAllRegions(index + 1);
+                  GetAllManager(index + 1);
                 }
                 setCurrentPage(index + 1);
                 // setSelectedUserIdForEdit(null);
@@ -397,4 +395,4 @@ function RegionPageComp() {
   );
 }
 
-export default RegionPageComp;
+export default RegionalManagerComp;
