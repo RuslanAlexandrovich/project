@@ -17,8 +17,8 @@ import { emailCheck } from "../pattern/allPattern";
 import { phoneCheck } from "../pattern/allPattern";
 import { passwordCheck } from "../pattern/allPattern";
 import loading from "../images/loading.gif";
-import editValue from "../images/editValue.png";
-import closeEdit from "../images/closeEdit.png";
+import editUser from "../images/editUser.svg";
+import closeEdit from "../images/closeEdit.svg";
 import closeForm from "../images/closeForm.png";
 
 function AboutUserComp() {
@@ -300,7 +300,7 @@ function AboutUserComp() {
                     {isEditingUserName ? (
                       <img src={closeEdit} width="19"></img>
                     ) : (
-                      <img src={editValue} width="18"></img>
+                      <img src={editUser} width="18"></img>
                     )}
                   </span>
                 </div>
@@ -316,7 +316,7 @@ function AboutUserComp() {
                     {isEditingName ? (
                       <img src={closeEdit} width="19"></img>
                     ) : (
-                      <img src={editValue} width="18"></img>
+                      <img src={editUser} width="18"></img>
                     )}
                   </span>
                 </div>
@@ -332,7 +332,7 @@ function AboutUserComp() {
                     {isEditingSurName ? (
                       <img src={closeEdit} width="19"></img>
                     ) : (
-                      <img src={editValue} width="18"></img>
+                      <img src={editUser} width="18"></img>
                     )}
                   </span>
                 </div>
@@ -348,7 +348,7 @@ function AboutUserComp() {
                     {isEditingEmail ? (
                       <img src={closeEdit} width="19"></img>
                     ) : (
-                      <img src={editValue} width="18"></img>
+                      <img src={editUser} width="18"></img>
                     )}
                   </span>
                 </div>
@@ -364,7 +364,7 @@ function AboutUserComp() {
                     {isEditingPhone ? (
                       <img src={closeEdit} width="19"></img>
                     ) : (
-                      <img src={editValue} width="18"></img>
+                      <img src={editUser} width="18"></img>
                     )}
                   </span>
                 </div>
@@ -374,13 +374,13 @@ function AboutUserComp() {
                     className="iconWrapper"
                     onClick={() => {
                       toggleEditingPassword();
-                    toggleFormPassword();
+                      toggleFormPassword();
                     }}
                   >
                     {isEditingPassword ? (
                       <img src={closeEdit} width="19"></img>
                     ) : (
-                      <img src={editValue} width="18"></img>
+                      <img src={editUser} width="18"></img>
                     )}
                   </span>
                 </div>
@@ -561,7 +561,9 @@ function AboutUserComp() {
                 ></img>
                 <h2 className="title_form">Зміна телефону</h2>
                 <Form.Group className="mb-2">
-                  <Form.Label className="App-label">Номер телефону (380 ** *** ** **)</Form.Label>
+                  <Form.Label className="App-label">
+                    Номер телефону (380 ** *** ** **)
+                  </Form.Label>
                   <Form.Control
                     type="text"
                     id="phone"

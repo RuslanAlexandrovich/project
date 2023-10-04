@@ -693,12 +693,17 @@ form #submit:hover {
 .btnAfter768 {
   margin-right: 15px;
   border-radius: 50%;
-  padding: 2px;
+  /* padding: 2px; */
 }
 .btnAfter768:hover {
-  /* box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75); */
+  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
 }
-.addGreenCircle {
+.notActiveEdit {
+  margin-right: 15px;
+  border-radius: 50%;
+  /* padding: 2px; */
+}
+/* .addGreenCircle {
   border: 2px solid green;
 }
 .addGreenCircle:hover {
@@ -715,12 +720,12 @@ form #submit:hover {
 }
 .activeCircleDelete:hover {
   box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
-}
+} */
 @media screen and (max-width: 768px) {
   /* .adminBtnWrapper {
     justify-content: center;
   } */
-  .DeleteBtn,
+  /* .DeleteBtn,
   .EditBtn {
     padding: 2px;
     margin-left: 10px;
@@ -728,7 +733,7 @@ form #submit:hover {
   .AddBtn {
     padding: 2px;
     margin-left: 0;
-  }
+  } */
 }
 .AdminPage {
   display: flex;
@@ -781,7 +786,7 @@ tbody > tr:nth-child(1):hover {
   background-color: white;
 }
 .selected {
-  border: 2px solid orange!important;
+  border: 2px solid orange !important;
   background-color: #daeaea;
 }
 td {
@@ -912,7 +917,7 @@ td {
   border-bottom: 1px solid gray;
 }
 .tBodyRegions td:nth-child(4) {
-  min-width: 500px!important;
+  min-width: 500px !important;
 }
 /* ================Footer======================= */
 

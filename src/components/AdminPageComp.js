@@ -16,6 +16,9 @@ import { Navigate } from "react-router";
 import addUser from "../images/addUser.svg";
 import editUser from "../images/editUser.svg";
 import deleteUserBtn from "../images/deleteUserBtn.svg";
+import deleteUserBtnNotActive from "../images/deleteUserBtnNotActive.svg";
+import editUserNotActive from "../images/editUserNotActive.svg";
+import addUserNotActive from "../images/addUserNotActve.svg";
 import deleteText from "../images/deleteText.png";
 import searchGlass from "../images/searchGlass.png";
 
@@ -51,8 +54,6 @@ function AboutAllUser() {
       allUser({});
     }
   }, []);
-
-
 
   const allUser = async (Page) => {
     // console.log("INDEX PAGE:", Page);
@@ -385,14 +386,20 @@ function AboutAllUser() {
               </button> */}
             {/* )}
             {windowWidth < 768 ? ( */}
-            <img
-              src={editUser}
-              width="40"
-              onClick={openEditModalForSelectedUser}
-              className={`btnAfter768 ${
-                !selectedUser ? "" : "activeCircleEdit"
-              }`}
-            ></img>
+            {!selectedUser ? (
+              <img
+                src={editUserNotActive}
+                width="40"
+                className="notActiveEdit"
+              ></img>
+            ) : (
+              <img
+                src={editUser}
+                width="40"
+                onClick={openEditModalForSelectedUser}
+                className="btnAfter768"
+              ></img>
+            )}
             {/* ) : (
               <button
                 className={`btn btn-warning EditBtn ${
@@ -404,15 +411,21 @@ function AboutAllUser() {
               </button>
             )} */}
             {/* {windowWidth < 768 ? ( */}
-            <img
-              src={deleteUserBtn}
-              width="40"
-              onClick={selectedUser ? openDeleteModal : null}
-              disabled={!selectedUser}
-              className={`btnAfter768 ${
-                !selectedUser ? "" : "activeCircleDelete"
-              }`}
-            ></img>
+            {!selectedUser ? (
+              <img
+                src={deleteUserBtnNotActive}
+                width="40"
+                className="notActiveEdit"
+              ></img>
+            ) : (
+              <img
+                src={deleteUserBtn}
+                width="40"
+                onClick={selectedUser ? openDeleteModal : null}
+                disabled={!selectedUser}
+                className="btnAfter768"
+              ></img>
+            )}
             {/* ) : (
                <button
                 className={`btn btn-danger DeleteBtn ${

@@ -11,12 +11,14 @@ import { Modal } from "react-bootstrap";
 import addUser from "../images/addUser.svg";
 import editUser from "../images/editUser.svg";
 import deleteUserBtn from "../images/deleteUserBtn.svg";
+import deleteUserBtnNotActive from "../images/deleteUserBtnNotActive.svg";
+import editUserNotActive from "../images/editUserNotActive.svg";
+import addUserNotActive from "../images/addUserNotActve.svg";
 import deleteText from "../images/deleteText.png";
 import searchGlass from "../images/searchGlass.png";
 import loading from "../images/loading.gif";
 
 function RegionPageComp() {
-
   const [RegionsList, setRegionsList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -89,7 +91,8 @@ function RegionPageComp() {
       let searchWords = searchWord !== "" ? searchWord : "";
 
       const response = await axios.get(
-        SERVER_URL + `Region/Region/All?Page=${numPaginPage}&SearchWords=${searchWords}`,
+        SERVER_URL +
+          `Region/Region/All?Page=${numPaginPage}&SearchWords=${searchWords}`,
         {
           // params: data,
           headers: authHeader(),
@@ -151,10 +154,7 @@ function RegionPageComp() {
     setShowAddedRegionModal(true);
   };
 
-  const editRegion = async (data) => {
-
-  };
-
+  const editRegion = async (data) => {};
 
   const onSubmit = async () => {
     console.log("дані форми пошуку...", searchRegion);
@@ -175,52 +175,50 @@ function RegionPageComp() {
     watch,
   } = useForm();
 
-  
-
   return (
     <>
       <div className="App">
         <Container className="wrappAdmPage wrappRegionBlock">
           <Row>
             <Col className="searchRegionWrapp searchWrapper">
-            <Form onSubmit={handleSubmit(onSubmit)} className="searchForm">
-              <Form.Group controlId="formBasicSearch">
-                <Form.Control
-                  className="searchInput"
-                  type="text"
-                  placeholder="Знайти користувача"
-                  value={searchRegion}
-                  onChange={(e) => setSearchRegion(e.target.value)}
-                />
-              </Form.Group>
-              <div className="searchBtnWrapp">
-                <img
-                  className=" deleteTextIcon"
-                  src={deleteText}
-                  width="33"
-                  height="33"
-                  onClick={() => {
-                    GetAllRegions({});
-                    // setnotFoundMessage(false);
-                    setPageNumber(1);
-                    setTotalPages(1);
-                    setSearchRegion("");
-                  }}
-                ></img>
-                <Button
-                  type="submit"
-                  id="submitSearch"
-                  className="searchUserBtn"
-                >
+              <Form onSubmit={handleSubmit(onSubmit)} className="searchForm">
+                <Form.Group controlId="formBasicSearch">
+                  <Form.Control
+                    className="searchInput"
+                    type="text"
+                    placeholder="Знайти користувача"
+                    value={searchRegion}
+                    onChange={(e) => setSearchRegion(e.target.value)}
+                  />
+                </Form.Group>
+                <div className="searchBtnWrapp">
                   <img
-                    className="searchUserIcon"
-                    src={searchGlass}
-                    width="22"
-                    height="22"
+                    className=" deleteTextIcon"
+                    src={deleteText}
+                    width="33"
+                    height="33"
+                    onClick={() => {
+                      GetAllRegions({});
+                      // setnotFoundMessage(false);
+                      setPageNumber(1);
+                      setTotalPages(1);
+                      setSearchRegion("");
+                    }}
                   ></img>
-                </Button>
-              </div>
-            </Form>
+                  <Button
+                    type="submit"
+                    id="submitSearch"
+                    className="searchUserBtn"
+                  >
+                    <img
+                      className="searchUserIcon"
+                      src={searchGlass}
+                      width="22"
+                      height="22"
+                    ></img>
+                  </Button>
+                </div>
+              </Form>
             </Col>
           </Row>
           <Row>
@@ -231,105 +229,116 @@ function RegionPageComp() {
                     src={addUser}
                     width="40"
                     onClick={AddedRegionWidow}
-                    className="btnAfter768 addGreenCircle"
+                    className="btnAfter768 "
                   ></img>
-                  <img
-                    src={editUser}
-                    width="40"
-                    // onClick={openEditModalForSelectedUser}
-                    className={`btnAfter768 ${
-                      !selectedRegion ? "" : "activeCircleEdit"
-                    }`}
-                  ></img>
-                   <img
-              src={deleteUserBtn}
-              width="40"
-              // onClick={selectedUser ? openDeleteModal : null}
-              // disabled={!selectedUser}
-              className={`btnAfter768 ${
-                !selectedRegion ? "" : "activeCircleDelete"
-              }`}
-            ></img>
+                  {!selectedRegion ? (
+                    <img
+                      src={editUserNotActive}
+                      width="40"
+                      className="notActiveEdit"
+                    ></img>
+                  ) : (
+                    <img
+                      src={editUser}
+                      width="40"
+                      // onClick={openEditModalForSelectedUser}
+                      className="btnAfter768"
+                    ></img>
+                  )}
+                  {!selectedRegion ? (
+                    <img
+                      src={deleteUserBtnNotActive}
+                      width="40"
+                      className="notActiveEdit"
+                    ></img>
+                  ) : (
+                    <img
+                      src={deleteUserBtn}
+                      width="40"
+                      // onClick={openEditModalForSelectedUser}
+                      className="btnAfter768"
+                    ></img>
+                  )}
                 </div>
 
                 {/* =======================Вікно Додавання Регіону========================== */}
 
-        <Modal
-          show={showAddedRegionModal}
-          onHide={() => setShowAddedRegionModal(false)}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Додавання регіону</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-          <Form
-              onSubmit={handleSubmit(onSubmit)}
-              className="form_EditForAdmin"
-            >
-              <Form.Group className="mb-2" controlId="formBasicAddUser">
-                <Form.Control
-                  type="text"
-                  placeholder="Код регіону"
-                  {...register("regionCode", {
-                    required: false,
-                    // validate: (value) => loginCheck(value),
-                  })}
-                />
-                {errors.regionCode && (
-                  <Form.Text className="text-danger">
-                    Код має містити тільки цифри, не більше 6.
-                  </Form.Text>
-                )}
-              </Form.Group>
-              <Form.Group className="mb-2" controlId="formBasicName">
-                <Form.Control
-                  type="text"
-                  placeholder="Назва регіону"
-                  {...register("regionName", {
-                    required: false,
-                    // validate: (value) => nameCheck(value),
-                  })}
-                />
-                {errors.regionName && (
-                  <Form.Text className="text-danger">
-                    Назва має містити мінімум дві літери, з першою великою і
-                    рештою малих літер.
-                  </Form.Text>
-                )}
-              </Form.Group>
-              <Form.Group className="mb-2" controlId="formBasicSurname">
-                <Form.Control
-                  type="text"
-                  placeholder="Примітки"
-                  {...register("regionNote", {
-                    required: false,
-                    // validate: (value) => surNameCheck(value),
-                  })}
-                />
-              </Form.Group>
-              {/* <span className="confirmEdit">{serverAnswer}</span> */}
-            </Form>
-          </Modal.Body>
-            <Modal.Footer>
-            <div className="addFormBtns">
-              <button
-                type="submit"
-                className="btn btn-primary modalSendForm me-2"
-                onClick={handleSubmit(addRegion)}
-              >
-                Додати
-              </button>
-              <button
-                className="btn btn-secondary modalCancel ms-2"
-                onClick={() => {
-                  setShowAddedRegionModal(false);
-                }}
-              >
-                Скасувати
-              </button>
-            </div>
-          </Modal.Footer>
-        </Modal>
+                <Modal
+                  show={showAddedRegionModal}
+                  onHide={() => setShowAddedRegionModal(false)}
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title>Додавання регіону</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <Form
+                      onSubmit={handleSubmit(onSubmit)}
+                      className="form_EditForAdmin"
+                    >
+                      <Form.Group className="mb-2" controlId="formBasicAddUser">
+                        <Form.Control
+                          type="text"
+                          placeholder="Код регіону"
+                          {...register("regionCode", {
+                            required: false,
+                            // validate: (value) => loginCheck(value),
+                          })}
+                        />
+                        {errors.regionCode && (
+                          <Form.Text className="text-danger">
+                            Код має містити тільки цифри, не більше 6.
+                          </Form.Text>
+                        )}
+                      </Form.Group>
+                      <Form.Group className="mb-2" controlId="formBasicName">
+                        <Form.Control
+                          type="text"
+                          placeholder="Назва регіону"
+                          {...register("regionName", {
+                            required: false,
+                            // validate: (value) => nameCheck(value),
+                          })}
+                        />
+                        {errors.regionName && (
+                          <Form.Text className="text-danger">
+                            Назва має містити мінімум дві літери, з першою
+                            великою і рештою малих літер.
+                          </Form.Text>
+                        )}
+                      </Form.Group>
+                      <Form.Group className="mb-2" controlId="formBasicSurname">
+                        <Form.Control
+                          type="text"
+                          placeholder="Примітки"
+                          {...register("regionNote", {
+                            required: false,
+                            // validate: (value) => surNameCheck(value),
+                          })}
+                        />
+                      </Form.Group>
+                      {/* <span className="confirmEdit">{serverAnswer}</span> */}
+                    </Form>
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <div className="addFormBtns">
+                      <button
+                        type="submit"
+                        className="btn btn-primary modalSendForm me-2"
+                        onClick={handleSubmit(addRegion)}
+                      >
+                        Додати
+                      </button>
+                      <button
+                        className="btn btn-secondary modalCancel ms-2"
+                        onClick={() => {
+                          setShowAddedRegionModal(false);
+                        }}
+                      >
+                        Скасувати
+                      </button>
+                    </div>
+                  </Modal.Footer>
+                </Modal>
                 <table className="tableUsers tableRegions">
                   <thead className="headTable headTableRegions">
                     <tr className="headRow">
@@ -347,48 +356,52 @@ function RegionPageComp() {
                       <td colSpan="8" style={{ padding: "3px" }}></td>
                     </tr>
                     {RegionsList.map((region, index) => (
-                <tr
-                  key={region.id}
-                  className={selectedRegion === region.id ? "selected" : ""}
-                  onClick={() => {
-                    setSelectedRegion(region.id);
-                  }}
-                >
-                  <td>{index + 1}</td>
-                  <td>{region.regionCode}</td>
-                  <td>{region.regionName}</td>
-                  <td>{region.regionNote}</td>
-                </tr>
-              ))}
+                      <tr
+                        key={region.id}
+                        className={
+                          selectedRegion === region.id ? "selected" : ""
+                        }
+                        onClick={() => {
+                          setSelectedRegion(region.id);
+                        }}
+                      >
+                        <td>{index + 1}</td>
+                        <td>{region.regionCode}</td>
+                        <td>{region.regionName}</td>
+                        <td>{region.regionNote}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
               {/* ====================Блок пагінатора========================= */}
 
-        <div className="paging">
-          {Array.from({ length: totalPages }, (_, index) => (
-            <button
-              key={index}
-              onChange={() => {
-                setNumberPagePagin(index + 1);
-              }}
-              onClick={() => {
-                if (indicateSearchForm) {
-                  SearchAllRegions(searchRegion, index + 1);
-                } else {
-                  GetAllRegions(index + 1);
-                }
-                setCurrentPage(index + 1);
-                // setSelectedUserIdForEdit(null);
-              }}
-              className={
-                pageNumber === index + 1 ? "activePagin" : "notActivePagin"
-              }
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
+              <div className="paging">
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <button
+                    key={index}
+                    onChange={() => {
+                      setNumberPagePagin(index + 1);
+                    }}
+                    onClick={() => {
+                      if (indicateSearchForm) {
+                        SearchAllRegions(searchRegion, index + 1);
+                      } else {
+                        GetAllRegions(index + 1);
+                      }
+                      setCurrentPage(index + 1);
+                      // setSelectedUserIdForEdit(null);
+                    }}
+                    className={
+                      pageNumber === index + 1
+                        ? "activePagin"
+                        : "notActivePagin"
+                    }
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
             </Col>
           </Row>
         </Container>

@@ -292,14 +292,14 @@ export default function Header() {
                             dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"
                           }
                         >
-                          <a>Групи контактних осіб</a>
+                          <a>Типи заходів</a>
                         </li>
                         <li
                           className={
                             dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"
                           }
                         >
-                          <a>Типи заходів</a>
+                          <a>Контактні особи</a>
                         </li>
                       </ul>
                     </div>

@@ -131,8 +131,9 @@ export default function LeftSideMenu() {
               src={doc}
               height="30"
               width="180"
-              className={`d-inline-block headerLogo  ms-auto ${styleSideMenu ? "sideLogo" : "hiddenlogo"
-                }`}
+              className={`d-inline-block headerLogo  ms-auto ${
+                styleSideMenu ? "sideLogo" : "hiddenlogo"
+              }`}
               alt="Logo"
             />
           ) : null}
@@ -210,10 +211,10 @@ export default function LeftSideMenu() {
               </Link>
             </li>
             <li className={dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"}>
-              <a>Групи контактних осіб</a>
+              <a>Типи заходів</a>
             </li>
             <li className={dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"}>
-              <a>Типи заходів</a>
+              <a>Контактні особи</a>
             </li>
           </ul>
         </div>
