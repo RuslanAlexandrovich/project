@@ -1,5 +1,7 @@
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import ManagerAddRegion from "../components/ManagerAddRegion";
+import ManagerEditRegion from "../components/ManagerEditRegion";
 import React, { useState, useEffect, useRef } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
@@ -13,12 +15,11 @@ import editUser from "../images/editUser.svg";
 import deleteUserBtn from "../images/deleteUserBtn.svg";
 import deleteUserBtnNotActive from "../images/deleteUserBtnNotActive.svg";
 import editUserNotActive from "../images/editUserNotActive.svg";
-import addUserNotActive from "../images/addUserNotActve.svg";
 import deleteText from "../images/deleteText.png";
 import searchGlass from "../images/searchGlass.png";
-import loading from "../images/loading.gif";
 
-function RegionPageComp() {
+function RegionPageComp(props) {
+
   const [RegionsList, setRegionsList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -26,9 +27,15 @@ function RegionPageComp() {
   const [originalRegionList, setOriginalRegionList] = useState([]);
   const [searchRegion, setSearchRegion] = useState("");
   const [selectedRegion, setSelectedRegion] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showAddedRegionModal, setShowAddedRegionModal] = useState(false);
+  const [selectedRegionIdForEdit, setSelectedRegionIdForEdit] = useState(null);
+  const [regionValue, setRegionValue] = useState({});
   const [filterSearch, setFilterSearch] = useState("");
+
+  const [showAddRegionModal, setShowAddRegionModal] = useState(false);
+  const submitAddButtonRef = useRef(null);
+
+  const [showEditRegionModal, setShowEditRegionModal] = useState(false);
+  const submitEditButtonRef = useRef(null);
 
   const [numberPagePagin, setNumberPagePagin] = useState(1);
   const [indicateSearchForm, setIndicateSearchForm] = useState(false);
@@ -123,38 +130,40 @@ function RegionPageComp() {
     }
   };
 
-  const addRegion = async (data) => {
-    try {
-      console.log("Add Regions Row.......", data);
-      const response = await axios.post(SERVER_URL + "Region/Region", data, {
-        // params: data,
-        headers: authHeader(),
-      });
-      // Перевіряємо статус відповіді
-      if (response.status === 200) {
-        // const responseData = response.data; // Отримуємо дані відповіді
-        // const usersData = responseData.users;
-        // Обробка успішної відповіді
-        console.log("Created new Region.....OK......!");
-        const confirmServer = response.data.messages;
-        return { success: true, message: confirmServer };
-        // return usersData;
-      } else {
-        throw new Error("Failed data");
-      }
-    } catch (error) {
-      // Обробка помилки
-      console.error("Not answer:", error);
-      const errorServer = error.response.data.messages;
-      return { success: false, error: errorServer };
+  
+  //====================================Робота з модалкою ManagerAddRegion=================
+
+  const openAddModalForSelectedRegion = () => {
+    if (selectedRegion !== null) {
+      setSelectedRegionIdForEdit(selectedRegion);
+      setShowAddRegionModal(true);
     }
   };
 
-  const AddedRegionWidow = () => {
-    setShowAddedRegionModal(true);
+  const handleSubmitAddButtonClick = () => {
+    // Клацання на кнопці "modalConfirm" в модальному вікні
+    if (submitAddButtonRef.current) {
+      submitAddButtonRef.current.click(); // Симулюємо клік на кнопці "Надіслати" в іншому компоненті
+    }
   };
 
-  const editRegion = async (data) => {};
+
+  //====================================Робота з модалкою Manager Edit Region=================
+
+  const openEditModalForSelectedRegion = () => {
+    if (selectedRegion !== null) {
+      setSelectedRegionIdForEdit(selectedRegion);
+      setShowEditRegionModal(true);
+    }
+  };
+
+  const handleSubmitEditButtonClick = () => {
+    // Клацання на кнопці "modalConfirm" в модальному вікні
+    if (submitEditButtonRef.current) {
+      submitEditButtonRef.current.click(); // Симулюємо клік на кнопці "Надіслати" в іншому компоненті
+    }
+  };
+
 
   const onSubmit = async () => {
     console.log("дані форми пошуку...", searchRegion);
@@ -181,7 +190,7 @@ function RegionPageComp() {
         <Container className="wrappAdmPage wrappRegionBlock">
           <Row>
             <Col className="searchRegionWrapp searchWrapper">
-              <Form onSubmit={handleSubmit(onSubmit)} className="searchForm">
+              <Form className="searchForm" onSubmit={handleSubmit(onSubmit)}>
                 <Form.Group controlId="formBasicSearch">
                   <Form.Control
                     className="searchInput"
@@ -228,7 +237,7 @@ function RegionPageComp() {
                   <img
                     src={addUser}
                     width="40"
-                    onClick={AddedRegionWidow}
+                    onClick={() => setShowAddRegionModal(true)}
                     className="btnAfter768 "
                   ></img>
                   {!selectedRegion ? (
@@ -240,8 +249,8 @@ function RegionPageComp() {
                   ) : (
                     <img
                       src={editUser}
+                      onClick={openEditModalForSelectedRegion} 
                       width="40"
-                      // onClick={openEditModalForSelectedUser}
                       className="btnAfter768"
                     ></img>
                   )}
@@ -261,77 +270,33 @@ function RegionPageComp() {
                   )}
                 </div>
 
-                {/* =======================Вікно Додавання Регіону========================== */}
+          {/* =======================Вікно Додавання Регіону========================== */}
 
                 <Modal
-                  show={showAddedRegionModal}
-                  onHide={() => setShowAddedRegionModal(false)}
+                  show={showAddRegionModal} onHide={() => setShowAddRegionModal(false)}
                 >
                   <Modal.Header closeButton>
                     <Modal.Title>Додавання регіону</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <Form
-                      onSubmit={handleSubmit(onSubmit)}
-                      className="form_EditForAdmin"
-                    >
-                      <Form.Group className="mb-2" controlId="formBasicAddUser">
-                        <Form.Control
-                          type="text"
-                          placeholder="Код регіону"
-                          {...register("regionCode", {
-                            required: false,
-                            // validate: (value) => loginCheck(value),
-                          })}
-                        />
-                        {errors.regionCode && (
-                          <Form.Text className="text-danger">
-                            Код має містити тільки цифри, не більше 6.
-                          </Form.Text>
-                        )}
-                      </Form.Group>
-                      <Form.Group className="mb-2" controlId="formBasicName">
-                        <Form.Control
-                          type="text"
-                          placeholder="Назва регіону"
-                          {...register("regionName", {
-                            required: false,
-                            // validate: (value) => nameCheck(value),
-                          })}
-                        />
-                        {errors.regionName && (
-                          <Form.Text className="text-danger">
-                            Назва має містити мінімум дві літери, з першою
-                            великою і рештою малих літер.
-                          </Form.Text>
-                        )}
-                      </Form.Group>
-                      <Form.Group className="mb-2" controlId="formBasicSurname">
-                        <Form.Control
-                          type="text"
-                          placeholder="Примітки"
-                          {...register("regionNote", {
-                            required: false,
-                            // validate: (value) => surNameCheck(value),
-                          })}
-                        />
-                      </Form.Group>
-                      {/* <span className="confirmEdit">{serverAnswer}</span> */}
-                    </Form>
+                    <ManagerAddRegion 
+                    // regionValue={regionValue}
+                    submitAddButtonRef={submitAddButtonRef}
+                    />
                   </Modal.Body>
                   <Modal.Footer>
                     <div className="addFormBtns">
                       <button
                         type="submit"
                         className="btn btn-primary modalSendForm me-2"
-                        onClick={handleSubmit(addRegion)}
+                        onClick={handleSubmitAddButtonClick}
                       >
                         Додати
                       </button>
                       <button
                         className="btn btn-secondary modalCancel ms-2"
                         onClick={() => {
-                          setShowAddedRegionModal(false);
+                          setShowAddRegionModal(false);
                         }}
                       >
                         Скасувати
@@ -339,6 +304,42 @@ function RegionPageComp() {
                     </div>
                   </Modal.Footer>
                 </Modal>
+
+                {/* =======================Вікно Редагування Регіону========================== */}
+
+                <Modal
+                  show={showEditRegionModal} onHide={() => setShowEditRegionModal(false)}
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title>Редагування регіону</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <ManagerEditRegion 
+                    regionValue={regionValue}
+                    submitEditButtonRef={submitEditButtonRef}
+                    />
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <div className="addFormBtns">
+                      <button
+                        type="submit"
+                        className="btn btn-primary modalSendForm me-2"
+                        onClick={handleSubmitEditButtonClick}
+                      >
+                        Змінити
+                      </button>
+                      <button
+                        className="btn btn-secondary modalCancel ms-2"
+                        onClick={() => {
+                          setShowEditRegionModal(false);
+                        }}
+                      >
+                        Скасувати
+                      </button>
+                    </div>
+                  </Modal.Footer>
+                </Modal>
+            
                 <table className="tableUsers tableRegions">
                   <thead className="headTable headTableRegions">
                     <tr className="headRow">
@@ -362,7 +363,9 @@ function RegionPageComp() {
                           selectedRegion === region.id ? "selected" : ""
                         }
                         onClick={() => {
-                          setSelectedRegion(region.id);
+                        setSelectedRegion(region.id);
+                        setRegionValue(region);
+                        console.log(selectedRegion)
                         }}
                       >
                         <td>{index + 1}</td>
@@ -374,6 +377,7 @@ function RegionPageComp() {
                   </tbody>
                 </table>
               </div>
+
               {/* ====================Блок пагінатора========================= */}
 
               <div className="paging">

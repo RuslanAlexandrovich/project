@@ -477,6 +477,7 @@ function AboutAllUser() {
                   onClick={() => {
                     setSelectedUser(user.id);
                     setSelectedUserData(user);
+                    console.log(selectedUser)
                   }}
                 >
                   <td>{index + 1}</td>

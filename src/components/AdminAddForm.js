@@ -31,19 +31,6 @@ function AdminAddUserForm(props) {
   const [isUserChecked, setIsUserChecked] = useState(false);
   const [isAtLeastOneChecked, setIsAtLeastOneChecked] = useState(false); // Перевірка чи обраний чекбокс
 
-  // ==================Відстеження та перевірка ролі користувача============================
-
-  //   useEffect(() => {
-  //     if (userObj.roles.some((role) => role.name === "admin")) {
-  //       setIsAdminChecked(true);
-  //       setIsAtLeastOneChecked(true);
-  //     }
-  //     if (userObj.roles.some((role) => role.name === "user")) {
-  //       setIsUserChecked(true);
-  //       setIsAtLeastOneChecked(true);
-  //     }
-  //   }, [userObj]);
-
   // ==================Ролі для користувача============================
 
   const handleAdminChange = () => {
