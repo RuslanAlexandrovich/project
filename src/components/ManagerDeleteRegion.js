@@ -10,10 +10,13 @@ import axios from "axios";
 import SERVER_URL from "../helpers/Config";
 import authHeader from "../helpers/auth-header";
 
-function ManagerAddRegion(props) {
+function ManagerDeleteRegion(props) {
+  const region = props.regionValue;
+  const regionId = region.id;
+  console.log("Видалення регіону пропси", regionId);
+
   const [isLoading, setIsLoading] = useState(false);
-  const submitAddButtonRef = props.submitAddButtonRef;
-  // const closeModal = props.onCloseModal;
+  const submitDeleteButtonRef = props.submitDeleteButtonRef;
 
   const [serverAnswer, setserverAnswer] = useState();
 
@@ -23,15 +26,15 @@ function ManagerAddRegion(props) {
     formState: { errors },
   } = useForm();
 
-  //   const [showPassword, setShowPassword] = useState(false);
-
-  const addRegion = async (data) => {
+  const deleteRegion = async (dataId) => {
     try {
-      console.log("Add Regions Row.......", data);
-      const response = await axios.post(SERVER_URL + "Region/Region", data, {
-        // params: data,
-        headers: authHeader(),
-      });
+      console.log("Delete Regions Row.......", dataId);
+      const response = await axios.delete(
+        SERVER_URL + `Region/Region?regionId=${dataId}`,
+        {
+          headers: authHeader(),
+        }
+      );
       console.log("RESPONSE DATA:", response);
       if (response.status === 200) {
         console.log("Created new Region.....OK......!");
@@ -48,7 +51,7 @@ function ManagerAddRegion(props) {
   };
 
   const onSubmit = async (data) => {
-    const result = await addRegion(data);
+    const result = await deleteRegion(data.id);
     console.log(result);
     if (result.success) {
       if (result.success !== true) {
@@ -57,7 +60,7 @@ function ManagerAddRegion(props) {
       }
       // console.log("Отримані дані від сервера:", result.data.message);
       setserverAnswer(result.message);
-      console.log("Дані надіслано...   ", data);
+      console.log("Дані надіслано ID...   ", regionId);
       // setTimeout(() => window.location.reload(), 1500);
     } else {
       // Обробка помилки
@@ -75,44 +78,37 @@ function ManagerAddRegion(props) {
               onSubmit={handleSubmit(onSubmit)}
               className="form_EditForAdmin"
             >
-              <Form.Group className="mb-2" controlId="formBasicAddRegion">
+              <Form.Group className="mb-2" controlId="formBasicDeleteRegion">
                 <Form.Control
                   type="text"
                   placeholder="Код регіону"
-                  {...register("regionCode", {
+                  value={region.id}
+                  readOnly
+                  hidden
+                  {...register("id", {
                     required: false,
-                    // validate: (value) => loginCheck(value),
                   })}
                 />
-                {errors.regionCode && (
-                  <Form.Text className="text-danger">
-                    Код має містити тільки цифри, не більше 6.
-                  </Form.Text>
-                )}
+              </Form.Group>
+              <Form.Group className="mb-2" controlId="formBasicAddUser">
+                <Form.Control
+                  type="text"
+                  placeholder="Код регіону"
+                  value={region.regionCode}
+                  readOnly
+                  {...register("regionCode", {
+                    required: false,
+                  })}
+                />
               </Form.Group>
               <Form.Group className="mb-2" controlId="formBasicName">
                 <Form.Control
                   type="text"
                   placeholder="Назва регіону"
+                  value={region.regionName}
+                  readOnly
                   {...register("regionName", {
                     required: false,
-                    // validate: (value) => nameCheck(value),
-                  })}
-                />
-                {errors.regionName && (
-                  <Form.Text className="text-danger">
-                    Назва має містити мінімум дві літери, з першою великою і
-                    рештою малих літер.
-                  </Form.Text>
-                )}
-              </Form.Group>
-              <Form.Group className="mb-2" controlId="formBasicSurname">
-                <Form.Control
-                  type="text"
-                  placeholder="Примітки"
-                  {...register("regionNote", {
-                    required: false,
-                    // validate: (value) => surNameCheck(value),
                   })}
                 />
               </Form.Group>
@@ -120,7 +116,7 @@ function ManagerAddRegion(props) {
               <Button
                 type="submit"
                 id="submitNewDataBtn"
-                ref={submitAddButtonRef}
+                ref={submitDeleteButtonRef}
               ></Button>
             </Form>
           </Col>
@@ -130,4 +126,4 @@ function ManagerAddRegion(props) {
   );
 }
 
-export default ManagerAddRegion;
+export default ManagerDeleteRegion;

@@ -28,6 +28,7 @@ function AdminEditUserForm(props) {
 
   const [isAdminChecked, setIsAdminChecked] = useState(false);
   const [isUserChecked, setIsUserChecked] = useState(false);
+  const [isManagerChecked, setIsManagerChecked] = useState(false);
   const [isAtLeastOneChecked, setIsAtLeastOneChecked] = useState(false); // Перевірка чи обраний чекбокс
 
   // ==================Відстеження та перевірка ролі користувача============================
@@ -35,10 +36,20 @@ function AdminEditUserForm(props) {
   useEffect(() => {
     if (userObj.roles.some((role) => role.name === "admin")) {
       setIsAdminChecked(true);
+      setIsManagerChecked(false);
+      setIsUserChecked(false);
       setIsAtLeastOneChecked(true);
     }
     if (userObj.roles.some((role) => role.name === "user")) {
       setIsUserChecked(true);
+      setIsManagerChecked(false);
+      setIsAdminChecked(false);
+      setIsAtLeastOneChecked(true);
+    }
+    if (userObj.roles.some((role) => role.name === "manager")) {
+      setIsManagerChecked(true);
+      setIsUserChecked(false);
+      setIsAdminChecked(false);
       setIsAtLeastOneChecked(true);
     }
   }, [userObj]);
@@ -47,12 +58,20 @@ function AdminEditUserForm(props) {
 
   const handleAdminChange = () => {
     setIsAdminChecked(true);
-    setIsUserChecked(false); // Знімаємо позначку з чекбоксу "User"
+    setIsUserChecked(false);
+    setIsManagerChecked(false); // Знімаємо позначку з чекбоксу "User"
     setIsAtLeastOneChecked(true); // Один з чекбоксів обраний, встановлюємо на true
   };
 
   const handleUserChange = () => {
     setIsUserChecked(true);
+    setIsAdminChecked(false);
+    setIsManagerChecked(false); // Знімаємо позначку з чекбоксу "Admin"
+    setIsAtLeastOneChecked(true);
+  };
+  const handleManagerChange = () => {
+    setIsManagerChecked(true);
+    setIsUserChecked(false);
     setIsAdminChecked(false); // Знімаємо позначку з чекбоксу "Admin"
     setIsAtLeastOneChecked(true);
   };
@@ -83,6 +102,13 @@ function AdminEditUserForm(props) {
             {
               id: "3c3ba716-9cd1-45cf-b594-650692531952",
               name: "user",
+            },
+          ];
+        } else if (isManagerChecked) {
+          data.roles = [
+            {
+              id: "6bc03331-acfb-4f99-9d8a-755812a4fec5",
+              name: "manager",
             },
           ];
         } else {
@@ -144,12 +170,6 @@ function AdminEditUserForm(props) {
                     // validate: (value) => nameCheck(value),
                   })}
                 />
-                {/* {errors.name && (
-                  <Form.Text className="text-danger">
-                    Ім'я має містити мінімум дві літери, з першою великою і
-                    рештою малих літер.
-                  </Form.Text>
-                )} */}
               </Form.Group>
               <Form.Group className="mb-2" controlId="formBasicLogin">
                 {/* <Form.Label className="App-label">Логін</Form.Label> */}
@@ -254,7 +274,14 @@ function AdminEditUserForm(props) {
                     checked={isAdminChecked}
                     onChange={handleAdminChange}
                   />
-
+                  <Form.Check
+                    className="wrappCheckAdmin"
+                    type="checkbox"
+                    id="managerChekB"
+                    label="Manager"
+                    checked={isManagerChecked}
+                    onChange={handleManagerChange}
+                  />
                   <Form.Check
                     type="checkbox"
                     id="userCheckB"

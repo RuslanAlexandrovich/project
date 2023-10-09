@@ -196,7 +196,6 @@ function AboutAllUser() {
         setTimeout(() => {
           setSelectedUser(null);
           setShowDeleteModal(false);
-          setAnswerServDel("");
         }, 3000);
         return;
       } else {
@@ -204,12 +203,19 @@ function AboutAllUser() {
           prevUsers.filter((user) => user.id !== selectedUser)
         );
         setAnswerServDel(response.message);
-        await afterEditUser(currentPage);
-        setTimeout(() => {
-          setSelectedUser(null);
-          setShowDeleteModal(false);
-          setAnswerServDel("");
-        }, 1500);
+        if (users.length - 1 === 0) {
+          await afterEditUser(1);
+          setTimeout(() => {
+            setSelectedUser(null);
+            setShowDeleteModal(false);
+          }, 1500);
+        } else {
+          await afterEditUser(currentPage);
+          setTimeout(() => {
+            setSelectedUser(null);
+            setShowDeleteModal(false);
+          }, 1500);
+        }
       }
     } catch (error) {
       console.error("Помилка Запиту на видалення:", error);
@@ -477,7 +483,7 @@ function AboutAllUser() {
                   onClick={() => {
                     setSelectedUser(user.id);
                     setSelectedUserData(user);
-                    console.log(selectedUser)
+                    console.log(selectedUser);
                   }}
                 >
                   <td>{index + 1}</td>
@@ -506,16 +512,13 @@ function AboutAllUser() {
               onClick={() => {
                 if (indicateSearchForm) {
                   AdminSearchFormUser(searchUser, index + 1);
+                  setSelectedUser(null);
                 } else {
                   allUser(index + 1);
+                  setSelectedUser(null);
                 }
                 setCurrentPage(index + 1);
                 setSelectedUserIdForEdit(null);
-                // setNumberPagePagin(index + 1);
-                // {indicateSearchForm ? AdminSearchFormUser(numberPagePagin) : allUser(index + 1);}
-
-                // setCurrentPage(index + 1);
-                // setSelectedUserIdForEdit(null);
               }}
               className={
                 pageNumber === index + 1 ? "activePagin" : "notActivePagin"

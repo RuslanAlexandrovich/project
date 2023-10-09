@@ -28,6 +28,7 @@ function AdminAddUserForm(props) {
   const [serverAnswer, setserverAnswer] = useState();
 
   const [isAdminChecked, setIsAdminChecked] = useState(false);
+  const [isManagerChecked, setIsManagerChecked] = useState(false);
   const [isUserChecked, setIsUserChecked] = useState(false);
   const [isAtLeastOneChecked, setIsAtLeastOneChecked] = useState(false); // Перевірка чи обраний чекбокс
 
@@ -38,7 +39,12 @@ function AdminAddUserForm(props) {
     setIsUserChecked(false); // Знімаємо позначку з чекбоксу "User"
     setIsAtLeastOneChecked(true); // Один з чекбоксів обраний, встановлюємо на true
   };
-
+  const handleManagerChange = () => {
+    setIsManagerChecked(true);
+    setIsAdminChecked(false);
+    setIsUserChecked(false); // Знімаємо позначку з чекбоксу "User"
+    setIsAtLeastOneChecked(true); // Один з чекбоксів обраний, встановлюємо на true
+  };
   const handleUserChange = () => {
     setIsUserChecked(true);
     setIsAdminChecked(false); // Знімаємо позначку з чекбоксу "Admin"
@@ -66,6 +72,13 @@ function AdminAddUserForm(props) {
               name: "admin",
             },
           ];
+        } else if (isManagerChecked) {
+          data.roles = [
+            {
+              id: "6bc03331-acfb-4f99-9d8a-755812a4fec5",
+              name: "manager",
+            },
+          ];
         } else if (isUserChecked) {
           data.roles = [
             {
@@ -85,10 +98,8 @@ function AdminAddUserForm(props) {
 
         const result = await EditUser.AdminAddUser(data);
 
-       
-
         if (result.success) {
-          if (result.success !== true){
+          if (result.success !== true) {
             setserverAnswer(result.message);
             return;
           }
@@ -248,6 +259,14 @@ function AdminAddUserForm(props) {
                     checked={isAdminChecked}
                     onChange={handleAdminChange}
                   />
+                  <Form.Check
+                    className="wrappCheckAdmin"
+                    type="checkbox"
+                    id="managerChekB"
+                    label="Manager"
+                    checked={isManagerChecked}
+                    onChange={handleManagerChange}
+                  />
 
                   <Form.Check
                     type="checkbox"
@@ -257,9 +276,7 @@ function AdminAddUserForm(props) {
                     onChange={handleUserChange}
                   />
                   {isAtLeastOneChecked ? null : (
-                    <span className="ms-auto errorRoles">
-                      Оберіть роль для користувача!
-                    </span>
+                    <span className="ms-auto errorRoles">Оберіть роль!</span>
                   )}
                 </Form.Group>
               </div>
@@ -268,8 +285,8 @@ function AdminAddUserForm(props) {
                 <div className="loadingSpinner d-flex">
                   <img
                     src={loading}
-                    height="40"
-                    width="40"
+                    height="30"
+                    width="30"
                     alt="Завантаження..."
                     className="loading-spinner"
                   />

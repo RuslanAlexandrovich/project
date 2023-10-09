@@ -2,6 +2,7 @@ import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ManagerAddRegion from "../components/ManagerAddRegion";
 import ManagerEditRegion from "../components/ManagerEditRegion";
+import ManagerDeleteRegion from "../components/ManagerDeleteRegion";
 import React, { useState, useEffect, useRef } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
@@ -19,7 +20,9 @@ import deleteText from "../images/deleteText.png";
 import searchGlass from "../images/searchGlass.png";
 
 function RegionPageComp(props) {
+  // const servStatus = props.onEditRegionStatusChange;
 
+  const [servStatus, setServStatus] = useState(null);
   const [RegionsList, setRegionsList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -36,6 +39,9 @@ function RegionPageComp(props) {
 
   const [showEditRegionModal, setShowEditRegionModal] = useState(false);
   const submitEditButtonRef = useRef(null);
+
+  const [showDeleteRegionModal, setShowDeleteRegionModal] = useState(false);
+  const submitDeleteButtonRef = useRef(null);
 
   const [numberPagePagin, setNumberPagePagin] = useState(1);
   const [indicateSearchForm, setIndicateSearchForm] = useState(false);
@@ -55,6 +61,7 @@ function RegionPageComp(props) {
     console.log("INDEX PAGE:", Page);
     setIndicateSearchForm(false);
     setFilterSearch("");
+    setSelectedRegion(null);
     try {
       let numPaginPage = typeof Page === "number" ? Page : 1;
 
@@ -93,6 +100,7 @@ function RegionPageComp(props) {
   const SearchAllRegions = async (searchWord, Page) => {
     console.log("INDEX PAGE:", Page);
     setIndicateSearchForm(true);
+    setSelectedRegion(null);
     try {
       let numPaginPage = typeof Page === "number" ? Page : 1;
       let searchWords = searchWord !== "" ? searchWord : "";
@@ -130,7 +138,6 @@ function RegionPageComp(props) {
     }
   };
 
-  
   //====================================Робота з модалкою ManagerAddRegion=================
 
   const openAddModalForSelectedRegion = () => {
@@ -146,9 +153,20 @@ function RegionPageComp(props) {
       submitAddButtonRef.current.click(); // Симулюємо клік на кнопці "Надіслати" в іншому компоненті
     }
   };
-
+  const updateAfterAdd = async () => {
+    setTimeout(() => {
+      setSelectedRegion(null);
+      GetAllRegions(currentPage);
+    }, 1000);
+  };
 
   //====================================Робота з модалкою Manager Edit Region=================
+
+  const closeModal = () => {
+    setShowAddRegionModal(false);
+    setShowEditRegionModal(false);
+    setShowDeleteRegionModal(false);
+  };
 
   const openEditModalForSelectedRegion = () => {
     if (selectedRegion !== null) {
@@ -163,7 +181,39 @@ function RegionPageComp(props) {
       submitEditButtonRef.current.click(); // Симулюємо клік на кнопці "Надіслати" в іншому компоненті
     }
   };
+  const updateAfterEdit = async () => {
+    setTimeout(() => {
+      setSelectedRegion(null);
+      GetAllRegions(currentPage);
+    }, 1000);
+  };
 
+  //====================================Робота з модалкою Manager Delete Region=================
+
+  const openDeleteModalForSelectedRegion = () => {
+    if (selectedRegion !== null) {
+      setSelectedRegionIdForEdit(selectedRegion);
+      setShowDeleteRegionModal(true);
+    }
+  };
+
+  const handleSubmitDeleteButtonClick = () => {
+    // Клацання на кнопці "modalConfirm" в модальному вікні
+    if (submitDeleteButtonRef.current) {
+      submitDeleteButtonRef.current.click(); // Симулюємо клік на кнопці "Надіслати" в іншому компоненті
+    }
+  };
+  const updateAfterDelete = async () => {
+    setTimeout(() => {
+      setSelectedRegion(null);
+      if (RegionsList.length - 1 === 0) {
+        setCurrentPage(currentPage - 1);
+        GetAllRegions(currentPage - 1);
+      } else {
+        GetAllRegions(currentPage);
+      }
+    }, 1000);
+  };
 
   const onSubmit = async () => {
     console.log("дані форми пошуку...", searchRegion);
@@ -188,6 +238,8 @@ function RegionPageComp(props) {
     <>
       <div className="App">
         <Container className="wrappAdmPage wrappRegionBlock">
+          {/* ===========================Блок пошуку============================ */}
+
           <Row>
             <Col className="searchRegionWrapp searchWrapper">
               <Form className="searchForm" onSubmit={handleSubmit(onSubmit)}>
@@ -249,7 +301,7 @@ function RegionPageComp(props) {
                   ) : (
                     <img
                       src={editUser}
-                      onClick={openEditModalForSelectedRegion} 
+                      onClick={openEditModalForSelectedRegion}
                       width="40"
                       className="btnAfter768"
                     ></img>
@@ -263,25 +315,26 @@ function RegionPageComp(props) {
                   ) : (
                     <img
                       src={deleteUserBtn}
+                      onClick={openDeleteModalForSelectedRegion}
                       width="40"
-                      // onClick={openEditModalForSelectedUser}
                       className="btnAfter768"
                     ></img>
                   )}
                 </div>
 
-          {/* =======================Вікно Додавання Регіону========================== */}
+                {/* =======================Вікно Додавання Регіону========================== */}
 
                 <Modal
-                  show={showAddRegionModal} onHide={() => setShowAddRegionModal(false)}
+                  show={showAddRegionModal}
+                  onHide={() => setShowAddRegionModal(false)}
                 >
                   <Modal.Header closeButton>
                     <Modal.Title>Додавання регіону</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <ManagerAddRegion 
-                    // regionValue={regionValue}
-                    submitAddButtonRef={submitAddButtonRef}
+                    <ManagerAddRegion
+                      submitAddButtonRef={submitAddButtonRef}
+                      closeModal={closeModal}
                     />
                   </Modal.Body>
                   <Modal.Footer>
@@ -289,7 +342,10 @@ function RegionPageComp(props) {
                       <button
                         type="submit"
                         className="btn btn-primary modalSendForm me-2"
-                        onClick={handleSubmitAddButtonClick}
+                        onClick={() => {
+                          handleSubmitAddButtonClick();
+                          updateAfterAdd();
+                        }}
                       >
                         Додати
                       </button>
@@ -308,15 +364,17 @@ function RegionPageComp(props) {
                 {/* =======================Вікно Редагування Регіону========================== */}
 
                 <Modal
-                  show={showEditRegionModal} onHide={() => setShowEditRegionModal(false)}
+                  show={showEditRegionModal}
+                  onHide={() => setShowEditRegionModal(false)}
                 >
                   <Modal.Header closeButton>
                     <Modal.Title>Редагування регіону</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <ManagerEditRegion 
-                    regionValue={regionValue}
-                    submitEditButtonRef={submitEditButtonRef}
+                    <ManagerEditRegion
+                      regionValue={regionValue}
+                      submitEditButtonRef={submitEditButtonRef}
+                      closeModal={closeModal}
                     />
                   </Modal.Body>
                   <Modal.Footer>
@@ -324,7 +382,11 @@ function RegionPageComp(props) {
                       <button
                         type="submit"
                         className="btn btn-primary modalSendForm me-2"
-                        onClick={handleSubmitEditButtonClick}
+                        onClick={() => {
+                          handleSubmitEditButtonClick();
+                          updateAfterEdit(currentPage);
+                          console.log("current page...", currentPage);
+                        }}
                       >
                         Змінити
                       </button>
@@ -339,7 +401,47 @@ function RegionPageComp(props) {
                     </div>
                   </Modal.Footer>
                 </Modal>
-            
+
+                {/* =======================Вікно Видалення Регіону========================== */}
+
+                <Modal
+                  show={showDeleteRegionModal}
+                  onHide={() => setShowDeleteRegionModal(false)}
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title>Ви хочете видалити регіон?</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <ManagerDeleteRegion
+                      regionValue={regionValue}
+                      submitDeleteButtonRef={submitDeleteButtonRef}
+                      closeModal={closeModal}
+                    />
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <div className="addFormBtns">
+                      <button
+                        type="submit"
+                        className="btn btn-primary modalSendForm me-2"
+                        onClick={() => {
+                          handleSubmitDeleteButtonClick();
+                          updateAfterDelete(currentPage);
+                        }}
+                      >
+                        Видалити
+                      </button>
+                      <button
+                        className="btn btn-secondary modalCancel ms-2"
+                        onClick={() => {
+                          setShowDeleteRegionModal(false);
+                        }}
+                      >
+                        Скасувати
+                      </button>
+                    </div>
+                  </Modal.Footer>
+                </Modal>
+
                 <table className="tableUsers tableRegions">
                   <thead className="headTable headTableRegions">
                     <tr className="headRow">
@@ -363,9 +465,9 @@ function RegionPageComp(props) {
                           selectedRegion === region.id ? "selected" : ""
                         }
                         onClick={() => {
-                        setSelectedRegion(region.id);
-                        setRegionValue(region);
-                        console.log(selectedRegion)
+                          setSelectedRegion(region.id);
+                          setRegionValue(region);
+                          console.log(selectedRegion);
                         }}
                       >
                         <td>{index + 1}</td>
@@ -394,7 +496,7 @@ function RegionPageComp(props) {
                         GetAllRegions(index + 1);
                       }
                       setCurrentPage(index + 1);
-                      // setSelectedUserIdForEdit(null);
+                      setSelectedRegionIdForEdit(null);
                     }}
                     className={
                       pageNumber === index + 1

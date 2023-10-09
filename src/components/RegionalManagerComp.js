@@ -1,5 +1,7 @@
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import RegionalManagerAdd from "../components/RegionalManagerAdd";
+import RegionalManagerDelete from "../components/RegionalManagerDelete";
 import React, { useState, useEffect, useRef } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
@@ -18,7 +20,7 @@ import deleteText from "../images/deleteText.png";
 import searchGlass from "../images/searchGlass.png";
 import loading from "../images/loading.gif";
 
-function RegionalManagerComp() {
+function RegionalManagerComp(props) {
   const [managerList, setManagerList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -26,12 +28,18 @@ function RegionalManagerComp() {
   const [originalManagerList, setOriginalManagerList] = useState([]);
   const [searchManager, setSearchManager] = useState("");
   const [selectedManager, setSelectedManager] = useState(null);
+  const [selectedManagerValue, setSelectedManagerValue] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [showAddedManagerModal, setShowAddedManagerModal] = useState(false);
   const [filterSearch, setFilterSearch] = useState("");
 
   const [numberPagePagin, setNumberPagePagin] = useState(1);
   const [indicateSearchForm, setIndicateSearchForm] = useState(false);
+
+  const [showAddedManagerModal, setShowAddedManagerModal] = useState(false);
+  const submitAddButtonRef = useRef(null);
+
+  const [showDeleteManagerModal, setShowDeleteManagerModal] = useState(false);
+  const submitDeleteButtonRef = useRef(null);
 
   useEffect(() => {
     const storedPage = localStorage.getItem("paginPage");
@@ -123,44 +131,45 @@ function RegionalManagerComp() {
     }
   };
 
-  const addManager = async (data) => {
-    try {
-      console.log("Add Regions Row.......", data);
-      const response = await axios.post(
-        SERVER_URL + "Region/RegionalManager",
-        data,
-        {
-          // params: data,
-          headers: authHeader(),
-        }
-      );
-      // Перевіряємо статус відповіді
-      if (response.status === 200) {
-        // const responseData = response.data; // Отримуємо дані відповіді
-        // const usersData = responseData.users;
-        // Обробка успішної відповіді
-        console.log("Created new Region.....OK......!");
-        const confirmServer = response.data.messages;
-        return { success: true, message: confirmServer };
-        // return usersData;
-      } else {
-        throw new Error("Failed data");
-      }
-    } catch (error) {
-      // Обробка помилки
-      console.error("Not answer:", error);
-      const errorServer = error.response.data.messages;
-      return { success: false, error: errorServer };
+  //===============================================Робота з модалками============================
+
+  const closeModal = () => {
+    setShowAddedManagerModal(false);
+    // setShowEditRegionModal(false);
+    setShowDeleteManagerModal(false);
+  };
+
+  const handleSubmitAddButtonClick = () => {
+    // Клацання на кнопці "modalConfirm" в модальному вікні
+    if (submitAddButtonRef.current) {
+      submitAddButtonRef.current.click(); // Симулюємо клік на кнопці "Надіслати" в іншому компоненті
     }
+    setTimeout(() => {
+      GetAllManager(currentPage);
+    }, 1000);
+  };
+  const handleSubmitDeleteButtonClick = () => {
+    // Клацання на кнопці "modalConfirm" в модальному вікні
+    if (submitDeleteButtonRef.current) {
+      submitDeleteButtonRef.current.click(); // Симулюємо клік на кнопці "Надіслати" в іншому компоненті
+    }
+    setTimeout(() => {
+      setSelectedManager(null);
+      if (managerList.length - 1 === 0) {
+        setCurrentPage(currentPage - 1);
+        GetAllManager(currentPage - 1);
+      } else {
+        GetAllManager(currentPage);
+      }
+    }, 1000);
   };
 
   const AddedRegionWidow = () => {
     setShowAddedManagerModal(true);
   };
-
-  //   const editRegion = async (data) => {
-
-  //   };
+  const DeleteRegionWidow = () => {
+    setShowDeleteManagerModal(true);
+  };
 
   const onSubmit = async () => {
     console.log("дані форми пошуку...", searchManager);
@@ -237,7 +246,7 @@ function RegionalManagerComp() {
                     onClick={AddedRegionWidow}
                     className="btnAfter768"
                   ></img>
-                  {!selectedManager ? (
+                  {/* {!selectedManager ? (
                     <img
                       src={editUserNotActive}
                       width="40"
@@ -250,7 +259,7 @@ function RegionalManagerComp() {
                       // onClick={openEditModalForSelectedUser}
                       className="btnAfter768"
                     ></img>
-                  )}
+                  )} */}
                   {!selectedManager ? (
                     <img
                       src={deleteUserBtnNotActive}
@@ -261,13 +270,13 @@ function RegionalManagerComp() {
                     <img
                       src={deleteUserBtn}
                       width="40"
-                      // onClick={openEditModalForSelectedUser}
+                      onClick={DeleteRegionWidow}
                       className="btnAfter768"
                     ></img>
                   )}
                 </div>
 
-                {/* =======================Вікно Додавання Регіону========================== */}
+                {/* =======================Вікно Додавання Регіонального менеджера========================== */}
 
                 <Modal
                   show={showAddedManagerModal}
@@ -277,60 +286,19 @@ function RegionalManagerComp() {
                     <Modal.Title>Додавання Менеджер\Регіон</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <Form
-                      onSubmit={handleSubmit(onSubmit)}
-                      className="form_EditForAdmin"
-                    >
-                      <Form.Group className="mb-2" controlId="formBasicAddUser">
-                        <Form.Control
-                          type="text"
-                          placeholder="Код регіону"
-                          {...register("regionCode", {
-                            required: false,
-                            // validate: (value) => loginCheck(value),
-                          })}
-                        />
-                        {errors.regionCode && (
-                          <Form.Text className="text-danger">
-                            Код має містити тільки цифри, не більше 6.
-                          </Form.Text>
-                        )}
-                      </Form.Group>
-                      <Form.Group className="mb-2" controlId="formBasicName">
-                        <Form.Control
-                          type="text"
-                          placeholder="Назва регіону"
-                          {...register("regionName", {
-                            required: false,
-                            // validate: (value) => nameCheck(value),
-                          })}
-                        />
-                        {errors.regionName && (
-                          <Form.Text className="text-danger">
-                            Назва має містити мінімум дві літери, з першою
-                            великою і рештою малих літер.
-                          </Form.Text>
-                        )}
-                      </Form.Group>
-                      <Form.Group className="mb-2" controlId="formBasicSurname">
-                        <Form.Control
-                          type="text"
-                          placeholder="Примітки"
-                          {...register("regionNote", {
-                            required: false,
-                            // validate: (value) => surNameCheck(value),
-                          })}
-                        />
-                      </Form.Group>
-                      {/* <span className="confirmEdit">{serverAnswer}</span> */}
-                    </Form>
+                    <RegionalManagerAdd
+                      submitAddButtonRef={submitAddButtonRef}
+                      closeModal={closeModal}
+                    />
                   </Modal.Body>
                   <Modal.Footer>
                     <div className="addFormBtns">
                       <button
                         type="submit"
                         className="btn btn-primary modalSendForm me-2"
-                        onClick={handleSubmit(addManager)}
+                        onClick={() => {
+                          handleSubmitAddButtonClick();
+                        }}
                       >
                         Додати
                       </button>
@@ -338,6 +306,43 @@ function RegionalManagerComp() {
                         className="btn btn-secondary modalCancel ms-2"
                         onClick={() => {
                           setShowAddedManagerModal(false);
+                        }}
+                      >
+                        Скасувати
+                      </button>
+                    </div>
+                  </Modal.Footer>
+                </Modal>
+
+                {/* =======================Вікно видалення регіонального менеджера========================== */}
+
+                <Modal
+                  show={showDeleteManagerModal}
+                  onHide={() => setShowDeleteManagerModal(false)}
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title>Видалення Менеджер\Регіон</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <RegionalManagerDelete
+                      selectedManagerValue={selectedManagerValue}
+                      submitDeleteButtonRef={submitDeleteButtonRef}
+                      closeModal={closeModal}
+                    />
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <div className="addFormBtns">
+                      <button
+                        type="submit"
+                        className="btn btn-primary modalSendForm me-2"
+                        onClick={handleSubmitDeleteButtonClick}
+                      >
+                        Видалити
+                      </button>
+                      <button
+                        className="btn btn-secondary modalCancel ms-2"
+                        onClick={() => {
+                          setShowDeleteManagerModal(false);
                         }}
                       >
                         Скасувати
@@ -370,6 +375,7 @@ function RegionalManagerComp() {
                         }
                         onClick={() => {
                           setSelectedManager(object.id);
+                          setSelectedManagerValue(object);
                         }}
                       >
                         <td>{index + 1}</td>
@@ -398,7 +404,7 @@ function RegionalManagerComp() {
                         GetAllManager(index + 1);
                       }
                       setCurrentPage(index + 1);
-                      // setSelectedUserIdForEdit(null);
+                      setSelectedManager(null);
                     }}
                     className={
                       pageNumber === index + 1
