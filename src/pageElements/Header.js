@@ -163,12 +163,14 @@ export default function Header() {
           <NavbarCollapse id="responsive-navbar-nav">
             <Nav className=" header_button">
               {show ? (
-                <Link
-                  to="/home"
-                  className={activeLink === "/home" ? "active" : ""}
-                >
-                  Головна
-                </Link>
+                <div className={activeLink === "/home" ? "active" : "noActive"}>
+                  <Link
+                    to="/home"
+                    // className={activeLink === "/home" ? "active" : ""}
+                  >
+                    Головна
+                  </Link>
+                </div>
               ) : null}
               {!show ? (
                 <Link
@@ -191,20 +193,36 @@ export default function Header() {
                   >
                     <span className="mailUser">{mailUser}</span>
                     {show ? (
-                      <Link
-                        to="/aboutuser"
-                        className={activeLink === "/aboutuser" ? "active" : ""}
+                      <div
+                        className={
+                          activeLink === "/aboutuser" ? "active" : "noActive"
+                        }
                       >
-                        Налаштування
-                      </Link>
+                        <Link
+                          to="/aboutuser"
+                          // className={
+                          //   activeLink === "/aboutuser" ? "active" : ""
+                          // }
+                        >
+                          Налаштування
+                        </Link>
+                      </div>
                     ) : null}
                     {admin ? (
-                      <Link
-                        to="/adminpage"
-                        className={activeLink === "/adminpage" ? "active" : ""}
+                      <div
+                        className={
+                          activeLink === "/adminpage" ? "active" : "noActive"
+                        }
                       >
-                        Користувачі
-                      </Link>
+                        <Link
+                          to="/adminpage"
+                          // className={
+                          //   activeLink === "/adminpage" ? "active" : ""
+                          // }
+                        >
+                          Користувачі
+                        </Link>
+                      </div>
                     ) : null}
                   </NavDropdown>
                   {windowWidth < 768 ? (
@@ -247,61 +265,78 @@ export default function Header() {
                           <a>Приклад</a>
                         </li>
                       </ul>
-                      <ul className="sideMenuUl">
-                        <div
-                          className="d-flex sideMenuDivRow"
-                          onClick={toggleDropLiDirectory}
-                        >
-                          Довідники
-                          <span className="sideMenuRowDown">&#9660;</span>
-                        </div>
-                        <li
-                          className={
-                            dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"
-                          }
-                        >
-                          <Link
-                            to="/regions"
+                      {admin ? (
+                        <ul className="sideMenuUl">
+                          <div
+                            className="d-flex sideMenuDivRow"
+                            onClick={toggleDropLiDirectory}
+                          >
+                            Довідники
+                            <span className="sideMenuRowDown">&#9660;</span>
+                          </div>
+                          <li
                             className={
-                              activeLink === "/regions"
-                                ? "activeSideBtn"
-                                : "notActiveSideBtn"
+                              dropMenuLiDirectory
+                                ? "openDropLi"
+                                : "inSideMenuLi"
                             }
                           >
-                            Регіони
-                          </Link>
-                        </li>
-                        <li
-                          className={
-                            dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"
-                          }
-                        >
-                          <Link
-                            to="/regionalmanager"
+                            <Link
+                              to="/regions"
+                              className={
+                                activeLink === "/regions"
+                                  ? "activeSideBtn"
+                                  : "notActiveSideBtn"
+                              }
+                            >
+                              Регіони
+                            </Link>
+                          </li>
+                          <li
                             className={
-                              activeLink === "/regionalmanager"
-                                ? "activeSideBtn"
-                                : "notActiveSideBtn"
+                              dropMenuLiDirectory
+                                ? "openDropLi"
+                                : "inSideMenuLi"
                             }
                           >
-                            Регіональні менеджери
-                          </Link>
-                        </li>
-                        <li
-                          className={
-                            dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"
-                          }
-                        >
-                          <a>Типи заходів</a>
-                        </li>
-                        <li
+                            <Link
+                              to="/regionalmanager"
+                              className={
+                                activeLink === "/regionalmanager"
+                                  ? "activeSideBtn"
+                                  : "notActiveSideBtn"
+                              }
+                            >
+                              Регіональні менеджери
+                            </Link>
+                          </li>
+                          <li
+                            className={
+                              dropMenuLiDirectory
+                                ? "openDropLi"
+                                : "inSideMenuLi"
+                            }
+                          >
+                            <Link
+                              to="/eventstype"
+                              className={
+                                activeLink === "/eventstype"
+                                  ? "activeSideBtn"
+                                  : "notActiveSideBtn"
+                              }
+                            >
+                              Типи заходів
+                            </Link>
+                          </li>
+                          {/* <li
                           className={
                             dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"
                           }
                         >
                           <a>Контактні особи</a>
-                        </li>
-                      </ul>
+                        </li> */}
+                        </ul>
+                      ) : null}
                     </div>
                   ) : null}
                 </div>

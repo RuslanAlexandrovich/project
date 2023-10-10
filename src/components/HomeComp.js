@@ -21,7 +21,7 @@ function HomeComponent() {
           src={doc}
           height="100%"
           width="100%"
-          className="d-inline-block"
+          className="d-inline-block homePageLogo"
           alt="Logo"
         />
       </div>

@@ -49,6 +49,7 @@ export default function LeftSideMenu() {
   };
 
   const visibleSideMenu = isShow();
+  const Admin = isAdmin();
 
   // =====================Відстеження ширини екрану=============================
 
@@ -173,50 +174,69 @@ export default function LeftSideMenu() {
               <a>Приклад</a>
             </li>
           </ul>
-          <ul className="sideMenuUl">
-            <div
-              className="d-flex sideMenuDivRow"
-              onClick={toggleDropLiDirectory}
-            >
-              <img
-                className="me-3 iconSideMenu"
-                src={example}
-                width="30"
-                height="30"
-              ></img>
-              Довідники<span className="sideMenuRowDown">&#9660;</span>
-            </div>
-            <li className={dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"}>
-              <Link
-                to="/regions"
-                className={
-                  activeLink === "/regions"
-                    ? "activeSideBtn"
-                    : "notActiveSideBtn"
-                }
+          {Admin ? (
+            <ul className="sideMenuUl">
+              <div
+                className="d-flex sideMenuDivRow"
+                onClick={toggleDropLiDirectory}
               >
-                Регіони
-              </Link>
-            </li>
-            <li className={dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"}>
-              <Link
-                to="/regionalmanager"
-                className={
-                  activeLink === "/regionalmanager"
-                    ? "activeSideBtn"
-                    : "notActiveSideBtn"
-                }
+                <img
+                  className="me-3 iconSideMenu"
+                  src={example}
+                  width="30"
+                  height="30"
+                ></img>
+                Довідники<span className="sideMenuRowDown">&#9660;</span>
+              </div>
+              <li
+                className={dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"}
               >
-                Регіональні менеджери
-              </Link>
-            </li>
-            <li className={dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"}>
-              <a>Типи заходів</a>
-            </li>
-            <li className={dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"}>
-              <a>Контактні особи</a>
-            </li>
-          </ul>
+                <Link
+                  to="/regions"
+                  className={
+                    activeLink === "/regions"
+                      ? "activeSideBtn"
+                      : "notActiveSideBtn"
+                  }
+                >
+                  Регіони
+                </Link>
+              </li>
+              <li
+                className={dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"}
+              >
+                <Link
+                  to="/regionalmanager"
+                  className={
+                    activeLink === "/regionalmanager"
+                      ? "activeSideBtn"
+                      : "notActiveSideBtn"
+                  }
+                >
+                  Регіональні менеджери
+                </Link>
+              </li>
+              {/* <li
+                className={dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"}
+              >
+                <a>Групи контактних осіб</a>
+              </li> */}
+              <li
+                className={dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"}
+              >
+                <Link
+                  to="/eventstype"
+                  className={
+                    activeLink === "/eventstype"
+                      ? "activeSideBtn"
+                      : "notActiveSideBtn"
+                  }
+                >
+                  Типи заходів
+                </Link>
+              </li>
+            </ul>
+          ) : null}
         </div>
       ) : null}
     </>

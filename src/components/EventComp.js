@@ -1,8 +1,8 @@
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import ManagerAddRegion from "../components/ManagerAddRegion";
-import ManagerEditRegion from "../components/ManagerEditRegion";
-import ManagerDeleteRegion from "../components/ManagerDeleteRegion";
+import EventTypeAdd from "../components/EventTypeAdd";
+import EventTypeEdit from "../components/EventTypeEdit";
+// import EventTypeDelete from "../components/EventTypeDelete";
 import React, { useState, useEffect, useRef } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
@@ -19,28 +19,28 @@ import editUserNotActive from "../images/editUserNotActive.svg";
 import deleteText from "../images/deleteText.png";
 import searchGlass from "../images/searchGlass.png";
 
-function RegionPageComp(props) {
+function EventComp(props) {
   // const servStatus = props.onEditRegionStatusChange;
 
   const [servStatus, setServStatus] = useState(null);
-  const [RegionsList, setRegionsList] = useState([]);
+  const [EventList, setEventList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
-  const [originalRegionList, setOriginalRegionList] = useState([]);
-  const [searchRegion, setSearchRegion] = useState("");
-  const [selectedRegion, setSelectedRegion] = useState(null);
-  const [selectedRegionIdForEdit, setSelectedRegionIdForEdit] = useState(null);
-  const [regionValue, setRegionValue] = useState({});
+  const [originalEventList, setOriginalEventList] = useState([]);
+  const [searchEvent, setSearchEvent] = useState("");
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedEventIdForEdit, setSelectedEventIdForEdit] = useState(null);
+  const [eventValue, setEventValue] = useState({});
   const [filterSearch, setFilterSearch] = useState("");
 
-  const [showAddRegionModal, setShowAddRegionModal] = useState(false);
+  const [showAddEventModal, setShowAddEventModal] = useState(false);
   const submitAddButtonRef = useRef(null);
 
-  const [showEditRegionModal, setShowEditRegionModal] = useState(false);
+  const [showEditEventModal, setShowEditEventModal] = useState(false);
   const submitEditButtonRef = useRef(null);
 
-  const [showDeleteRegionModal, setShowDeleteRegionModal] = useState(false);
+  const [showDeleteEventModal, setShowDeleteEventModal] = useState(false);
   const submitDeleteButtonRef = useRef(null);
 
   const [numberPagePagin, setNumberPagePagin] = useState(1);
@@ -51,22 +51,22 @@ function RegionPageComp(props) {
     if (storedPage) {
       const Page = parseInt(storedPage, 10);
       console.log("СТОРІНКА.....", Page);
-      GetAllRegions();
+      GetAllEventType();
     } else {
-      GetAllRegions({});
+      GetAllEventType({});
     }
   }, []);
 
-  const GetAllRegions = async (Page) => {
+  const GetAllEventType = async (Page) => {
     console.log("INDEX PAGE:", Page);
     setIndicateSearchForm(false);
     setFilterSearch("");
-    setSelectedRegion(null);
+    setSelectedEvent(null);
     try {
       let numPaginPage = typeof Page === "number" ? Page : 1;
 
       const response = await axios.get(
-        SERVER_URL + `Region/Region/All?Page=${numPaginPage}`,
+        SERVER_URL + `Event/EventType/All?Page=${numPaginPage}`,
         {
           // params: data,
           headers: authHeader(),
@@ -76,18 +76,18 @@ function RegionPageComp(props) {
       // Перевіряємо статус відповіді
       if (response.status === 200) {
         const responseData = response.data; // Отримуємо дані відповіді
-        const Regions = responseData.entries;
+        const Events = responseData.entries;
         const totalPages = responseData.paging.total_pages;
         const pageNumber = responseData.paging.page_number;
 
         setPageNumber(pageNumber);
         setTotalPages(totalPages); // Зберігаємо загальну кількість сторінок
-        setRegionsList(Regions); // Зберігаємо всі регіони в стані
-        setOriginalRegionList(Regions);
+        setEventList(Events); // Зберігаємо всі регіони в стані
+        setOriginalEventList(Events);
         // Обробка успішної відповіді
         console.log("Successful regionsAll:", response);
         console.log("Successful pages:", pageNumber);
-        return Regions;
+        return Events;
       } else {
         throw new Error("Failed data");
       }
@@ -97,17 +97,17 @@ function RegionPageComp(props) {
     }
   };
 
-  const SearchAllRegions = async (searchWord, Page) => {
+  const SearchAllEvent = async (searchWord, Page) => {
     console.log("INDEX PAGE:", Page);
     setIndicateSearchForm(true);
-    setSelectedRegion(null);
+    setSelectedEvent(null);
     try {
       let numPaginPage = typeof Page === "number" ? Page : 1;
       let searchWords = searchWord !== "" ? searchWord : "";
 
       const response = await axios.get(
         SERVER_URL +
-          `Region/Region/All?Page=${numPaginPage}&SearchWords=${searchWords}`,
+          `Event/EventType/All?Page=${numPaginPage}&SearchWords=${searchWords}`,
         {
           // params: data,
           headers: authHeader(),
@@ -117,18 +117,18 @@ function RegionPageComp(props) {
       // Перевіряємо статус відповіді
       if (response.status === 200) {
         const responseData = response.data; // Отримуємо дані відповіді
-        const Regions = responseData.entries;
+        const Events = responseData.entries;
         const totalPages = responseData.paging.total_pages;
         const pageNumber = responseData.paging.page_number;
 
         setPageNumber(pageNumber);
         setTotalPages(totalPages); // Зберігаємо загальну кількість сторінок
-        setRegionsList(Regions); // Зберігаємо всі регіони в стані
-        setOriginalRegionList(Regions);
+        setEventList(Events); // Зберігаємо всі регіони в стані
+        setOriginalEventList(Events);
         // Обробка успішної відповіді
         console.log("Successful regionsAll:", response);
         console.log("Successful pages:", pageNumber);
-        return Regions;
+        return Events;
       } else {
         throw new Error("Failed data");
       }
@@ -138,12 +138,12 @@ function RegionPageComp(props) {
     }
   };
 
-  //====================================Робота з модалкою AddRegion=================
+  //====================================Робота з модалкою Add=================
 
-  const openAddModalForSelectedRegion = () => {
-    if (selectedRegion !== null) {
-      setSelectedRegionIdForEdit(selectedRegion);
-      setShowAddRegionModal(true);
+  const openAddModalForSelectedEvent = () => {
+    if (selectedEvent !== null) {
+      setSelectedEventIdForEdit(selectedEvent);
+      setShowAddEventModal(true);
     }
   };
 
@@ -155,23 +155,23 @@ function RegionPageComp(props) {
   };
   const updateAfterAdd = async () => {
     setTimeout(() => {
-      setSelectedRegion(null);
-      GetAllRegions(currentPage);
+      setSelectedEvent(null);
+      GetAllEventType(currentPage);
     }, 1000);
   };
 
-  //====================================Робота з модалкою Edit Region=================
+  //====================================Робота з модалкою  Edit =================
 
   const closeModal = () => {
-    setShowAddRegionModal(false);
-    setShowEditRegionModal(false);
-    setShowDeleteRegionModal(false);
+    setShowAddEventModal(false);
+    setShowEditEventModal(false);
+    setShowDeleteEventModal(false);
   };
 
-  const openEditModalForSelectedRegion = () => {
-    if (selectedRegion !== null) {
-      setSelectedRegionIdForEdit(selectedRegion);
-      setShowEditRegionModal(true);
+  const openEditModalForSelectedEvent = () => {
+    if (selectedEvent !== null) {
+      setSelectedEventIdForEdit(selectedEvent);
+      setShowEditEventModal(true);
     }
   };
 
@@ -183,17 +183,17 @@ function RegionPageComp(props) {
   };
   const updateAfterEdit = async () => {
     setTimeout(() => {
-      setSelectedRegion(null);
-      GetAllRegions(currentPage);
+      setSelectedEvent(null);
+      GetAllEventType(currentPage);
     }, 1000);
   };
 
-  //====================================Робота з модалкою Delete Region=================
+  //====================================Робота з модалкою  Delete =================
 
-  const openDeleteModalForSelectedRegion = () => {
-    if (selectedRegion !== null) {
-      setSelectedRegionIdForEdit(selectedRegion);
-      setShowDeleteRegionModal(true);
+  const openDeleteModalForSelectedEvent = () => {
+    if (selectedEvent !== null) {
+      setSelectedEventIdForEdit(selectedEvent);
+      setShowDeleteEventModal(true);
     }
   };
 
@@ -205,24 +205,24 @@ function RegionPageComp(props) {
   };
   const updateAfterDelete = async () => {
     setTimeout(() => {
-      setSelectedRegion(null);
-      if (RegionsList.length - 1 === 0) {
+      setSelectedEvent(null);
+      if (EventList.length - 1 === 0) {
         setCurrentPage(currentPage - 1);
-        GetAllRegions(currentPage - 1);
+        GetAllEventType(currentPage - 1);
       } else {
-        GetAllRegions(currentPage);
+        GetAllEventType(currentPage);
       }
     }, 1000);
   };
 
   const onSubmit = async () => {
-    console.log("дані форми пошуку...", searchRegion);
-    if (searchRegion.trim() === "") {
+    console.log("дані форми пошуку...", searchEvent);
+    if (searchEvent.trim() === "") {
       // Якщо поле пошуку порожнє, встановлюємо список користувачів в початковий стан
-      setRegionsList(originalRegionList);
+      setEventList(originalEventList);
     } else {
       // Викликаємо функцію пошуку та передаємо стартову сторінку
-      SearchAllRegions(searchRegion, 1);
+      SearchAllEvent(searchEvent, 1);
     }
   };
 
@@ -247,9 +247,9 @@ function RegionPageComp(props) {
                   <Form.Control
                     className="searchInput"
                     type="text"
-                    placeholder="Знайти користувача"
-                    value={searchRegion}
-                    onChange={(e) => setSearchRegion(e.target.value)}
+                    placeholder="Знайти захід"
+                    value={searchEvent}
+                    onChange={(e) => setSearchEvent(e.target.value)}
                   />
                 </Form.Group>
                 <div className="searchBtnWrapp">
@@ -259,11 +259,11 @@ function RegionPageComp(props) {
                     width="33"
                     height="33"
                     onClick={() => {
-                      GetAllRegions({});
+                      GetAllEventType({});
                       // setnotFoundMessage(false);
                       setPageNumber(1);
                       setTotalPages(1);
-                      setSearchRegion("");
+                      setSearchEvent("");
                     }}
                   ></img>
                   <Button
@@ -289,10 +289,10 @@ function RegionPageComp(props) {
                   <img
                     src={addUser}
                     width="40"
-                    onClick={() => setShowAddRegionModal(true)}
+                    onClick={() => setShowAddEventModal(true)}
                     className="btnAfter768 "
                   ></img>
-                  {!selectedRegion ? (
+                  {!selectedEvent ? (
                     <img
                       src={editUserNotActive}
                       width="40"
@@ -301,12 +301,12 @@ function RegionPageComp(props) {
                   ) : (
                     <img
                       src={editUser}
-                      onClick={openEditModalForSelectedRegion}
+                      onClick={openEditModalForSelectedEvent}
                       width="40"
                       className="btnAfter768"
                     ></img>
                   )}
-                  {!selectedRegion ? (
+                  {!selectedEvent ? (
                     <img
                       src={deleteUserBtnNotActive}
                       width="40"
@@ -315,24 +315,24 @@ function RegionPageComp(props) {
                   ) : (
                     <img
                       src={deleteUserBtn}
-                      onClick={openDeleteModalForSelectedRegion}
+                      onClick={openDeleteModalForSelectedEvent}
                       width="40"
                       className="btnAfter768"
                     ></img>
                   )}
                 </div>
 
-                {/* =======================Вікно Додавання Регіону========================== */}
+                {/* =======================Вікно Додавання ========================== */}
 
                 <Modal
-                  show={showAddRegionModal}
-                  onHide={() => setShowAddRegionModal(false)}
+                  show={showAddEventModal}
+                  onHide={() => setShowAddEventModal(false)}
                 >
                   <Modal.Header closeButton>
-                    <Modal.Title>Додавання регіону</Modal.Title>
+                    <Modal.Title>Додавання</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <ManagerAddRegion
+                    <EventTypeAdd
                       submitAddButtonRef={submitAddButtonRef}
                       closeModal={closeModal}
                     />
@@ -352,7 +352,7 @@ function RegionPageComp(props) {
                       <button
                         className="btn btn-secondary modalCancel ms-2"
                         onClick={() => {
-                          setShowAddRegionModal(false);
+                          setShowAddEventModal(false);
                         }}
                       >
                         Скасувати
@@ -361,18 +361,18 @@ function RegionPageComp(props) {
                   </Modal.Footer>
                 </Modal>
 
-                {/* =======================Вікно Редагування Регіону========================== */}
+                {/* =======================Вікно Редагування ========================== */}
 
                 <Modal
-                  show={showEditRegionModal}
-                  onHide={() => setShowEditRegionModal(false)}
+                  show={showEditEventModal}
+                  onHide={() => setShowEditEventModal(false)}
                 >
                   <Modal.Header closeButton>
-                    <Modal.Title>Редагування регіону</Modal.Title>
+                    <Modal.Title>Редагування</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <ManagerEditRegion
-                      regionValue={regionValue}
+                    <EventTypeEdit
+                      eventValue={eventValue}
                       submitEditButtonRef={submitEditButtonRef}
                       closeModal={closeModal}
                     />
@@ -393,7 +393,7 @@ function RegionPageComp(props) {
                       <button
                         className="btn btn-secondary modalCancel ms-2"
                         onClick={() => {
-                          setShowEditRegionModal(false);
+                          setShowEditEventModal(false);
                         }}
                       >
                         Скасувати
@@ -402,21 +402,21 @@ function RegionPageComp(props) {
                   </Modal.Footer>
                 </Modal>
 
-                {/* =======================Вікно Видалення Регіону========================== */}
+                {/* =======================Вікно Видалення ========================== */}
 
                 <Modal
-                  show={showDeleteRegionModal}
-                  onHide={() => setShowDeleteRegionModal(false)}
+                  show={showDeleteEventModal}
+                  onHide={() => setShowDeleteEventModal(false)}
                 >
                   <Modal.Header closeButton>
                     <Modal.Title>Ви хочете видалити регіон?</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <ManagerDeleteRegion
-                      regionValue={regionValue}
+                    {/* <ManagerDeleteRegion
+                      eventValue={eventValue}
                       submitDeleteButtonRef={submitDeleteButtonRef}
                       closeModal={closeModal}
-                    />
+                    /> */}
                   </Modal.Body>
                   <Modal.Footer>
                     <div className="addFormBtns">
@@ -433,7 +433,7 @@ function RegionPageComp(props) {
                       <button
                         className="btn btn-secondary modalCancel ms-2"
                         onClick={() => {
-                          setShowDeleteRegionModal(false);
+                          setShowDeleteEventModal(false);
                         }}
                       >
                         Скасувати
@@ -442,12 +442,12 @@ function RegionPageComp(props) {
                   </Modal.Footer>
                 </Modal>
 
-                <table className="tableUsers tableRegions">
+                <table className="tableUsers tableRegions tableEvents">
                   <thead className="headTable headTableRegions">
                     <tr className="headRow">
                       <th>№</th>
                       <th>Код</th>
-                      <th>Регіон</th>
+                      <th>Тип</th>
                       <th>Примітки</th>
                     </tr>
                     <tr>
@@ -458,22 +458,20 @@ function RegionPageComp(props) {
                     <tr>
                       <td colSpan="8" style={{ padding: "3px" }}></td>
                     </tr>
-                    {RegionsList.map((region, index) => (
+                    {EventList.map((event, index) => (
                       <tr
-                        key={region.id}
-                        className={
-                          selectedRegion === region.id ? "selected" : ""
-                        }
+                        key={event.id}
+                        className={selectedEvent === event.id ? "selected" : ""}
                         onClick={() => {
-                          setSelectedRegion(region.id);
-                          setRegionValue(region);
-                          console.log(selectedRegion);
+                          setSelectedEvent(event.id);
+                          setEventValue(event);
+                          console.log(selectedEvent);
                         }}
                       >
                         <td>{index + 1}</td>
-                        <td>{region.regionCode}</td>
-                        <td>{region.regionName}</td>
-                        <td>{region.regionNote}</td>
+                        <td>{event.eventTypeCode}</td>
+                        <td>{event.eventTypeName}</td>
+                        <td>{event.eventTypeNote}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -491,12 +489,12 @@ function RegionPageComp(props) {
                     }}
                     onClick={() => {
                       if (indicateSearchForm) {
-                        SearchAllRegions(searchRegion, index + 1);
+                        SearchAllEvent(searchEvent, index + 1);
                       } else {
-                        GetAllRegions(index + 1);
+                        GetAllEventType(index + 1);
                       }
                       setCurrentPage(index + 1);
-                      setSelectedRegionIdForEdit(null);
+                      setSelectedEventIdForEdit(null);
                     }}
                     className={
                       pageNumber === index + 1
@@ -516,4 +514,4 @@ function RegionPageComp(props) {
   );
 }
 
-export default RegionPageComp;
+export default EventComp;

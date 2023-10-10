@@ -18,7 +18,10 @@ main {
   flex-direction: column;
   height: 100%;
 }
-
+/* .homePageLogo {
+  min-width: 100%;
+  min-height: 100%;
+} */
 /* ===============Header============= */
 
 .headerContainer {
@@ -39,12 +42,10 @@ main {
   box-shadow: none !important;
 }
 .collapse.show {
-  /* max-width: 50%; */
   min-height: 100% !important;
 }
 .header_button {
   display: flex;
-  /* justify-content: space-between !important; */
   align-items: center;
   width: 100%;
   padding-left: 50px;
@@ -53,22 +54,23 @@ main {
   height: fit-content !important;
   color: #004c5d;
   text-decoration: none;
-  /* margin-top: auto;
-  margin-bottom: auto; */
   padding: 0;
   font-weight: 500;
 }
-.header_button a:hover {
-  /* border-bottom: 2px solid #004c5d; */
-  background-color: #d6d4d4;
+.noActive {
+  border-bottom: 1px solid transparent;
+  width: fit-content;
+}
+.header_button .noActive:hover {
+  border-bottom: 1px solid #004c5d;
+  /* background-color: #d6d4d4; */
   padding: 0;
 }
 .header_button .active {
-  /* margin-top: auto;
-  margin-bottom: auto; */
+  width: fit-content;
   padding: 0;
-  /* border-bottom: 2px solid #004c5d; */
-  background-color: #d6d4d4;
+  border-bottom: 1px solid #004c5d;
+  /* background-color: #d6d4d4; */
   color: #004c5d;
 }
 .enterStyle {
@@ -123,7 +125,7 @@ main {
   /* border: 1px solid grey; */
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.75);
   padding: 10px;
-  margin-top: 14px;
+  margin-top: 17px;
   min-height: 120px;
   border-radius: 0;
 }
