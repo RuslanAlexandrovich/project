@@ -318,6 +318,24 @@ export default function Header() {
                             }
                           >
                             <Link
+                              to="/contactgroup"
+                              className={
+                                activeLink === "/contactgroup"
+                                  ? "activeSideBtn"
+                                  : "notActiveSideBtn"
+                              }
+                            >
+                              Групи контактних осіб
+                            </Link>
+                          </li>
+                          <li
+                            className={
+                              dropMenuLiDirectory
+                                ? "openDropLi"
+                                : "inSideMenuLi"
+                            }
+                          >
+                            <Link
                               to="/eventstype"
                               className={
                                 activeLink === "/eventstype"
@@ -328,13 +346,6 @@ export default function Header() {
                               Типи заходів
                             </Link>
                           </li>
-                          {/* <li
-                          className={
-                            dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"
-                          }
-                        >
-                          <a>Контактні особи</a>
-                        </li> */}
                         </ul>
                       ) : null}
                     </div>

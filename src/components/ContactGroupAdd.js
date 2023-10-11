@@ -10,10 +10,9 @@ import axios from "axios";
 import SERVER_URL from "../helpers/Config";
 import authHeader from "../helpers/auth-header";
 
-function EventTypeEdit(props) {
+function ContactGroupAdd(props) {
   const [isLoading, setIsLoading] = useState(false);
-  const submitEditButtonRef = props.submitEditButtonRef;
-  const eventValue = props.eventValue;
+  const submitAddButtonRef = props.submitAddButtonRef;
 
   const [serverAnswer, setserverAnswer] = useState();
   const [Events, setEvents] = useState([]);
@@ -21,11 +20,11 @@ function EventTypeEdit(props) {
 
   useEffect(() => {}, []);
 
-  const editEvent = async (data) => {
+  const addGroup = async (data) => {
     try {
-      console.log("Edit event Row.......", data);
-      const response = await axios.put(
-        SERVER_URL + `Event/EventType?eventTypeId=${data.id}`,
+      console.log("Add ContactGroup Row.......", data);
+      const response = await axios.post(
+        SERVER_URL + `Contact/ContactGroup`,
         data,
         {
           headers: authHeader(),
@@ -33,7 +32,7 @@ function EventTypeEdit(props) {
       );
       // Перевіряємо статус відповіді
       if (response.status === 200) {
-        console.log("Edit Event.....OK......!", response);
+        console.log("Created new Event.....OK......!", response);
         const confirmServer = response.data.messages;
         setTimeout(() => {
           props.closeModal();
@@ -57,8 +56,8 @@ function EventTypeEdit(props) {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const result = await editEvent(data);
-    console.log("onSubmit data...", result);
+    const result = await addGroup(data);
+    console.log(result);
     if (result.success) {
       if (result.success !== true) {
         setserverAnswer(result.error);
@@ -83,26 +82,12 @@ function EventTypeEdit(props) {
               onSubmit={handleSubmit(onSubmit)}
               className="form_EditForAdmin"
             >
-              <Form.Group className="mb-2" controlId="formBasicId">
-                {/* <Form.Label className="App-label">Код</Form.Label> */}
-                <Form.Control
-                  type="text"
-                  placeholder="Id"
-                  value={eventValue.id}
-                  hidden
-                  {...register("id", {
-                    required: false,
-                    // validate: (value) => surNameCheck(value),
-                  })}
-                />
-              </Form.Group>
               <Form.Group className="mb-2" controlId="formBasicCode">
                 {/* <Form.Label className="App-label">Код</Form.Label> */}
                 <Form.Control
                   type="text"
                   placeholder="Код"
-                  defaultValue={eventValue.eventTypeCode}
-                  {...register("eventTypeCode", {
+                  {...register("groupCode", {
                     required: false,
                     // validate: (value) => surNameCheck(value),
                   })}
@@ -119,8 +104,7 @@ function EventTypeEdit(props) {
                 <Form.Control
                   type="text"
                   placeholder="Назва"
-                  defaultValue={eventValue.eventTypeName}
-                  {...register("eventTypeName", {
+                  {...register("groupName", {
                     required: true,
                     // validate: (value) => surNameCheck(value),
                   })}
@@ -137,8 +121,7 @@ function EventTypeEdit(props) {
                 <Form.Control
                   type="text"
                   placeholder="Примітки"
-                  defaultValue={eventValue.eventTypeNote}
-                  {...register("eventTypeNote", {
+                  {...register("groupNote", {
                     required: false,
                     // validate: (value) => surNameCheck(value),
                   })}
@@ -154,7 +137,7 @@ function EventTypeEdit(props) {
               <Button
                 type="submit"
                 id="submitNewDataBtn"
-                ref={submitEditButtonRef}
+                ref={submitAddButtonRef}
               ></Button>
             </Form>
           </Col>
@@ -164,4 +147,4 @@ function EventTypeEdit(props) {
   );
 }
 
-export default EventTypeEdit;
+export default ContactGroupAdd;

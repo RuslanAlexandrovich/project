@@ -15,6 +15,7 @@ import RegionPage from "./pages/RegionPage";
 import RegionalManagerPage from "./pages/RegionalManagerPage";
 import UserConfirmComp from "./components/UserConfirmComp";
 import EventPage from "./pages/EventPage";
+import ContactGroupPage from "./pages/ContactGroupPage";
 import LeftSideMenu from "../src/components/LeftSideMenu";
 
 function App() {
@@ -111,6 +112,7 @@ function App() {
           <Route path="/regions" element={<RegionPage />} />
           <Route path="/regionalmanager" element={<RegionalManagerPage />} />
           <Route path="/eventstype" element={<EventPage />} />
+          <Route path="/contactgroup" element={<ContactGroupPage />} />
         </Routes>
       </div>
     </div>

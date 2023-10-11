@@ -216,11 +216,20 @@ export default function LeftSideMenu() {
                   Регіональні менеджери
                 </Link>
               </li>
-              {/* <li
+              <li
                 className={dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"}
               >
-                <a>Групи контактних осіб</a>
-              </li> */}
+                <Link
+                  to="/contactgroup"
+                  className={
+                    activeLink === "/contactgroup"
+                      ? "activeSideBtn"
+                      : "notActiveSideBtn"
+                  }
+                >
+                  Групи контактних осіб
+                </Link>
+              </li>
               <li
                 className={dropMenuLiDirectory ? "openDropLi" : "inSideMenuLi"}
               >

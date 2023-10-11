@@ -10,10 +10,10 @@ import axios from "axios";
 import SERVER_URL from "../helpers/Config";
 import authHeader from "../helpers/auth-header";
 
-function EventTypeEdit(props) {
+function ContactGroupEdit(props) {
   const [isLoading, setIsLoading] = useState(false);
   const submitEditButtonRef = props.submitEditButtonRef;
-  const eventValue = props.eventValue;
+  const ContactGroupValue = props.ContactGroupValue;
 
   const [serverAnswer, setserverAnswer] = useState();
   const [Events, setEvents] = useState([]);
@@ -21,11 +21,11 @@ function EventTypeEdit(props) {
 
   useEffect(() => {}, []);
 
-  const editEvent = async (data) => {
+  const editGroup = async (data) => {
     try {
-      console.log("Edit event Row.......", data);
+      console.log("Add event Row.......", data);
       const response = await axios.put(
-        SERVER_URL + `Event/EventType?eventTypeId=${data.id}`,
+        SERVER_URL + `Contact/ContactGroup?contactGroupId=${data.id}`,
         data,
         {
           headers: authHeader(),
@@ -33,7 +33,7 @@ function EventTypeEdit(props) {
       );
       // Перевіряємо статус відповіді
       if (response.status === 200) {
-        console.log("Edit Event.....OK......!", response);
+        console.log("Edit ContactGroup.....OK......!", response);
         const confirmServer = response.data.messages;
         setTimeout(() => {
           props.closeModal();
@@ -57,7 +57,7 @@ function EventTypeEdit(props) {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const result = await editEvent(data);
+    const result = await editGroup(data);
     console.log("onSubmit data...", result);
     if (result.success) {
       if (result.success !== true) {
@@ -88,7 +88,7 @@ function EventTypeEdit(props) {
                 <Form.Control
                   type="text"
                   placeholder="Id"
-                  value={eventValue.id}
+                  value={ContactGroupValue.id}
                   hidden
                   {...register("id", {
                     required: false,
@@ -101,13 +101,13 @@ function EventTypeEdit(props) {
                 <Form.Control
                   type="text"
                   placeholder="Код"
-                  defaultValue={eventValue.eventTypeCode}
-                  {...register("eventTypeCode", {
+                  defaultValue={ContactGroupValue.groupCode}
+                  {...register("groupCode", {
                     required: false,
                     // validate: (value) => surNameCheck(value),
                   })}
                 />
-                {errors.eventTypeCode && (
+                {errors.groupCode && (
                   <Form.Text className="text-danger">
                     Прізвище має містити мінімум дві літери, з першою великою і
                     рештою малих літер.
@@ -119,13 +119,13 @@ function EventTypeEdit(props) {
                 <Form.Control
                   type="text"
                   placeholder="Назва"
-                  defaultValue={eventValue.eventTypeName}
-                  {...register("eventTypeName", {
+                  defaultValue={ContactGroupValue.groupName}
+                  {...register("groupName", {
                     required: true,
                     // validate: (value) => surNameCheck(value),
                   })}
                 />
-                {errors.eventTypeName && (
+                {errors.groupName && (
                   <Form.Text className="text-danger">
                     Прізвище має містити мінімум дві літери, з першою великою і
                     рештою малих літер.
@@ -137,13 +137,13 @@ function EventTypeEdit(props) {
                 <Form.Control
                   type="text"
                   placeholder="Примітки"
-                  defaultValue={eventValue.eventTypeNote}
-                  {...register("eventTypeNote", {
+                  defaultValue={ContactGroupValue.groupNote}
+                  {...register("groupNote", {
                     required: false,
                     // validate: (value) => surNameCheck(value),
                   })}
                 />
-                {errors.eventTypeNote && (
+                {errors.groupNote && (
                   <Form.Text className="text-danger">
                     Прізвище має містити мінімум дві літери, з першою великою і
                     рештою малих літер.
@@ -164,4 +164,4 @@ function EventTypeEdit(props) {
   );
 }
 
-export default EventTypeEdit;
+export default ContactGroupEdit;

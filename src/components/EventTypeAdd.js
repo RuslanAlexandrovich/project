@@ -30,7 +30,9 @@ function EventTypeAdd(props) {
       if (response.status === 200) {
         console.log("Created new Event.....OK......!", response);
         const confirmServer = response.data.messages;
-        props.closeModal();
+        setTimeout(() => {
+          props.closeModal();
+        }, 1000);
         return { success: true, message: confirmServer };
       } else {
         throw new Error("Failed data");

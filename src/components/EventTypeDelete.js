@@ -10,9 +10,9 @@ import axios from "axios";
 import SERVER_URL from "../helpers/Config";
 import authHeader from "../helpers/auth-header";
 
-function EventTypeEdit(props) {
+function EventTypeDelete(props) {
   const [isLoading, setIsLoading] = useState(false);
-  const submitEditButtonRef = props.submitEditButtonRef;
+  const submitDeleteButtonRef = props.submitDeleteButtonRef;
   const eventValue = props.eventValue;
 
   const [serverAnswer, setserverAnswer] = useState();
@@ -21,23 +21,23 @@ function EventTypeEdit(props) {
 
   useEffect(() => {}, []);
 
-  const editEvent = async (data) => {
+  const deleteEvent = async (data) => {
     try {
-      console.log("Edit event Row.......", data);
-      const response = await axios.put(
+      console.log("Delete event Row.......", data);
+      const response = await axios.delete(
         SERVER_URL + `Event/EventType?eventTypeId=${data.id}`,
-        data,
         {
           headers: authHeader(),
         }
       );
       // Перевіряємо статус відповіді
       if (response.status === 200) {
-        console.log("Edit Event.....OK......!", response);
-        const confirmServer = response.data.messages;
+        console.log("delete Event.....OK......!", response);
+        const confirmServer = response.statusText;
         setTimeout(() => {
           props.closeModal();
         }, 1000);
+
         return { success: true, message: confirmServer };
       } else {
         throw new Error("Failed data");
@@ -57,7 +57,7 @@ function EventTypeEdit(props) {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const result = await editEvent(data);
+    const result = await deleteEvent(data);
     console.log("onSubmit data...", result);
     if (result.success) {
       if (result.success !== true) {
@@ -102,6 +102,7 @@ function EventTypeEdit(props) {
                   type="text"
                   placeholder="Код"
                   defaultValue={eventValue.eventTypeCode}
+                  readOnly
                   {...register("eventTypeCode", {
                     required: false,
                     // validate: (value) => surNameCheck(value),
@@ -120,6 +121,7 @@ function EventTypeEdit(props) {
                   type="text"
                   placeholder="Назва"
                   defaultValue={eventValue.eventTypeName}
+                  readOnly
                   {...register("eventTypeName", {
                     required: true,
                     // validate: (value) => surNameCheck(value),
@@ -138,6 +140,7 @@ function EventTypeEdit(props) {
                   type="text"
                   placeholder="Примітки"
                   defaultValue={eventValue.eventTypeNote}
+                  readOnly
                   {...register("eventTypeNote", {
                     required: false,
                     // validate: (value) => surNameCheck(value),
@@ -154,7 +157,7 @@ function EventTypeEdit(props) {
               <Button
                 type="submit"
                 id="submitNewDataBtn"
-                ref={submitEditButtonRef}
+                ref={submitDeleteButtonRef}
               ></Button>
             </Form>
           </Col>
@@ -164,4 +167,4 @@ function EventTypeEdit(props) {
   );
 }
 
-export default EventTypeEdit;
+export default EventTypeDelete;

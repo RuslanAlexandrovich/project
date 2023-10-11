@@ -1,8 +1,8 @@
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import EventTypeAdd from "../components/EventTypeAdd";
-import EventTypeEdit from "../components/EventTypeEdit";
-import EventTypeDelete from "../components/EventTypeDelete";
+import ContactGroupAdd from "../components/ContactGroupAdd";
+import ContactGroupEdit from "../components/ContactGroupEdit";
+import ContactGroupDelete from "../components/ContactGroupDelete";
 import React, { useState, useEffect, useRef } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
@@ -19,68 +19,79 @@ import editUserNotActive from "../images/editUserNotActive.svg";
 import deleteText from "../images/deleteText.png";
 import searchGlass from "../images/searchGlass.png";
 
-function EventComp(props) {
+function ContactGroupComp(props) {
   // const servStatus = props.onEditRegionStatusChange;
 
   const [servStatus, setServStatus] = useState(null);
-  const [EventList, setEventList] = useState([]);
+  const [contactGroupList, setContactGroupList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
-  const [originalEventList, setOriginalEventList] = useState([]);
-  const [searchEvent, setSearchEvent] = useState("");
-  const [selectedEvent, setSelectedEvent] = useState(null);
-  const [selectedEventIdForEdit, setSelectedEventIdForEdit] = useState(null);
-  const [eventValue, setEventValue] = useState({});
+  const [originalContactGroupList, setOriginalContactGroupList] = useState([]);
+  const [searchContactGroup, setSearchContactGroup] = useState("");
+  const [selectedContactGroup, setSelectedContactGroup] = useState(null);
+  const [selectedContactGroupIdForEdit, setSelectedContactGroupIdForEdit] =
+    useState(null);
+  const [contactGroupValue, setContactGroupValue] = useState({});
   const [filterSearch, setFilterSearch] = useState("");
 
-  const [showAddEventModal, setShowAddEventModal] = useState(false);
+  const [showAddContactGroupModal, setShowAddContactGroupModal] =
+    useState(false);
   const submitAddButtonRef = useRef(null);
 
-  const [showEditEventModal, setShowEditEventModal] = useState(false);
+  const [showEditContactGroupModal, setShowEditContactGroupModal] =
+    useState(false);
   const submitEditButtonRef = useRef(null);
 
-  const [showDeleteEventModal, setShowDeleteEventModal] = useState(false);
+  const [showDeleteContactGroupModal, setShowDeleteContactGroupModal] =
+    useState(false);
   const submitDeleteButtonRef = useRef(null);
 
   const [numberPagePagin, setNumberPagePagin] = useState(1);
   const [indicateSearchForm, setIndicateSearchForm] = useState(false);
 
   useEffect(() => {
-    GetAllEventType();
+    const storedPage = localStorage.getItem("paginPage");
+    if (storedPage) {
+      const Page = parseInt(storedPage, 10);
+      console.log("СТОРІНКА.....", Page);
+      GetAllContactGroup();
+    } else {
+      GetAllContactGroup({});
+    }
   }, []);
 
-  const GetAllEventType = async (Page) => {
+  const GetAllContactGroup = async (Page) => {
     console.log("INDEX PAGE:", Page);
     setIndicateSearchForm(false);
     setFilterSearch("");
-    setSelectedEvent(null);
+    setSelectedContactGroup(null);
     try {
       let numPaginPage = typeof Page === "number" ? Page : 1;
 
       const response = await axios.get(
-        SERVER_URL + `Event/EventType/All?Page=${numPaginPage}`,
+        SERVER_URL + `Contact/ContactGroup/All?Page=${numPaginPage}`,
         {
           // params: data,
           headers: authHeader(),
         }
       );
-      console.log("Successful EventAll:", response);
+      console.log("Successful regionsAll:", response);
       // Перевіряємо статус відповіді
       if (response.status === 200) {
         const responseData = response.data; // Отримуємо дані відповіді
-        const Events = responseData.entries;
+        const ContactGroup = responseData.entries;
         const totalPages = responseData.paging.total_pages;
         const pageNumber = responseData.paging.page_number;
 
         setPageNumber(pageNumber);
         setTotalPages(totalPages); // Зберігаємо загальну кількість сторінок
-        setEventList(Events); // Зберігаємо всі регіони в стані
-        setOriginalEventList(Events);
+        setContactGroupList(ContactGroup); // Зберігаємо всі регіони в стані
+        setOriginalContactGroupList(ContactGroup);
         // Обробка успішної відповіді
-        console.log("Successful EventAll=200:", response);
+        console.log("Successful ContactGroupAll:", response);
         console.log("Successful pages:", pageNumber);
-        return Events;
+        return ContactGroup;
       } else {
         throw new Error("Failed data");
       }
@@ -90,38 +101,38 @@ function EventComp(props) {
     }
   };
 
-  const SearchAllEvent = async (searchWord, Page) => {
+  const SearchAllContactGroup = async (searchWord, Page) => {
     console.log("INDEX PAGE:", Page);
     setIndicateSearchForm(true);
-    setSelectedEvent(null);
+    setSelectedContactGroup(null);
     try {
       let numPaginPage = typeof Page === "number" ? Page : 1;
       let searchWords = searchWord !== "" ? searchWord : "";
 
       const response = await axios.get(
         SERVER_URL +
-          `Event/EventType/All?Page=${numPaginPage}&SearchWords=${searchWords}`,
+          `Contact/ContactGroup/All?Page=${numPaginPage}&SearchWords=${searchWords}`,
         {
           // params: data,
           headers: authHeader(),
         }
       );
-      console.log("Successful EventAllSearch:", response);
+      console.log("Successful regionsAll:", response);
       // Перевіряємо статус відповіді
       if (response.status === 200) {
         const responseData = response.data; // Отримуємо дані відповіді
-        const Events = responseData.entries;
+        const ContactGroup = responseData.entries;
         const totalPages = responseData.paging.total_pages;
         const pageNumber = responseData.paging.page_number;
 
         setPageNumber(pageNumber);
         setTotalPages(totalPages); // Зберігаємо загальну кількість сторінок
-        setEventList(Events); // Зберігаємо всі регіони в стані
-        setOriginalEventList(Events);
+        setContactGroupList(ContactGroup); // Зберігаємо всі регіони в стані
+        setOriginalContactGroupList(ContactGroup);
         // Обробка успішної відповіді
-        console.log("Successful EventAllSearch:", response);
+        console.log("Successful ContactGroupAll:", response);
         console.log("Successful pages:", pageNumber);
-        return Events;
+        return ContactGroup;
       } else {
         throw new Error("Failed data");
       }
@@ -133,10 +144,10 @@ function EventComp(props) {
 
   //====================================Робота з модалкою Add=================
 
-  const openAddModalForSelectedEvent = () => {
-    if (selectedEvent !== null) {
-      setSelectedEventIdForEdit(selectedEvent);
-      setShowAddEventModal(true);
+  const openAddModalForSelectedContactGroup = () => {
+    if (selectedContactGroup !== null) {
+      setSelectedContactGroupIdForEdit(selectedContactGroup);
+      setShowAddContactGroupModal(true);
     }
   };
 
@@ -148,23 +159,23 @@ function EventComp(props) {
   };
   const updateAfterAdd = async () => {
     setTimeout(() => {
-      setSelectedEvent(null);
-      GetAllEventType(currentPage);
+      setSelectedContactGroup(null);
+      GetAllContactGroup(currentPage);
     }, 1000);
   };
 
   //====================================Робота з модалкою  Edit =================
 
   const closeModal = () => {
-    setShowAddEventModal(false);
-    setShowEditEventModal(false);
-    setShowDeleteEventModal(false);
+    setShowAddContactGroupModal(false);
+    setShowEditContactGroupModal(false);
+    setShowDeleteContactGroupModal(false);
   };
 
-  const openEditModalForSelectedEvent = () => {
-    if (selectedEvent !== null) {
-      setSelectedEventIdForEdit(selectedEvent);
-      setShowEditEventModal(true);
+  const openEditModalForSelectedContactGroup = () => {
+    if (selectedContactGroup !== null) {
+      setSelectedContactGroupIdForEdit(selectedContactGroup);
+      setShowEditContactGroupModal(true);
     }
   };
 
@@ -176,17 +187,17 @@ function EventComp(props) {
   };
   const updateAfterEdit = async () => {
     setTimeout(() => {
-      setSelectedEvent(null);
-      GetAllEventType(currentPage);
+      setSelectedContactGroup(null);
+      GetAllContactGroup(currentPage);
     }, 1000);
   };
 
   //====================================Робота з модалкою  Delete =================
 
-  const openDeleteModalForSelectedEvent = () => {
-    if (selectedEvent !== null) {
-      setSelectedEventIdForEdit(selectedEvent);
-      setShowDeleteEventModal(true);
+  const openDeleteModalForSelectedContactGroup = () => {
+    if (selectedContactGroup !== null) {
+      setSelectedContactGroupIdForEdit(selectedContactGroup);
+      setShowDeleteContactGroupModal(true);
     }
   };
 
@@ -198,24 +209,24 @@ function EventComp(props) {
   };
   const updateAfterDelete = async () => {
     setTimeout(() => {
-      setSelectedEvent(null);
-      if (EventList.length - 1 === 0) {
+      setSelectedContactGroup(null);
+      if (contactGroupList.length - 1 === 0) {
         setCurrentPage(currentPage - 1);
-        GetAllEventType(currentPage - 1);
+        GetAllContactGroup(currentPage - 1);
       } else {
-        GetAllEventType(currentPage);
+        GetAllContactGroup(currentPage);
       }
     }, 1000);
   };
 
   const onSubmit = async () => {
-    console.log("дані форми пошуку...", searchEvent);
-    if (searchEvent.trim() === "") {
+    console.log("дані форми пошуку...", searchContactGroup);
+    if (searchContactGroup.trim() === "") {
       // Якщо поле пошуку порожнє, встановлюємо список користувачів в початковий стан
-      setEventList(originalEventList);
+      setContactGroupList(originalContactGroupList);
     } else {
       // Викликаємо функцію пошуку та передаємо стартову сторінку
-      SearchAllEvent(searchEvent, 1);
+      SearchAllContactGroup(searchContactGroup, 1);
     }
   };
 
@@ -241,8 +252,8 @@ function EventComp(props) {
                     className="searchInput"
                     type="text"
                     placeholder="Знайти захід"
-                    value={searchEvent}
-                    onChange={(e) => setSearchEvent(e.target.value)}
+                    value={searchContactGroup}
+                    onChange={(e) => setSearchContactGroup(e.target.value)}
                   />
                 </Form.Group>
                 <div className="searchBtnWrapp">
@@ -252,11 +263,11 @@ function EventComp(props) {
                     width="33"
                     height="33"
                     onClick={() => {
-                      GetAllEventType({});
+                      GetAllContactGroup({});
                       // setnotFoundMessage(false);
                       setPageNumber(1);
                       setTotalPages(1);
-                      setSearchEvent("");
+                      setSearchContactGroup("");
                     }}
                   ></img>
                   <Button
@@ -282,10 +293,10 @@ function EventComp(props) {
                   <img
                     src={addUser}
                     width="40"
-                    onClick={() => setShowAddEventModal(true)}
+                    onClick={() => setShowAddContactGroupModal(true)}
                     className="btnAfter768 "
                   ></img>
-                  {!selectedEvent ? (
+                  {!selectedContactGroup ? (
                     <img
                       src={editUserNotActive}
                       width="40"
@@ -294,12 +305,12 @@ function EventComp(props) {
                   ) : (
                     <img
                       src={editUser}
-                      onClick={openEditModalForSelectedEvent}
+                      onClick={openEditModalForSelectedContactGroup}
                       width="40"
                       className="btnAfter768"
                     ></img>
                   )}
-                  {!selectedEvent ? (
+                  {!selectedContactGroup ? (
                     <img
                       src={deleteUserBtnNotActive}
                       width="40"
@@ -308,7 +319,7 @@ function EventComp(props) {
                   ) : (
                     <img
                       src={deleteUserBtn}
-                      onClick={openDeleteModalForSelectedEvent}
+                      onClick={openDeleteModalForSelectedContactGroup}
                       width="40"
                       className="btnAfter768"
                     ></img>
@@ -318,14 +329,14 @@ function EventComp(props) {
                 {/* =======================Вікно Додавання ========================== */}
 
                 <Modal
-                  show={showAddEventModal}
-                  onHide={() => setShowAddEventModal(false)}
+                  show={showAddContactGroupModal}
+                  onHide={() => setShowAddContactGroupModal(false)}
                 >
                   <Modal.Header closeButton>
                     <Modal.Title>Додавання</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <EventTypeAdd
+                    <ContactGroupAdd
                       submitAddButtonRef={submitAddButtonRef}
                       closeModal={closeModal}
                     />
@@ -345,7 +356,7 @@ function EventComp(props) {
                       <button
                         className="btn btn-secondary modalCancel ms-2"
                         onClick={() => {
-                          setShowAddEventModal(false);
+                          setShowAddContactGroupModal(false);
                         }}
                       >
                         Скасувати
@@ -357,15 +368,15 @@ function EventComp(props) {
                 {/* =======================Вікно Редагування ========================== */}
 
                 <Modal
-                  show={showEditEventModal}
-                  onHide={() => setShowEditEventModal(false)}
+                  show={showEditContactGroupModal}
+                  onHide={() => setShowEditContactGroupModal(false)}
                 >
                   <Modal.Header closeButton>
                     <Modal.Title>Редагування</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <EventTypeEdit
-                      eventValue={eventValue}
+                    <ContactGroupEdit
+                      ContactGroupValue={contactGroupValue}
                       submitEditButtonRef={submitEditButtonRef}
                       closeModal={closeModal}
                     />
@@ -386,7 +397,7 @@ function EventComp(props) {
                       <button
                         className="btn btn-secondary modalCancel ms-2"
                         onClick={() => {
-                          setShowEditEventModal(false);
+                          setShowEditContactGroupModal(false);
                         }}
                       >
                         Скасувати
@@ -398,15 +409,15 @@ function EventComp(props) {
                 {/* =======================Вікно Видалення ========================== */}
 
                 <Modal
-                  show={showDeleteEventModal}
-                  onHide={() => setShowDeleteEventModal(false)}
+                  show={showDeleteContactGroupModal}
+                  onHide={() => setShowDeleteContactGroupModal(false)}
                 >
                   <Modal.Header closeButton>
-                    <Modal.Title>Ви хочете видалити захід?</Modal.Title>
+                    <Modal.Title>Ви хочете видалити групу?</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <EventTypeDelete
-                      eventValue={eventValue}
+                    <ContactGroupDelete
+                      ContactGroupValue={contactGroupValue}
                       submitDeleteButtonRef={submitDeleteButtonRef}
                       closeModal={closeModal}
                     />
@@ -426,7 +437,7 @@ function EventComp(props) {
                       <button
                         className="btn btn-secondary modalCancel ms-2"
                         onClick={() => {
-                          setShowDeleteEventModal(false);
+                          setShowDeleteContactGroupModal(false);
                         }}
                       >
                         Скасувати
@@ -451,20 +462,22 @@ function EventComp(props) {
                     <tr>
                       <td colSpan="8" style={{ padding: "3px" }}></td>
                     </tr>
-                    {EventList.map((event, index) => (
+                    {contactGroupList.map((group, index) => (
                       <tr
-                        key={event.id}
-                        className={selectedEvent === event.id ? "selected" : ""}
+                        key={group.id}
+                        className={
+                          selectedContactGroup === group.id ? "selected" : ""
+                        }
                         onClick={() => {
-                          setSelectedEvent(event.id);
-                          setEventValue(event);
-                          console.log(selectedEvent);
+                          setSelectedContactGroup(group.id);
+                          setContactGroupValue(group);
+                          console.log(selectedContactGroup);
                         }}
                       >
                         <td>{index + 1}</td>
-                        <td>{event.eventTypeCode}</td>
-                        <td>{event.eventTypeName}</td>
-                        <td>{event.eventTypeNote}</td>
+                        <td>{group.groupCode}</td>
+                        <td>{group.groupName}</td>
+                        <td>{group.groupNote}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -482,12 +495,12 @@ function EventComp(props) {
                     }}
                     onClick={() => {
                       if (indicateSearchForm) {
-                        SearchAllEvent(searchEvent, index + 1);
+                        SearchAllContactGroup(searchContactGroup, index + 1);
                       } else {
-                        GetAllEventType(index + 1);
+                        GetAllContactGroup(index + 1);
                       }
                       setCurrentPage(index + 1);
-                      setSelectedEventIdForEdit(null);
+                      setSelectedContactGroupIdForEdit(null);
                     }}
                     className={
                       pageNumber === index + 1
@@ -507,4 +520,4 @@ function EventComp(props) {
   );
 }
 
-export default EventComp;
+export default ContactGroupComp;

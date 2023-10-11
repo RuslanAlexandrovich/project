@@ -10,10 +10,10 @@ import axios from "axios";
 import SERVER_URL from "../helpers/Config";
 import authHeader from "../helpers/auth-header";
 
-function EventTypeEdit(props) {
+function ContactGroupDelete(props) {
   const [isLoading, setIsLoading] = useState(false);
-  const submitEditButtonRef = props.submitEditButtonRef;
-  const eventValue = props.eventValue;
+  const submitDeleteButtonRef = props.submitDeleteButtonRef;
+  const ContactGroupValue = props.ContactGroupValue;
 
   const [serverAnswer, setserverAnswer] = useState();
   const [Events, setEvents] = useState([]);
@@ -21,23 +21,23 @@ function EventTypeEdit(props) {
 
   useEffect(() => {}, []);
 
-  const editEvent = async (data) => {
+  const deleteGroup = async (data) => {
     try {
-      console.log("Edit event Row.......", data);
-      const response = await axios.put(
-        SERVER_URL + `Event/EventType?eventTypeId=${data.id}`,
-        data,
+      console.log("Delete event Row.......", data);
+      const response = await axios.delete(
+        SERVER_URL + `Contact/ContactGroup?contactGroupId=${data.id}`,
         {
           headers: authHeader(),
         }
       );
       // Перевіряємо статус відповіді
       if (response.status === 200) {
-        console.log("Edit Event.....OK......!", response);
-        const confirmServer = response.data.messages;
+        console.log("delete Event.....OK......!", response);
+        const confirmServer = response.statusText;
         setTimeout(() => {
           props.closeModal();
         }, 1000);
+
         return { success: true, message: confirmServer };
       } else {
         throw new Error("Failed data");
@@ -57,7 +57,7 @@ function EventTypeEdit(props) {
   } = useForm();
 
   const onSubmit = async (data) => {
-    const result = await editEvent(data);
+    const result = await deleteGroup(data);
     console.log("onSubmit data...", result);
     if (result.success) {
       if (result.success !== true) {
@@ -88,7 +88,7 @@ function EventTypeEdit(props) {
                 <Form.Control
                   type="text"
                   placeholder="Id"
-                  value={eventValue.id}
+                  value={ContactGroupValue.id}
                   hidden
                   {...register("id", {
                     required: false,
@@ -101,8 +101,9 @@ function EventTypeEdit(props) {
                 <Form.Control
                   type="text"
                   placeholder="Код"
-                  defaultValue={eventValue.eventTypeCode}
-                  {...register("eventTypeCode", {
+                  defaultValue={ContactGroupValue.groupCode}
+                  readOnly
+                  {...register("groupCode", {
                     required: false,
                     // validate: (value) => surNameCheck(value),
                   })}
@@ -119,8 +120,9 @@ function EventTypeEdit(props) {
                 <Form.Control
                   type="text"
                   placeholder="Назва"
-                  defaultValue={eventValue.eventTypeName}
-                  {...register("eventTypeName", {
+                  defaultValue={ContactGroupValue.groupName}
+                  readOnly
+                  {...register("groupName", {
                     required: true,
                     // validate: (value) => surNameCheck(value),
                   })}
@@ -137,8 +139,9 @@ function EventTypeEdit(props) {
                 <Form.Control
                   type="text"
                   placeholder="Примітки"
-                  defaultValue={eventValue.eventTypeNote}
-                  {...register("eventTypeNote", {
+                  defaultValue={ContactGroupValue.groupNote}
+                  readOnly
+                  {...register("groupNote", {
                     required: false,
                     // validate: (value) => surNameCheck(value),
                   })}
@@ -154,7 +157,7 @@ function EventTypeEdit(props) {
               <Button
                 type="submit"
                 id="submitNewDataBtn"
-                ref={submitEditButtonRef}
+                ref={submitDeleteButtonRef}
               ></Button>
             </Form>
           </Col>
@@ -164,4 +167,4 @@ function EventTypeEdit(props) {
   );
 }
 
-export default EventTypeEdit;
+export default ContactGroupDelete;
