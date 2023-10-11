@@ -47,14 +47,7 @@ function RegionPageComp(props) {
   const [indicateSearchForm, setIndicateSearchForm] = useState(false);
 
   useEffect(() => {
-    const storedPage = localStorage.getItem("paginPage");
-    if (storedPage) {
-      const Page = parseInt(storedPage, 10);
-      console.log("СТОРІНКА.....", Page);
-      GetAllRegions();
-    } else {
-      GetAllRegions({});
-    }
+    GetAllRegions();
   }, []);
 
   const GetAllRegions = async (Page) => {
@@ -85,7 +78,7 @@ function RegionPageComp(props) {
         setRegionsList(Regions); // Зберігаємо всі регіони в стані
         setOriginalRegionList(Regions);
         // Обробка успішної відповіді
-        console.log("Successful regionsAll:", response);
+        console.log("TotlaPages:", totalPages);
         console.log("Successful pages:", pageNumber);
         return Regions;
       } else {
@@ -113,7 +106,7 @@ function RegionPageComp(props) {
           headers: authHeader(),
         }
       );
-      console.log("Successful regionsAll:", response);
+      console.log("Successful regionsAllSearch:", response);
       // Перевіряємо статус відповіді
       if (response.status === 200) {
         const responseData = response.data; // Отримуємо дані відповіді
@@ -126,7 +119,7 @@ function RegionPageComp(props) {
         setRegionsList(Regions); // Зберігаємо всі регіони в стані
         setOriginalRegionList(Regions);
         // Обробка успішної відповіді
-        console.log("Successful regionsAll:", response);
+        // console.log("Successful regionsAllSearch:", response);
         console.log("Successful pages:", pageNumber);
         return Regions;
       } else {
@@ -224,6 +217,26 @@ function RegionPageComp(props) {
       // Викликаємо функцію пошуку та передаємо стартову сторінку
       SearchAllRegions(searchRegion, 1);
     }
+  };
+
+  //====================================Робота з блоком паігнатора =================
+
+  const controlBtnPagingRef = useRef(null);
+
+  // Функція для обробки кліків на кнопки сторінок
+  const handleButtonClick = (buttonIndex) => {
+    const containerWidth = controlBtnPagingRef.current.clientWidth;
+    const contentWidth = controlBtnPagingRef.current.scrollWidth;
+
+    const scrollPosition =
+      buttonIndex *
+        (contentWidth / controlBtnPagingRef.current.children.length) -
+      containerWidth / 2;
+
+    controlBtnPagingRef.current.scrollTo({
+      left: scrollPosition,
+      behavior: "smooth",
+    });
   };
 
   const {
@@ -483,30 +496,67 @@ function RegionPageComp(props) {
               {/* ====================Блок пагінатора========================= */}
 
               <div className="paging">
-                {Array.from({ length: totalPages }, (_, index) => (
-                  <button
-                    key={index}
-                    onChange={() => {
-                      setNumberPagePagin(index + 1);
-                    }}
-                    onClick={() => {
-                      if (indicateSearchForm) {
-                        SearchAllRegions(searchRegion, index + 1);
-                      } else {
-                        GetAllRegions(index + 1);
-                      }
-                      setCurrentPage(index + 1);
-                      setSelectedRegionIdForEdit(null);
-                    }}
-                    className={
-                      pageNumber === index + 1
-                        ? "activePagin"
-                        : "notActivePagin"
+                <button
+                  onClick={() => {
+                    if (indicateSearchForm) {
+                      SearchAllRegions(searchRegion, 1);
+                    } else {
+                      GetAllRegions(1);
                     }
-                  >
-                    {index + 1}
-                  </button>
-                ))}
+                    setCurrentPage(1);
+                    setSelectedRegionIdForEdit(null);
+                    handleButtonClick(0); // Додайте обробку кліка на кнопці
+                  }}
+                  className={
+                    pageNumber === 1 ? "activePagin" : "notActivePagin"
+                  }
+                >
+                  Перша
+                </button>
+                <div className="controlBtnPaging" ref={controlBtnPagingRef}>
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <button
+                      key={index}
+                      onChange={() => {
+                        setNumberPagePagin(index + 1);
+                      }}
+                      onClick={() => {
+                        if (indicateSearchForm) {
+                          SearchAllRegions(searchRegion, index + 1);
+                        } else {
+                          GetAllRegions(index + 1);
+                        }
+                        setCurrentPage(index + 1);
+                        setSelectedRegionIdForEdit(null);
+                        handleButtonClick(index); // Додайте обробку кліка на кнопці
+                      }}
+                      className={
+                        pageNumber === index + 1
+                          ? "activePagin"
+                          : "notActivePagin"
+                      }
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  className={
+                    pageNumber === totalPages ? "activePagin" : "notActivePagin"
+                  }
+                  onClick={() => {
+                    if (indicateSearchForm) {
+                      SearchAllRegions(searchRegion, totalPages);
+                    } else {
+                      GetAllRegions(totalPages);
+                    }
+                    setCurrentPage(totalPages);
+                    setSelectedRegionIdForEdit(null);
+                    handleButtonClick(totalPages - 1); // Додайте обробку кліка на кнопці
+                  }}
+                >
+                  Остання
+                </button>
               </div>
             </Col>
           </Row>

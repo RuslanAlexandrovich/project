@@ -705,37 +705,8 @@ form #submit:hover {
   border-radius: 50%;
   /* padding: 2px; */
 }
-/* .addGreenCircle {
-  border: 2px solid green;
-}
-.addGreenCircle:hover {
-  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
-}
-.activeCircleEdit {
-  border: 2px solid orange;
-}
-.activeCircleEdit:hover {
-  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
-}
-.activeCircleDelete {
-  border: 2px solid Red;
-}
-.activeCircleDelete:hover {
-  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.75);
-} */
+
 @media screen and (max-width: 768px) {
-  /* .adminBtnWrapper {
-    justify-content: center;
-  } */
-  /* .DeleteBtn,
-  .EditBtn {
-    padding: 2px;
-    margin-left: 10px;
-  }
-  .AddBtn {
-    padding: 2px;
-    margin-left: 0;
-  } */
 }
 .AdminPage {
   display: flex;
@@ -996,4 +967,15 @@ td {
   margin-left: auto;
   margin-right: auto;
   color: red;
+}
+
+/* ================Paging style======================= */
+
+.controlBtnPaging {
+  display: flex;
+  flex-wrap: nowrap;
+  /* border: 1px solid black; */
+  padding: 1px;
+  width: 290px;
+  overflow: hidden;
 }
