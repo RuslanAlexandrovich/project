@@ -511,7 +511,7 @@ function RegionPageComp(props) {
                     pageNumber === 1 ? "activePagin" : "notActivePagin"
                   }
                 >
-                  Перша
+                  1 ст.
                 </button>
                 <div className="controlBtnPaging" ref={controlBtnPagingRef}>
                   {Array.from({ length: totalPages }, (_, index) => (
@@ -555,7 +555,7 @@ function RegionPageComp(props) {
                     handleButtonClick(totalPages - 1); // Додайте обробку кліка на кнопці
                   }}
                 >
-                  Остання
+                  {totalPages} ст.
                 </button>
               </div>
             </Col>

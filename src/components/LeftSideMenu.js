@@ -138,6 +138,7 @@ export default function LeftSideMenu() {
               alt="Logo"
             />
           ) : null}
+          {Admin ? (
           <ul className="sideMenuUl">
             <div
               className="d-flex sideMenuDivRow"
@@ -152,9 +153,20 @@ export default function LeftSideMenu() {
               Контакти<span className="sideMenuRowDown">&#9660;</span>
             </div>
             <li className={dropMenuLiContacts ? "openDropLi" : "inSideMenuLi"}>
-              <a>Контактні особи</a>
+            <Link
+                  to="/contacts"
+                  className={
+                    activeLink === "/contacts"
+                      ? "activeSideBtn"
+                      : "notActiveSideBtn"
+                  }
+                >
+                  Контактні особи
+                </Link>
             </li>
           </ul>
+          ) : null}
+            {/* {Admin ? ( */}
           <ul className="sideMenuUl">
             <div
               className="d-flex sideMenuDivRow"
@@ -174,6 +186,7 @@ export default function LeftSideMenu() {
               <a>Приклад</a>
             </li>
           </ul>
+          {/* ) : null} */}
           {Admin ? (
             <ul className="sideMenuUl">
               <div

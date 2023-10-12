@@ -26,7 +26,7 @@ function RegionalManagerAdd(props) {
   const allRegionId = async () => {
     try {
       const response = await axios.get(
-        SERVER_URL + `Region/Region/All?PageSize=${100}`,
+        SERVER_URL + `Region/Region/All?PageSize=${1000}`,
         {
           headers: authHeader(),
         }
@@ -46,7 +46,7 @@ function RegionalManagerAdd(props) {
   const allManagerId = async () => {
     try {
       const response = await axios.get(
-        SERVER_URL + `Region/Manager/All?PageSize=${100}`,
+        SERVER_URL + `Region/Manager/All?PageSize=${1000}`,
         {
           headers: authHeader(),
         }

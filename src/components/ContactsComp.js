@@ -1,7 +1,7 @@
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import RegionalManagerAdd from "../components/RegionalManagerAdd";
-import RegionalManagerDelete from "../components/RegionalManagerDelete";
+import ContactsAdd from "../components/ContactsAdd";
+// import RegionalManagerDelete from "../components/RegionalManagerDelete";
 import React, { useState, useEffect, useRef } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
@@ -20,32 +20,35 @@ import deleteText from "../images/deleteText.png";
 import searchGlass from "../images/searchGlass.png";
 import loading from "../images/loading.gif";
 
-function RegionalManagerComp(props) {
-  const [managerList, setManagerList] = useState([]);
+function ContactsComp(props) {
+  const [contactsList, setContactsList] = useState([]);
   const [pageNumber, setPageNumber] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
-  const [originalManagerList, setOriginalManagerList] = useState([]);
-  const [searchManager, setSearchManager] = useState("");
-  const [selectedManager, setSelectedManager] = useState(null);
-  const [selectedManagerValue, setSelectedManagerValue] = useState({});
+  const [originalContactsList, setOriginalContactsList] = useState([]);
+  const [searchContact, setSearchContact] = useState("");
+  const [selectedContact, setSelectedContact] = useState(null);
+  const [selectedContactValue, setSelectedContactValue] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [filterSearch, setFilterSearch] = useState("");
 
   const [numberPagePagin, setNumberPagePagin] = useState(1);
   const [indicateSearchForm, setIndicateSearchForm] = useState(false);
 
-  const [showAddedManagerModal, setShowAddedManagerModal] = useState(false);
+  const [showAddedContactModal, setShowAddedContactModal] = useState(false);
   const submitAddButtonRef = useRef(null);
 
-  const [showDeleteManagerModal, setShowDeleteManagerModal] = useState(false);
+  const [showEditedContactModal, setShowEditedContactModal] = useState(false);
+  const submitEditButtonRef = useRef(null);
+
+  const [showDeleteContactModal, setShowDeleteContactModal] = useState(false);
   const submitDeleteButtonRef = useRef(null);
 
   useEffect(() => {
-      GetAllManager();
+      GetAllContacts();
   }, []);
 
-  const GetAllManager = async (Page) => {
+  const GetAllContacts = async (Page) => {
     console.log("INDEX PAGE:", Page);
     setIndicateSearchForm(false);
     setFilterSearch("");
@@ -53,28 +56,28 @@ function RegionalManagerComp(props) {
       let numPaginPage = typeof Page === "number" ? Page : 1;
 
       const response = await axios.get(
-        SERVER_URL + `Region/RegionalManager/All?Page=${numPaginPage}`,
+        SERVER_URL + `Contact/Contact/All?Page=${numPaginPage}`,
         {
           // params: data,
           headers: authHeader(),
         }
       );
-      console.log("Successful regionalManagerresponse:", response);
+      console.log("Successful Contacts response:", response);
       // Перевіряємо статус відповіді
       if (response.status === 200) {
         const responseData = response.data; // Отримуємо дані відповіді
-        const Manager = responseData.entries;
+        const Contacts = responseData.entries;
         const totalPages = responseData.paging.total_pages;
         const pageNumber = responseData.paging.page_number;
 
         setPageNumber(pageNumber);
         setTotalPages(totalPages); // Зберігаємо загальну кількість сторінок
-        setManagerList(Manager); // Зберігаємо всі регіони в стані
-        setOriginalManagerList(Manager);
+        setContactsList(Contacts); // Зберігаємо всі регіони в стані
+        setOriginalContactsList(Contacts);
         // Обробка успішної відповіді
-        console.log("Successful regionalManager:", Manager);
+        console.log("Successful Contacts List:", Contacts);
         console.log("Successful pages:", pageNumber);
-        return Manager;
+        return Contacts;
       } else {
         throw new Error("Failed data");
       }
@@ -84,7 +87,7 @@ function RegionalManagerComp(props) {
     }
   };
 
-  const SearchAllManager = async (searchWord, Page) => {
+  const SearchAllContacts = async (searchWord, Page) => {
     console.log("INDEX PAGE:", Page);
     setIndicateSearchForm(true);
     try {
@@ -93,28 +96,28 @@ function RegionalManagerComp(props) {
 
       const response = await axios.get(
         SERVER_URL +
-          `/Region/RegionalManager/All?Page=${numPaginPage}&SearchWords=${searchWords}`,
+          `Contact/Contact/All?Page=${numPaginPage}&SearchWords=${searchWords}`,
         {
           // params: data,
           headers: authHeader(),
         }
       );
-      console.log("Successful regionsAll:", response);
+      console.log("Successful Contacts All:", response);
       // Перевіряємо статус відповіді
       if (response.status === 200) {
         const responseData = response.data; // Отримуємо дані відповіді
-        const Manager = responseData.entries;
+        const Contacts = responseData.entries;
         const totalPages = responseData.paging.total_pages;
         const pageNumber = responseData.paging.page_number;
 
         setPageNumber(pageNumber);
         setTotalPages(totalPages); // Зберігаємо загальну кількість сторінок
-        setManagerList(Manager); // Зберігаємо всі регіони в стані
-        setOriginalManagerList(Manager);
+        setContactsList(Contacts); // Зберігаємо всі регіони в стані
+        setOriginalContactsList(Contacts);
         // Обробка успішної відповіді
-        console.log("Successful regionsAll:", response);
+        console.log("Successful Contacts list:", Contacts);
         console.log("Successful pages:", pageNumber);
-        return Manager;
+        return Contacts;
       } else {
         throw new Error("Failed data");
       }
@@ -127,9 +130,9 @@ function RegionalManagerComp(props) {
   //===============================================Робота з модалками============================
 
   const closeModal = () => {
-    setShowAddedManagerModal(false);
+    setShowAddedContactModal(false);
     // setShowEditRegionModal(false);
-    setShowDeleteManagerModal(false);
+    setShowDeleteContactModal(false);
   };
 
   const handleSubmitAddButtonClick = () => {
@@ -138,7 +141,7 @@ function RegionalManagerComp(props) {
       submitAddButtonRef.current.click(); // Симулюємо клік на кнопці "Надіслати" в іншому компоненті
     }
     setTimeout(() => {
-      GetAllManager(currentPage);
+      GetAllContacts(currentPage);
     }, 1000);
   };
   const handleSubmitDeleteButtonClick = () => {
@@ -147,31 +150,31 @@ function RegionalManagerComp(props) {
       submitDeleteButtonRef.current.click(); // Симулюємо клік на кнопці "Надіслати" в іншому компоненті
     }
     setTimeout(() => {
-      setSelectedManager(null);
-      if (managerList.length - 1 === 0) {
+      setSelectedContact(null);
+      if (contactsList.length - 1 === 0) {
         setCurrentPage(currentPage - 1);
-        GetAllManager(currentPage - 1);
+        GetAllContacts(currentPage - 1);
       } else {
-        GetAllManager(currentPage);
+        GetAllContacts(currentPage);
       }
     }, 1000);
   };
 
-  const AddedRegionWidow = () => {
-    setShowAddedManagerModal(true);
+  const AddedContactWidow = () => {
+    setShowAddedContactModal(true);
   };
-  const DeleteRegionWidow = () => {
-    setShowDeleteManagerModal(true);
+  const DeleteContactWidow = () => {
+    setShowDeleteContactModal(true);
   };
 
   const onSubmit = async () => {
-    console.log("дані форми пошуку...", searchManager);
-    if (searchManager.trim() === "") {
+    console.log("дані форми пошуку...", searchContact);
+    if (searchContact.trim() === "") {
       // Якщо поле пошуку порожнє, встановлюємо список користувачів в початковий стан
-      setManagerList(originalManagerList);
+      setContactsList(originalContactsList);
     } else {
       // Викликаємо функцію пошуку та передаємо стартову сторінку
-      SearchAllManager(searchManager, 1);
+      SearchAllContacts(searchContact, 1);
     }
   };
 
@@ -195,8 +198,8 @@ function RegionalManagerComp(props) {
                     className="searchInput"
                     type="text"
                     placeholder="Знайти менеджера"
-                    value={searchManager}
-                    onChange={(e) => setSearchManager(e.target.value)}
+                    value={searchContact}
+                    onChange={(e) => setSearchContact(e.target.value)}
                   />
                 </Form.Group>
                 <div className="searchBtnWrapp">
@@ -206,11 +209,11 @@ function RegionalManagerComp(props) {
                     width="33"
                     height="33"
                     onClick={() => {
-                      GetAllManager({});
+                      GetAllContacts({});
                       // setnotFoundMessage(false);
                       setPageNumber(1);
                       setTotalPages(1);
-                      setSearchManager("");
+                      setSearchContact("");
                     }}
                   ></img>
                   <Button
@@ -236,7 +239,7 @@ function RegionalManagerComp(props) {
                   <img
                     src={addUser}
                     width="40"
-                    onClick={AddedRegionWidow}
+                    onClick={AddedContactWidow}
                     className="btnAfter768"
                   ></img>
                   {/* {!selectedManager ? (
@@ -253,7 +256,7 @@ function RegionalManagerComp(props) {
                       className="btnAfter768"
                     ></img>
                   )} */}
-                  {!selectedManager ? (
+                  {!selectedContact ? (
                     <img
                       src={deleteUserBtnNotActive}
                       width="40"
@@ -263,23 +266,23 @@ function RegionalManagerComp(props) {
                     <img
                       src={deleteUserBtn}
                       width="40"
-                      onClick={DeleteRegionWidow}
+                      onClick={DeleteContactWidow}
                       className="btnAfter768"
                     ></img>
                   )}
                 </div>
 
-                {/* =======================Вікно Додавання Регіонального менеджера========================== */}
+                {/* =======================Вікно Додавання контакту========================== */}
 
                 <Modal
-                  show={showAddedManagerModal}
-                  onHide={() => setShowAddedManagerModal(false)}
+                  show={showAddedContactModal}
+                  onHide={() => setShowAddedContactModal(false)}
                 >
                   <Modal.Header closeButton>
-                    <Modal.Title>Додавання Менеджер\Регіон</Modal.Title>
+                    <Modal.Title>Додавання контакту</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <RegionalManagerAdd
+                    <ContactsAdd
                       submitAddButtonRef={submitAddButtonRef}
                       closeModal={closeModal}
                     />
@@ -298,7 +301,7 @@ function RegionalManagerComp(props) {
                       <button
                         className="btn btn-secondary modalCancel ms-2"
                         onClick={() => {
-                          setShowAddedManagerModal(false);
+                          setShowAddedContactModal(false);
                         }}
                       >
                         Скасувати
@@ -310,18 +313,18 @@ function RegionalManagerComp(props) {
                 {/* =======================Вікно видалення регіонального менеджера========================== */}
 
                 <Modal
-                  show={showDeleteManagerModal}
-                  onHide={() => setShowDeleteManagerModal(false)}
+                  show={showDeleteContactModal}
+                  onHide={() => setShowDeleteContactModal(false)}
                 >
                   <Modal.Header closeButton>
-                    <Modal.Title>Видалення Менеджер\Регіон</Modal.Title>
+                    <Modal.Title>Видалення контакту</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    <RegionalManagerDelete
-                      selectedManagerValue={selectedManagerValue}
+                    {/* <ContactsDelete
+                      selectedContactValue={selectedContactValue}
                       submitDeleteButtonRef={submitDeleteButtonRef}
                       closeModal={closeModal}
-                    />
+                    /> */}
                   </Modal.Body>
                   <Modal.Footer>
                     <div className="addFormBtns">
@@ -335,7 +338,7 @@ function RegionalManagerComp(props) {
                       <button
                         className="btn btn-secondary modalCancel ms-2"
                         onClick={() => {
-                          setShowDeleteManagerModal(false);
+                          setShowDeleteContactModal(false);
                         }}
                       >
                         Скасувати
@@ -347,10 +350,11 @@ function RegionalManagerComp(props) {
                   <thead className="headTable headTableRegions">
                     <tr className="headRow">
                       <th>№</th>
-                      <th>RegionId</th>
-                      <th>RegionName</th>
-                      <th>UserId</th>
-                      <th>UserName</th>
+                      <th>contactCode</th>
+                      <th>contactName</th>
+                      <th>contactPhone</th>
+                      <th>contactEmail</th>
+                      {/* <th>UserName</th> */}
                     </tr>
                     <tr>
                       <th colSpan="8" style={{ padding: "5px" }}></th>
@@ -360,22 +364,23 @@ function RegionalManagerComp(props) {
                     <tr>
                       <td colSpan="8" style={{ padding: "3px" }}></td>
                     </tr>
-                    {Array.from(managerList).map((object, index) => (
+                    {Array.from(contactsList).map((contact, index) => (
                       <tr
-                        key={object.id}
+                        key={contact.id}
                         className={
-                          selectedManager === object.id ? "selected" : ""
+                          selectedContact === contact.id ? "selected" : ""
                         }
                         onClick={() => {
-                          setSelectedManager(object.id);
-                          setSelectedManagerValue(object);
+                          setSelectedContact(contact.id);
+                          setSelectedContactValue(contact);
                         }}
                       >
                         <td>{index + 1}</td>
-                        <td>{object.region.id}</td>
-                        <td>{object.region.name}</td>
-                        <td>{object.user.id}</td>
-                        <td>{object.user.name}</td>
+                        <td>{contact.contactCode}</td>
+                        <td>{contact.contactName}</td>
+                        <td>{contact.contactPhone}</td>
+                        <td>{contact.contactEmail}</td>
+                        {/* <td>{contact.user.name}</td> */}
                       </tr>
                     ))}
                   </tbody>
@@ -392,12 +397,12 @@ function RegionalManagerComp(props) {
                     }}
                     onClick={() => {
                       if (indicateSearchForm) {
-                        SearchAllManager(searchManager, index + 1);
+                        SearchAllContacts(searchContact, index + 1);
                       } else {
-                        GetAllManager(index + 1);
+                        GetAllContacts(index + 1);
                       }
                       setCurrentPage(index + 1);
-                      setSelectedManager(null);
+                      setSelectedContact(null);
                     }}
                     className={
                       pageNumber === index + 1
@@ -417,4 +422,4 @@ function RegionalManagerComp(props) {
   );
 }
 
-export default RegionalManagerComp;
+export default ContactsComp;

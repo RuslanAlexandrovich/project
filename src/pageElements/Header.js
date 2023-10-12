@@ -231,6 +231,7 @@ export default function Header() {
                     wrapperForSideInHeader"
                       ref={wrapperRef}
                     >
+                        {admin ? (
                       <ul className="sideMenuUl">
                         <div
                           className="d-flex sideMenuDivRow"
@@ -244,9 +245,19 @@ export default function Header() {
                             dropMenuLiContacts ? "openDropLi" : "inSideMenuLi"
                           }
                         >
-                          <a>Контактні особи</a>
+                          <Link
+                              to="/contacts"
+                              className={
+                                activeLink === "/contacts"
+                                  ? "activeSideBtn"
+                                  : "notActiveSideBtn"
+                              }
+                            >
+                              Контактні особи
+                            </Link>
                         </li>
                       </ul>
+                       ) : null}
                       <ul className="sideMenuUl">
                         <div
                           className="d-flex sideMenuDivRow"
