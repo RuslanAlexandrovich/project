@@ -1,6 +1,8 @@
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import ContactsAdd from "../components/ContactsAdd";
+import ContactsEdit from "../components/ContactsEdit";
+import ContactsDelete from "../components/ContactsDelete";
 // import RegionalManagerDelete from "../components/RegionalManagerDelete";
 import React, { useState, useEffect, useRef } from "react";
 import { Container, Row, Col, Button } from "react-bootstrap";
@@ -38,14 +40,14 @@ function ContactsComp(props) {
   const [showAddedContactModal, setShowAddedContactModal] = useState(false);
   const submitAddButtonRef = useRef(null);
 
-  const [showEditedContactModal, setShowEditedContactModal] = useState(false);
+  const [showEditContactModal, setShowEditContactModal] = useState(false);
   const submitEditButtonRef = useRef(null);
 
   const [showDeleteContactModal, setShowDeleteContactModal] = useState(false);
   const submitDeleteButtonRef = useRef(null);
 
   useEffect(() => {
-      GetAllContacts();
+    GetAllContacts();
   }, []);
 
   const GetAllContacts = async (Page) => {
@@ -130,9 +132,11 @@ function ContactsComp(props) {
   //===============================================Робота з модалками============================
 
   const closeModal = () => {
-    setShowAddedContactModal(false);
-    // setShowEditRegionModal(false);
-    setShowDeleteContactModal(false);
+    setTimeout(() => {
+      setShowAddedContactModal(false);
+      setShowEditContactModal(false);
+      setShowDeleteContactModal(false);
+    }, 1500);
   };
 
   const handleSubmitAddButtonClick = () => {
@@ -141,6 +145,17 @@ function ContactsComp(props) {
       submitAddButtonRef.current.click(); // Симулюємо клік на кнопці "Надіслати" в іншому компоненті
     }
     setTimeout(() => {
+      setSelectedContact(null);
+      GetAllContacts(currentPage);
+    }, 1000);
+  };
+  const handleSubmitEditButtonClick = () => {
+    // Клацання на кнопці "modalConfirm" в модальному вікні
+    if (submitEditButtonRef.current) {
+      submitEditButtonRef.current.click(); // Симулюємо клік на кнопці "Надіслати" в іншому компоненті
+    }
+    setTimeout(() => {
+      setSelectedContact(null);
       GetAllContacts(currentPage);
     }, 1000);
   };
@@ -162,6 +177,9 @@ function ContactsComp(props) {
 
   const AddedContactWidow = () => {
     setShowAddedContactModal(true);
+  };
+  const EditContactWidow = () => {
+    setShowEditContactModal(true);
   };
   const DeleteContactWidow = () => {
     setShowDeleteContactModal(true);
@@ -242,7 +260,7 @@ function ContactsComp(props) {
                     onClick={AddedContactWidow}
                     className="btnAfter768"
                   ></img>
-                  {/* {!selectedManager ? (
+                  {!selectedContact ? (
                     <img
                       src={editUserNotActive}
                       width="40"
@@ -252,10 +270,10 @@ function ContactsComp(props) {
                     <img
                       src={editUser}
                       width="40"
-                      // onClick={openEditModalForSelectedUser}
+                      onClick={EditContactWidow}
                       className="btnAfter768"
                     ></img>
-                  )} */}
+                  )}
                   {!selectedContact ? (
                     <img
                       src={deleteUserBtnNotActive}
@@ -310,7 +328,44 @@ function ContactsComp(props) {
                   </Modal.Footer>
                 </Modal>
 
-                {/* =======================Вікно видалення регіонального менеджера========================== */}
+                {/* =======================Вікно редагування контакту========================== */}
+
+                <Modal
+                  show={showEditContactModal}
+                  onHide={() => setShowEditContactModal(false)}
+                >
+                  <Modal.Header closeButton>
+                    <Modal.Title>Редагування контакту</Modal.Title>
+                  </Modal.Header>
+                  <Modal.Body>
+                    <ContactsEdit
+                      selectedContactValue={selectedContactValue}
+                      submitEditButtonRef={submitEditButtonRef}
+                      closeModal={closeModal}
+                    />
+                  </Modal.Body>
+                  <Modal.Footer>
+                    <div className="addFormBtns">
+                      <button
+                        type="submit"
+                        className="btn btn-primary modalSendForm me-2"
+                        onClick={handleSubmitEditButtonClick}
+                      >
+                        Змінити
+                      </button>
+                      <button
+                        className="btn btn-secondary modalCancel ms-2"
+                        onClick={() => {
+                          setShowEditContactModal(false);
+                        }}
+                      >
+                        Скасувати
+                      </button>
+                    </div>
+                  </Modal.Footer>
+                </Modal>
+
+                {/* =======================Вікно видалення контакту========================== */}
 
                 <Modal
                   show={showDeleteContactModal}
@@ -320,11 +375,11 @@ function ContactsComp(props) {
                     <Modal.Title>Видалення контакту</Modal.Title>
                   </Modal.Header>
                   <Modal.Body>
-                    {/* <ContactsDelete
+                    <ContactsDelete
                       selectedContactValue={selectedContactValue}
                       submitDeleteButtonRef={submitDeleteButtonRef}
                       closeModal={closeModal}
-                    /> */}
+                    />
                   </Modal.Body>
                   <Modal.Footer>
                     <div className="addFormBtns">

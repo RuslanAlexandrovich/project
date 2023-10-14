@@ -14,13 +14,15 @@ import axios from "axios";
 import SERVER_URL from "../helpers/Config";
 import authHeader from "../helpers/auth-header";
 
-function ContactsAdd(props) {
+function ContactsEdit(props) {
   const [Regions, setRegions] = useState([]);
   const [Users, setUsers] = useState([]);
   const [ContactGroups, setContactGroups] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const submitAddButtonRef = props.submitAddButtonRef;
-  // const closeModal = props.onCloseModal;
+
+  const submitEditButtonRef = props.submitEditButtonRef;
+  const contactValue = props.selectedContactValue;
+  console.log("props region VALUE", contactValue);
 
   const [serverAnswer, setserverAnswer] = useState();
 
@@ -30,18 +32,20 @@ function ContactsAdd(props) {
     GetAllContactGroupId();
   }, []);
 
-  //   const [showPassword, setShowPassword] = useState(false);
-
-  const addContact = async (data) => {
+  const editContact = async (data) => {
     try {
-      console.log("Add Contact Row.......", data);
-      const response = await axios.post(SERVER_URL + "Contact/Contact", data, {
-        // params: data,
-        headers: authHeader(),
-      });
+      console.log("Edit Contact Row.......", data);
+      const response = await axios.put(
+        SERVER_URL + `Contact/Contact?contactId=${data.id}`,
+        data,
+        {
+          // params: data,
+          headers: authHeader(),
+        }
+      );
       console.log("RESPONSE DATA:", response);
       if (response.status === 200) {
-        console.log("Created new Contact.....OK......!");
+        console.log("Edit Contact.....OK......!");
         const confirmServer = response.data.messages;
         props.closeModal();
         return { success: true, message: confirmServer };
@@ -138,24 +142,21 @@ function ContactsAdd(props) {
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm();
 
   const onSubmit = async (data) => {
     console.log("Дані надіслано...   ", data);
-    const result = await addContact(data);
+    const result = await editContact(data);
     console.log(result);
     if (result.success) {
       if (result.success !== true) {
         setserverAnswer(result.error);
         return;
       }
-      // console.log("Отримані дані від сервера:", result.data.message);
       setserverAnswer(result.message);
-      // setTimeout(() => window.location.reload(), 1500);
     } else {
-      // Обробка помилки
-      // console.error("Помилка:", result.error);
       setserverAnswer(result.error);
     }
   };
@@ -169,10 +170,27 @@ function ContactsAdd(props) {
               onSubmit={handleSubmit(onSubmit)}
               className="form_EditForAdmin"
             >
-              <Form.Group className="mb-2" controlId="formBasicAddCode">
+              <Form.Group className="mb-2" controlId="formBasicEditId">
+                <Form.Control
+                  type="text"
+                  value={contactValue.id}
+                  hidden
+                  {...register("id", {
+                    required: false,
+                    // validate: (value) => nameCheck(value),
+                  })}
+                />
+                {errors.id && (
+                  <Form.Text className="text-danger">
+                    Код має містити тільки цифри, не більше 6.
+                  </Form.Text>
+                )}
+              </Form.Group>
+              <Form.Group className="mb-2" controlId="formBasicEditCode">
                 <Form.Control
                   type="text"
                   placeholder="Код контакту"
+                  defaultValue={contactValue.contactCode}
                   {...register("contactCode", {
                     required: false,
                     // validate: (value) => nameCheck(value),
@@ -184,10 +202,11 @@ function ContactsAdd(props) {
                   </Form.Text>
                 )}
               </Form.Group>
-              <Form.Group className="mb-2" controlId="formBasicAddName">
+              <Form.Group className="mb-2" controlId="formBasicEditName">
                 <Form.Control
                   type="text"
                   placeholder="Ім'я"
+                  defaultValue={contactValue.contactF}
                   {...register("contactF", {
                     required: false,
                     validate: (value) => nameCheck(value),
@@ -199,10 +218,11 @@ function ContactsAdd(props) {
                   </Form.Text>
                 )}
               </Form.Group>
-              <Form.Group className="mb-2" controlId="formBasicAddSurname">
+              <Form.Group className="mb-2" controlId="formBasicEditSurname">
                 <Form.Control
                   type="text"
                   placeholder="Прізвище"
+                  defaultValue={contactValue.contactI}
                   {...register("contactI", {
                     required: false,
                     validate: (value) => surNameCheck(value),
@@ -214,10 +234,11 @@ function ContactsAdd(props) {
                   </Form.Text>
                 )}
               </Form.Group>
-              <Form.Group className="mb-2" controlId="formBasicAddSurname2">
+              <Form.Group className="mb-2" controlId="formBasicEditSurname2">
                 <Form.Control
                   type="text"
                   placeholder="По-батькові"
+                  defaultValue={contactValue.contactO}
                   {...register("contactO", {
                     required: false,
                     validate: (value) => surNameCheck(value),
@@ -229,10 +250,11 @@ function ContactsAdd(props) {
                   </Form.Text>
                 )}
               </Form.Group>
-              <Form.Group className="mb-2" controlId="formBasicEmail">
+              <Form.Group className="mb-2" controlId="formBasicEditEmail">
                 <Form.Control
                   type="text"
                   placeholder="Email *"
+                  defaultValue={contactValue.contactEmail}
                   {...register("contactEmail", {
                     required: true,
                     validate: (value) => emailCheck(value),
@@ -249,6 +271,7 @@ function ContactsAdd(props) {
                 <Form.Control
                   type="text"
                   placeholder="Телефон *"
+                  defaultValue={contactValue.contactPhone}
                   {...register("contactPhone", {
                     required: true,
                     validate: (value) => phoneCheck(value),
@@ -261,14 +284,19 @@ function ContactsAdd(props) {
                   </Form.Text>
                 )}
               </Form.Group>
-              <Form.Group controlId="formBasicAddregionId">
+              <Form.Group controlId="formBasicEditregionId">
                 <Form.Label>Оберіть регіон *</Form.Label>
                 <Form.Select
                   {...register("regionId", {
                     required: true,
                   })}
                 >
-                  <option value=""></option>
+                  <option
+                    value={contactValue.region.id}
+                    selected={contactValue.region.id}
+                  >
+                    {contactValue.region.name}
+                  </option>
                   {Regions.map((region) => (
                     <option key={region.id} value={region.id}>
                       {region.regionName}
@@ -276,14 +304,19 @@ function ContactsAdd(props) {
                   ))}
                 </Form.Select>
               </Form.Group>
-              <Form.Group controlId="formBasicAdduserId">
+              <Form.Group controlId="formBasicEdituserId">
                 <Form.Label>Оберіть користувача *</Form.Label>
                 <Form.Select
                   {...register("userId", {
                     required: true,
                   })}
                 >
-                  <option value=""></option>
+                  <option
+                    value={contactValue.user.id}
+                    selected={contactValue.user.id}
+                  >
+                    {contactValue.user.name}
+                  </option>
                   {Users.map((user) => (
                     <option key={user.id} value={user.id}>
                       {user.name}
@@ -291,14 +324,19 @@ function ContactsAdd(props) {
                   ))}
                 </Form.Select>
               </Form.Group>
-              <Form.Group controlId="formBasicAddcontactGroupId">
+              <Form.Group controlId="formBasicEditcontactGroupId">
                 <Form.Label>Оберіть контактну групу *</Form.Label>
                 <Form.Select
                   {...register("contactGroupId", {
                     required: true,
                   })}
                 >
-                  <option value=""></option>
+                  <option
+                    value={contactValue.contactGroup.id}
+                    selected={contactValue.contactGroup.id}
+                  >
+                    {contactValue.contactGroup.name}
+                  </option>
                   {ContactGroups.map((group) => (
                     <option key={group.id} value={group.id}>
                       {group.groupName}
@@ -310,7 +348,7 @@ function ContactsAdd(props) {
               <Button
                 type="submit"
                 id="submitNewDataBtn"
-                ref={submitAddButtonRef}
+                ref={submitEditButtonRef}
               ></Button>
             </Form>
           </Col>
@@ -320,4 +358,4 @@ function ContactsAdd(props) {
   );
 }
 
-export default ContactsAdd;
+export default ContactsEdit;

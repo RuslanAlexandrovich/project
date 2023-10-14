@@ -974,8 +974,10 @@ td {
 .controlBtnPaging {
   display: flex;
   flex-wrap: nowrap;
-  /* border: 1px solid black; */
-  padding: 1px;
+  border-right: 1px solid black;
+  border-left: 1px solid black;
+  padding: 2px;
   width: 290px;
+  margin: 0 5px 0 5px;
   overflow: hidden;
 }

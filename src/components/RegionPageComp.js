@@ -156,9 +156,11 @@ function RegionPageComp(props) {
   //====================================Робота з модалкою Edit Region=================
 
   const closeModal = () => {
-    setShowAddRegionModal(false);
-    setShowEditRegionModal(false);
-    setShowDeleteRegionModal(false);
+    setTimeout(() => {
+      setShowAddRegionModal(false);
+      setShowEditRegionModal(false);
+      setShowDeleteRegionModal(false);
+    }, 1500);
   };
 
   const openEditModalForSelectedRegion = () => {

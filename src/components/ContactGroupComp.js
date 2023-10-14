@@ -167,9 +167,11 @@ function ContactGroupComp(props) {
   //====================================Робота з модалкою  Edit =================
 
   const closeModal = () => {
-    setShowAddContactGroupModal(false);
-    setShowEditContactGroupModal(false);
-    setShowDeleteContactGroupModal(false);
+    setTimeout(() => {
+      setShowAddContactGroupModal(false);
+      setShowEditContactGroupModal(false);
+      setShowDeleteContactGroupModal(false);
+    }, 1500);
   };
 
   const openEditModalForSelectedContactGroup = () => {

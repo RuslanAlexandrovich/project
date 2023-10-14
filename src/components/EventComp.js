@@ -156,9 +156,11 @@ function EventComp(props) {
   //====================================Робота з модалкою  Edit =================
 
   const closeModal = () => {
-    setShowAddEventModal(false);
-    setShowEditEventModal(false);
-    setShowDeleteEventModal(false);
+    setTimeout(() => {
+      setShowAddEventModal(false);
+      setShowEditEventModal(false);
+      setShowDeleteEventModal(false);
+    }, 1500);
   };
 
   const openEditModalForSelectedEvent = () => {

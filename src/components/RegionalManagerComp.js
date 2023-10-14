@@ -42,7 +42,7 @@ function RegionalManagerComp(props) {
   const submitDeleteButtonRef = useRef(null);
 
   useEffect(() => {
-      GetAllManager();
+    GetAllManager();
   }, []);
 
   const GetAllManager = async (Page) => {
@@ -127,9 +127,11 @@ function RegionalManagerComp(props) {
   //===============================================Робота з модалками============================
 
   const closeModal = () => {
-    setShowAddedManagerModal(false);
-    // setShowEditRegionModal(false);
-    setShowDeleteManagerModal(false);
+    setTimeout(() => {
+      setShowAddedManagerModal(false);
+      // setShowEditRegionModal(false);
+      setShowDeleteManagerModal(false);
+    }, 1500);
   };
 
   const handleSubmitAddButtonClick = () => {
