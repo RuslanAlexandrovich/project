@@ -969,6 +969,57 @@ td {
   color: red;
 }
 
+/* ======================Contacts Add form======================= */
+
+.emailAddContact {
+  position: relative;
+}
+.removeEmail {
+  position: absolute;
+  width: 30px;
+  top: 4px;
+  right: 2px;
+  border: 1px solid transparent;
+  background-color: white;
+  color: #616c70;
+  font-weight: 500;
+  border-radius: 50%;
+}
+.removeEmail:hover {
+  /* background-color: #d6d4d4; */
+  border: 1px solid #d6d4d4;
+}
+.addEmail {
+  width: 100%;
+  border-radius: 5px;
+  border: 1px solid #d6d4d4;
+  background-color: white;
+  margin-bottom: 9px;
+  color: gray;
+  transition: 0.1s all ease-in;
+}
+.addEmail:hover {
+  color: black;
+  border: 1px solid black;
+}
+.phoneAddContact {
+  position: relative;
+}
+.removePhone {
+  position: absolute;
+  width: 30px;
+  top: 4px;
+  right: 2px;
+  border: 1px solid transparent;
+  background-color: white;
+  color: #616c70;
+  font-weight: 500;
+  border-radius: 50%;
+}
+.removePhone:hover {
+  border: 1px solid #d6d4d4;
+}
+
 /* ================Paging style======================= */
 
 .controlBtnPaging {

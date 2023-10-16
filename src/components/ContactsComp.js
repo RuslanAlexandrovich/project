@@ -295,6 +295,7 @@ function ContactsComp(props) {
                 <Modal
                   show={showAddedContactModal}
                   onHide={() => setShowAddedContactModal(false)}
+                  dialogClassName="modal-fullscreen"
                 >
                   <Modal.Header closeButton>
                     <Modal.Title>Додавання контакту</Modal.Title>

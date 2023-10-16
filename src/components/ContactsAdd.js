@@ -24,9 +24,37 @@ function ContactsAdd(props) {
 
   const [serverAnswer, setserverAnswer] = useState();
 
+  const [emails, setEmails] = useState([{ email: "" }]);
+
+  const addEmailRow = () => {
+    const newEmails = [...emails, { email: "" }];
+    setEmails(newEmails);
+  };
+  const removeEmailRow = (index) => {
+    if (emails.length > 1) {
+      const newEmails = [...emails];
+      newEmails.splice(index, 1);
+      setEmails(newEmails);
+    }
+  };
+
+  const [phones, setPhones] = useState([{ phone: "" }]);
+
+  const addPhoneRow = () => {
+    const newPhones = [...phones, { phone: "" }];
+    setPhones(newPhones);
+  };
+  const removePhoneRow = (index) => {
+    if (phones.length > 1) {
+      const newPhones = [...phones];
+      newPhones.splice(index, 1);
+      setPhones(newPhones);
+    }
+  };
+
   useEffect(() => {
     GetAllRegionsId();
-    GetAllUsersId();
+    // GetAllUsersId();
     GetAllContactGroupId();
   }, []);
 
@@ -48,8 +76,8 @@ function ContactsAdd(props) {
         // return usersData;
       }
     } catch (error) {
-      console.error("Not answer:", error.response.data.errors.RegionCode[0]);
-      const errorServer = error.response.data.errors.RegionCode[0];
+      console.error("Not answer:", error.response.statusText);
+      const errorServer = error.response.statusText;
       return { success: false, error: errorServer };
     }
   };
@@ -81,32 +109,32 @@ function ContactsAdd(props) {
     }
   };
 
-  const GetAllUsersId = async () => {
-    try {
-      const response = await axios.get(
-        SERVER_URL + `User/all?PageSize=${5000}`,
-        {
-          // params: data,
-          headers: authHeader(),
-        }
-      );
-      console.log("Successful UsersAll response:", response);
-      // Перевіряємо статус відповіді
-      if (response.status === 200) {
-        const responseData = response.data; // Отримуємо дані відповіді
-        const usersData = responseData.users;
-        setUsers(usersData);
-        console.log("Successful UsersAll data:", usersData);
+  // const GetAllUsersId = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       SERVER_URL + `User/all?PageSize=${5000}`,
+  //       {
+  //         // params: data,
+  //         headers: authHeader(),
+  //       }
+  //     );
+  //     console.log("Successful UsersAll response:", response);
+  //     // Перевіряємо статус відповіді
+  //     if (response.status === 200) {
+  //       const responseData = response.data; // Отримуємо дані відповіді
+  //       const usersData = responseData.users;
+  //       setUsers(usersData);
+  //       console.log("Successful UsersAll data:", usersData);
 
-        return Regions;
-      } else {
-        throw new Error("Failed data");
-      }
-    } catch (error) {
-      // Обробка помилки
-      console.error("Not answer:", error);
-    }
-  };
+  //       return Regions;
+  //     } else {
+  //       throw new Error("Failed data");
+  //     }
+  //   } catch (error) {
+  //     // Обробка помилки
+  //     console.error("Not answer:", error);
+  //   }
+  // };
 
   const GetAllContactGroupId = async () => {
     try {
@@ -142,6 +170,26 @@ function ContactsAdd(props) {
   } = useForm();
 
   const onSubmit = async (data) => {
+    // Формуємо масив об'єктів `contactEmail та contactPhones` зі станів
+
+    const contactEmails = emails.map((email, index) => ({
+      [`email${index}`]: data[`contactEmailRow${index}`],
+    }));
+
+    for (let i = 0; i <= emails.length; i++) {
+      delete data[`contactEmailRow${i}`];
+    }
+    data.contactEmails = contactEmails;
+
+    const contactPhones = phones.map((phone, index) => ({
+      [`phone${index}`]: data[`contactPhoneRow${index}`],
+    }));
+
+    for (let i = 0; i <= phones.length; i++) {
+      delete data[`contactPhoneRow${i}`];
+    }
+    data.contactPhones = contactPhones;
+
     console.log("Дані надіслано...   ", data);
     const result = await addContact(data);
     console.log(result);
@@ -229,38 +277,74 @@ function ContactsAdd(props) {
                   </Form.Text>
                 )}
               </Form.Group>
-              <Form.Group className="mb-2" controlId="formBasicEmail">
-                <Form.Control
-                  type="text"
-                  placeholder="Email *"
-                  {...register("contactEmail", {
-                    required: true,
-                    validate: (value) => emailCheck(value),
-                  })}
-                />
-                {errors.contactEmail && (
-                  <Form.Text className="text-danger">
-                    Назва має містити мінімум дві літери, з першою великою і
-                    рештою малих літер.
-                  </Form.Text>
-                )}
-              </Form.Group>
-              <Form.Group className="mb-2" controlId="formBasicNumber">
-                <Form.Control
-                  type="text"
-                  placeholder="Телефон *"
-                  {...register("contactPhone", {
-                    required: true,
-                    validate: (value) => phoneCheck(value),
-                  })}
-                />
-                {errors.contactPhone && (
-                  <Form.Text className="text-danger">
-                    Назва має містити мінімум дві літери, з першою великою і
-                    рештою малих літер.
-                  </Form.Text>
-                )}
-              </Form.Group>
+              {emails.map((email, index) => (
+                <div key={index} className="d-flex">
+                  <Form.Group
+                    className="mb-2 w-100 emailAddContact"
+                    controlId={`formBasicEmail${index}`}
+                  >
+                    <Form.Control
+                      type="text"
+                      placeholder="Email *"
+                      {...register(`contactEmailRow${index}`, {
+                        required: index === 0, // Перше поле email обов'язкове
+                        validate: (value) => emailCheck(value),
+                      })}
+                    />
+                    {errors[`contactEmailRow${index}`] && (
+                      <Form.Text className="text-danger">
+                        Назва має містити мінімум дві літери, з першою великою і
+                        рештою малих літер.
+                      </Form.Text>
+                    )}
+                    {index > 0 && (
+                      <button
+                        className="removeEmail"
+                        onClick={() => removeEmailRow(index)}
+                      >
+                        X
+                      </button>
+                    )}
+                  </Form.Group>
+                </div>
+              ))}
+              <button className="addEmail" onClick={addEmailRow}>
+                Додатковий email
+              </button>
+              {phones.map((phone, index) => (
+                <div key={index} className="d-flex">
+                  <Form.Group
+                    className="mb-2 w-100 phoneAddContact"
+                    controlId={`formBasicNumber${index}`}
+                  >
+                    <Form.Control
+                      type="text"
+                      placeholder="Телефон *"
+                      {...register(`contactPhoneRow${index}`, {
+                        required: true,
+                        validate: (value) => phoneCheck(value),
+                      })}
+                    />
+                    {errors[`contactPhoneRow${index}`] && (
+                      <Form.Text className="text-danger">
+                        Назва має містити мінімум дві літери, з першою великою і
+                        рештою малих літер.
+                      </Form.Text>
+                    )}
+                    {index > 0 && (
+                      <button
+                        className="removePhone"
+                        onClick={() => removePhoneRow(index)}
+                      >
+                        X
+                      </button>
+                    )}
+                  </Form.Group>
+                </div>
+              ))}
+              <button className="addEmail" onClick={addPhoneRow}>
+                Додатковий телефон
+              </button>
               <Form.Group controlId="formBasicAddregionId">
                 <Form.Label>Оберіть регіон *</Form.Label>
                 <Form.Select
@@ -276,7 +360,7 @@ function ContactsAdd(props) {
                   ))}
                 </Form.Select>
               </Form.Group>
-              <Form.Group controlId="formBasicAdduserId">
+              {/* <Form.Group controlId="formBasicAdduserId">
                 <Form.Label>Оберіть користувача *</Form.Label>
                 <Form.Select
                   {...register("userId", {
@@ -290,7 +374,7 @@ function ContactsAdd(props) {
                     </option>
                   ))}
                 </Form.Select>
-              </Form.Group>
+              </Form.Group> */}
               <Form.Group controlId="formBasicAddcontactGroupId">
                 <Form.Label>Оберіть контактну групу *</Form.Label>
                 <Form.Select
