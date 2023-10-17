@@ -971,13 +971,70 @@ td {
 
 /* ======================Contacts Add form======================= */
 
+.contactsAddFormMain {
+  width: 100%;
+}
+.headFormContactAdd {
+  display: flex;
+}
+.selectBtnShowMenu {
+  width: 100%;
+  margin: 15px 0 15px 0;
+  padding: 5px;
+  border-top: 1px solid #004c5d;
+  padding-top: 0;
+}
+.btnShowContactAdd {
+  border: 1px solid #004c5d;
+  background-color: white;
+  border-radius: 5px;
+  /* border-top: none; */
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  margin-right: 2px;
+  padding: 1px 5px 5px 5px;
+}
+.btnShowContactAdd:hover {
+  cursor: pointer;
+  background-color: #daeaea;
+}
+.btnShowPhoneMail{
+  background-color: #daeaea;
+  border-top: 1px solid transparent;
+}
+.btnShowAdress{
+  background-color: #daeaea;
+  border-top: 1px solid transparent;
+}
+.btnShowMoreInfo{
+  background-color: #daeaea;
+  border-top: 1px solid transparent;
+}
+
+
+
 .emailAddContact {
   position: relative;
 }
+.wrapperEmailLayer{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.wrapperPhoneLayer{
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
 .removeEmail {
   position: absolute;
-  width: 30px;
-  top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  top: 6px;
   right: 2px;
   border: 1px solid transparent;
   background-color: white;
@@ -988,12 +1045,23 @@ td {
 .removeEmail:hover {
   /* background-color: #d6d4d4; */
   border: 1px solid #d6d4d4;
+  cursor: pointer;
 }
 .addEmail {
-  width: 100%;
+  position: absolute;
+  top: 4px;
+  right: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  white-space: nowrap;
+  font-size: 12px;
+  padding: 5px;
   border-radius: 5px;
   border: 1px solid #d6d4d4;
   background-color: white;
+  margin-left: 5px;
   margin-bottom: 9px;
   color: gray;
   transition: 0.1s all ease-in;
@@ -1001,23 +1069,19 @@ td {
 .addEmail:hover {
   color: black;
   border: 1px solid black;
+  cursor: pointer;
 }
 .phoneAddContact {
   position: relative;
 }
-.removePhone {
-  position: absolute;
-  width: 30px;
-  top: 4px;
-  right: 2px;
-  border: 1px solid transparent;
-  background-color: white;
-  color: #616c70;
-  font-weight: 500;
-  border-radius: 50%;
+
+.AdressAddContact{
+  position: relative;
 }
-.removePhone:hover {
-  border: 1px solid #d6d4d4;
+.wrapperAdressLayer{
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
 
 /* ================Paging style======================= */
