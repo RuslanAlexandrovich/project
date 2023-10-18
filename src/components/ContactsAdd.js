@@ -16,7 +16,6 @@ import authHeader from "../helpers/auth-header";
 
 function ContactsAdd(props) {
   const [Regions, setRegions] = useState([]);
-  const [Users, setUsers] = useState([]);
   const [ContactGroups, setContactGroups] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const submitAddButtonRef = props.submitAddButtonRef;
@@ -52,50 +51,46 @@ function ContactsAdd(props) {
     }
   };
 
-  const [adress, setAdress] = useState([{ adress: "" }]);
+  // const [adress, setAdress] = useState([{ adress: "" }]);
 
-  const addAdress = () => {
-    const newAdress = [...adress, { adress: "" }];
-    setAdress(newAdress);
-  };
-  const removeAdress = (index) => {
-    if (adress.length > 1) {
-      const newAdress = [...adress];
-      newAdress.splice(index, 1);
-      setAdress(newAdress);
-    }
-  };
+  // const addAdress = () => {
+  //   const newAdress = [...adress, { adress: "" }];
+  //   setAdress(newAdress);
+  // };
+  // const removeAdress = (index) => {
+  //   if (adress.length > 1) {
+  //     const newAdress = [...adress];
+  //     newAdress.splice(index, 1);
+  //     setAdress(newAdress);
+  //   }
+  // };
 
   // ==========================================Кнопки вкладок додавання контакту=======================
 
-  const [showMailPhone, setShowMailPhone]= useState(true);
-  const [showAdress, setShowAdress]= useState(false);
-  const [moreInfo, setShowMoreInfo]= useState(false);
+  const [showMailPhone, setShowMailPhone] = useState(true);
+  const [showAdress, setShowAdress] = useState(false);
+  const [moreInfo, setShowMoreInfo] = useState(false);
 
-  const clickShowMailPhone = ()=>{
+  const clickShowMailPhone = () => {
     setShowMailPhone(true);
     setShowAdress(false);
     setShowMoreInfo(false);
-  }
-  const clickShowAdress = ()=>{
+  };
+  const clickShowAdress = () => {
     setShowAdress(true);
     setShowMailPhone(false);
     setShowMoreInfo(false);
-  }
-  const clickShowMoreInfo = ()=>{
+  };
+  const clickShowMoreInfo = () => {
     setShowMoreInfo(true);
     setShowAdress(false);
     setShowMailPhone(false);
-  }
-
+  };
 
   useEffect(() => {
     GetAllRegionsId();
-    // GetAllUsersId();
     GetAllContactGroupId();
   }, []);
-
-  //   const [showPassword, setShowPassword] = useState(false);
 
   const addContact = async (data) => {
     try {
@@ -146,7 +141,6 @@ function ContactsAdd(props) {
     }
   };
 
-
   const GetAllContactGroupId = async () => {
     try {
       const response = await axios.get(
@@ -181,49 +175,76 @@ function ContactsAdd(props) {
   } = useForm();
 
   const onSubmit = async (data) => {
-    
     // Формуємо масив об'єктів `contactEmail та contactPhones` зі станів
+
+    if (!data[`contactEmailRow${0}`] || !data[`contactPhoneRow${0}`]) {
+      alert("Заповніть обов'язкові поля на вкладці 'Телефон та пошта'");
+      return;
+    }
 
     const contactEmails = emails.map((email, index) => ({
       [`email`]: data[`contactEmailRow${index}`],
+      [`isMain`]: data[`isMain${index}`],
     }));
 
     for (let i = 0; i <= emails.length; i++) {
       delete data[`contactEmailRow${i}`];
+      delete data[`isMain${i}`];
     }
     data.contactEmails = contactEmails;
 
     const contactPhones = phones.map((phone, index) => ({
       [`phone`]: data[`contactPhoneRow${index}`],
+      [`isMain`]: data[`isMainPhone${index}`],
+      [`isViber`]: data[`isViberNumb${index}`],
+      [`isTelegram`]: data[`isTelegramNumb${index}`],
+      [`phoneType`]: parseInt(data[`phoneType${index}`], 10),
     }));
 
     for (let i = 0; i <= phones.length; i++) {
       delete data[`contactPhoneRow${i}`];
+      delete data[`isMainPhone${i}`];
+      delete data[`isViberNumb${i}`];
+      delete data[`isTelegramNumb${i}`];
+      delete data[`phoneType${i}`];
     }
     data.contactPhones = contactPhones;
+    console.log("Тип змінної", typeof contactPhones[0].phoneType);
 
-// =============================================Створюю масив адрес=======================
+    // =============================================Створюю масив адрес=======================
 
     const contactAddresses = [];
 
-  for (let i = 1; i <= 4; i++) { // є 4 групи адрес, проходимо по їх ідентифікаторах
-    const addressData = {
-      addressType: data[`addressType${i}`], // Отримуємо тип адреси
-      address: data[`contactAdressRow${i}`], // Отримуємо адресу
-      zip: data[`contactZipRow${i}`], // Отримуємо поштовий код
-      country: data[`contactCountryRow${i}`], // Отримуємо країну
-    };
+    for (let i = 1; i <= 4; i++) {
+      // є 4 групи адрес, проходимо по їх ідентифікаторах
+      const addressData = {
+        addressType: parseInt(data[`addressType${i}`], 10), // Отримуємо тип адреси
+        address: data[`contactAdressRow${i}`], // Отримуємо адресу
+        zip: data[`contactZipRow${i}`], // Отримуємо поштовий код
+        country: data[`contactCountryRow${i}`], // Отримуємо країну
+      };
 
-    contactAddresses.push(addressData);
-  }
-  for (let i = 0; i <= 4; i++) {
-    delete data[`addressType${i}`];
-    delete data[`contactAdressRow${i}`];
-    delete data[`contactZipRow${i}`];
-    delete data[`contactCountryRow${i}`];
-  }
+      if (
+        !data[`contactAdressRow${1}`] ||
+        !data[`contactZipRow${1}`] ||
+        !data[`contactCountryRow${1}`]
+      ) {
+        alert("Заповніть обов'язкові поля на вкладці 'Адреса'");
+        return;
+      }
 
-  data.contactAddresses = contactAddresses;
+      if (addressData.address && addressData.zip && addressData.country) {
+        contactAddresses.push(addressData);
+      }
+    }
+    for (let i = 0; i <= 4; i++) {
+      delete data[`addressType${i}`];
+      delete data[`contactAdressRow${i}`];
+      delete data[`contactZipRow${i}`];
+      delete data[`contactCountryRow${i}`];
+    }
+
+    data.contactAddresses = contactAddresses;
 
     console.log("Дані надіслано...   ", data);
     const result = await addContact(data);
@@ -254,205 +275,276 @@ function ContactsAdd(props) {
             >
               <div className="headFormContactAdd">
                 <div className="w-50 me-2">
-              <Form.Group className="mb-2" controlId="formBasicAddCode">
-                <Form.Control
-                  type="text"
-                  placeholder="Код контакту"
-                  {...register("contactCode", {
-                    required: false,
-                    // validate: (value) => nameCheck(value),
-                  })}
-                />
-                {errors.contactCode && (
-                  <Form.Text className="text-danger">
-                    Код має містити тільки цифри, не більше 6.
-                  </Form.Text>
-                )}
-              </Form.Group>
-              <Form.Group className="mb-2" controlId="formBasicAddName">
-                <Form.Control
-                  type="text"
-                  placeholder="Ім'я"
-                  {...register("contactF", {
-                    required: false,
-                    validate: (value) => nameCheck(value),
-                  })}
-                />
-                {errors.contactF && (
-                  <Form.Text className="text-danger">
-                    Код має містити тільки цифри, не більше 6.
-                  </Form.Text>
-                )}
-              </Form.Group>
-              <Form.Group className="mb-2" controlId="formBasicAddSurname">
-                <Form.Control
-                  type="text"
-                  placeholder="Прізвище"
-                  {...register("contactI", {
-                    required: false,
-                    validate: (value) => surNameCheck(value),
-                  })}
-                />
-                {errors.contactI && (
-                  <Form.Text className="text-danger">
-                    Код має містити тільки цифри, не більше 6.
-                  </Form.Text>
-                )}
-              </Form.Group>
-              <Form.Group className="mb-2" controlId="formBasicAddSurname2">
-                <Form.Control
-                  type="text"
-                  placeholder="По-батькові"
-                  {...register("contactO", {
-                    required: false,
-                    validate: (value) => surNameCheck(value),
-                  })}
-                />
-                {errors.contactO && (
-                  <Form.Text className="text-danger">
-                    Код має містити тільки цифри, не більше 6.
-                  </Form.Text>
-                )}
-              </Form.Group>
-              </div>
-              <div className="w-50">
-              <Form.Group controlId="formBasicAddregionId" className="mb-2">
-                <Form.Label>Оберіть регіон *</Form.Label>
-                <Form.Select
-                  {...register("regionId", {
-                    required: true,
-                  })}
-                >
-                  <option value=""></option>
-                  {Regions.map((region) => (
-                    <option key={region.id} value={region.id}>
-                      {region.regionName}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-              <Form.Group controlId="formBasicAddcontactGroupId">
-                <Form.Label>Оберіть контактну групу *</Form.Label>
-                <Form.Select
-                  {...register("contactGroupId", {
-                    required: true,
-                  })}
-                >
-                  <option value=""></option>
-                  {ContactGroups.map((group) => (
-                    <option key={group.id} value={group.id}>
-                      {group.groupName}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-              </div>
+                  <Form.Group className="mb-2" controlId="formBasicAddCode">
+                    <Form.Control
+                      type="text"
+                      placeholder="Код контакту"
+                      {...register("contactCode", {
+                        required: false,
+                        // validate: (value) => nameCheck(value),
+                      })}
+                    />
+                    {errors.contactCode && (
+                      <Form.Text className="text-danger">
+                        Код має містити тільки цифри, не більше 6.
+                      </Form.Text>
+                    )}
+                  </Form.Group>
+                  <Form.Group className="mb-2" controlId="formBasicAddName">
+                    <Form.Control
+                      type="text"
+                      placeholder="Ім'я"
+                      {...register("contactF", {
+                        required: false,
+                        validate: (value) => nameCheck(value),
+                      })}
+                    />
+                    {errors.contactF && (
+                      <Form.Text className="text-danger">
+                        Код має містити тільки цифри, не більше 6.
+                      </Form.Text>
+                    )}
+                  </Form.Group>
+                  <Form.Group className="mb-2" controlId="formBasicAddSurname">
+                    <Form.Control
+                      type="text"
+                      placeholder="Прізвище"
+                      {...register("contactI", {
+                        required: false,
+                        validate: (value) => surNameCheck(value),
+                      })}
+                    />
+                    {errors.contactI && (
+                      <Form.Text className="text-danger">
+                        Код має містити тільки цифри, не більше 6.
+                      </Form.Text>
+                    )}
+                  </Form.Group>
+                  <Form.Group className="mb-2" controlId="formBasicAddSurname2">
+                    <Form.Control
+                      type="text"
+                      placeholder="По-батькові"
+                      {...register("contactO", {
+                        required: false,
+                        validate: (value) => surNameCheck(value),
+                      })}
+                    />
+                    {errors.contactO && (
+                      <Form.Text className="text-danger">
+                        Код має містити тільки цифри, не більше 6.
+                      </Form.Text>
+                    )}
+                  </Form.Group>
+                </div>
+                <div className="w-50">
+                  <Form.Group controlId="formBasicAddregionId" className="mb-2">
+                    <Form.Label>Оберіть регіон *</Form.Label>
+                    <Form.Select
+                      {...register("regionId", {
+                        required: true,
+                      })}
+                    >
+                      <option value=""></option>
+                      {Regions.map((region) => (
+                        <option key={region.id} value={region.id}>
+                          {region.regionName}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                  <Form.Group controlId="formBasicAddcontactGroupId">
+                    <Form.Label>Оберіть контактну групу *</Form.Label>
+                    <Form.Select
+                      {...register("contactGroupId", {
+                        required: true,
+                      })}
+                    >
+                      <option value=""></option>
+                      {ContactGroups.map((group) => (
+                        <option key={group.id} value={group.id}>
+                          {group.groupName}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                </div>
               </div>
 
               <div className="selectBtnShowMenu">
-              <span className={`btnShowContactAdd ${showMailPhone ? 'btnShowPhoneMail' : ''}`} onClick={clickShowMailPhone}>Телефон та пошта</span>
-                <span className={`btnShowContactAdd ${showAdress ? 'btnShowAdress' : ''}`} onClick={clickShowAdress}>Адреса</span>
-                <span className={`btnShowContactAdd ${moreInfo ? 'btnShowMoreInfo' : ''}`} onClick={clickShowMoreInfo}>Додаткова інформація</span>
+                <span
+                  className={`btnShowContactAdd ${
+                    showMailPhone ? "btnShowPhoneMail" : ""
+                  }`}
+                  onClick={clickShowMailPhone}
+                >
+                  Телефон та пошта
+                </span>
+                <span
+                  className={`btnShowContactAdd ${
+                    showAdress ? "btnShowAdress" : ""
+                  }`}
+                  onClick={clickShowAdress}
+                >
+                  Адреса
+                </span>
+                <span
+                  className={`btnShowContactAdd ${
+                    moreInfo ? "btnShowMoreInfo" : ""
+                  }`}
+                  onClick={clickShowMoreInfo}
+                >
+                  Додаткова інформація
+                </span>
               </div>
-
-              {showMailPhone && <div className="numberMailFormContact">
-              <div className="wrapperEmailLayer">
-              {emails.map((email, index) => (
-                
-                <div key={index} className="d-flex w-100">
-                  <Form.Group
-                    className="mb-2 w-100 emailAddContact"
-                    controlId={`formBasicEmail${index}`}
-                  >
-                    <Form.Control
-                      type="text"
-                      placeholder="Email *"
-                      {...register(`contactEmailRow${index}`, {
-                        required: index === 0, // Перше поле email обов'язкове
-                        validate: (value) => emailCheck(value),
-                      })}
-                    />
-                    {errors[`contactEmailRow${index}`] && (
-                      <Form.Text className="text-danger">
-                        Назва має містити мінімум дві літери, з першою великою і
-                        рештою малих літер.
-                      </Form.Text>
-                    )}
-                    {index > 0 && (
-                      <span
-                        className="removeEmail"
-                        onClick={() => removeEmailRow(index)}
-                      >
-                        X
-                      </span>
-                    )}
-                  </Form.Group>
+              {/* ===========================================Пошти================================================== */}
+              {showMailPhone && (
+                <div className="numberMailFormContact">
+                  <div className="wrapperEmailLayer">
+                    {emails.map((email, index) => (
+                      <div key={index} className="d-flex w-100">
+                        <Form.Group
+                          className="mb-2 w-100 emailAddContact"
+                          controlId={`formBasicEmail${index}`}
+                        >
+                          <Form.Control
+                            type="text"
+                            placeholder={
+                              index === 0
+                                ? "Email * (основний)"
+                                : "Додатковий Email"
+                            }
+                            {...register(`contactEmailRow${index}`, {
+                              required: index === 0, // Перше поле email обов'язкове
+                              validate: (value) => emailCheck(value),
+                            })}
+                          />
+                          {errors[`contactEmailRow${index}`] && (
+                            <Form.Text className="text-danger">
+                              Назва має містити мінімум дві літери, з першою
+                              великою і рештою малих літер.
+                            </Form.Text>
+                          )}
+                          <Form.Check
+                            type="checkbox"
+                            hidden
+                            checked={index === 0 ? true : false}
+                            {...register(`isMain${index}`, {})}
+                          />
+                          {index > 0 && (
+                            <span
+                              className="removeEmail"
+                              onClick={() => removeEmailRow(index)}
+                            >
+                              X
+                            </span>
+                          )}
+                        </Form.Group>
+                      </div>
+                    ))}
+                    <span className="addEmail" onClick={addEmailRow}>
+                      Додатковий
+                    </span>
+                  </div>
+                  {/* ===========================================Телефони================================================== */}
+                  <div className="wrapperPhoneLayer">
+                    {phones.map((phone, index) => (
+                      <div key={index} className="d-flex">
+                        <Form.Group
+                          className="mb-2 w-100 phoneAddContact"
+                          controlId={`formBasicNumber${index}`}
+                        >
+                          <Form.Control
+                            className="w-25 me-2"
+                            type="text"
+                            placeholder={
+                              index === 0
+                                ? "Телефон * (основний)"
+                                : "Додатковий телефон"
+                            }
+                            {...register(`contactPhoneRow${index}`, {
+                              required: true,
+                              validate: (value) => phoneCheck(value),
+                            })}
+                          />
+                          {errors[`contactPhoneRow${index}`] && (
+                            <Form.Text className="text-danger">
+                              Назва має містити мінімум дві літери, з першою
+                              великою і рештою малих літер.
+                            </Form.Text>
+                          )}
+                          <Form.Check
+                            type="checkbox"
+                            hidden
+                            checked={index === 0 ? true : false}
+                            {...register(`isMainPhone${index}`, {})}
+                          />
+                          <div className="d-flex">
+                            <Form.Select
+                              className="w-100 me-2"
+                              {...register(`phoneType${index}`, {
+                                required: true,
+                              })}
+                            >
+                              <option value=""></option>
+                              <option value={0} selected>
+                                Мобільний
+                              </option>
+                              <option value={1}>Домашній</option>
+                              <option value={2}>Робочий</option>
+                            </Form.Select>
+                            <div className="viberTelegramBox">
+                              <Form.Check
+                                type="checkbox"
+                                label="Viber"
+                                {...register(`isViberNumb${index}`, {})}
+                              />
+                              <Form.Check
+                                type="checkbox"
+                                label="Telegram"
+                                {...register(`isTelegramNumb${index}`, {})}
+                                bsSize="sm"
+                              />
+                            </div>
+                          </div>
+                          {index > 0 && (
+                            <span
+                              className="removeEmail"
+                              onClick={() => removePhoneRow(index)}
+                            >
+                              X
+                            </span>
+                          )}
+                        </Form.Group>
+                      </div>
+                    ))}
+                    <span className="addEmail" onClick={addPhoneRow}>
+                      Додатковий
+                    </span>
+                  </div>
                 </div>
-              ))}
-              <span className="addEmail" onClick={addEmailRow}>
-                Додатковий
-              </span>
-              </div>
+              )}
 
-              <div className="wrapperPhoneLayer">
+              {/* =========================================Adress Block================================================ */}
 
-              {phones.map((phone, index) => (
-                <div key={index} className="d-flex">
-                  <Form.Group
-                    className="mb-2 w-100 phoneAddContact"
-                    controlId={`formBasicNumber${index}`}
-                  >
+              {showAdress && (
+                <div className="adressAddBlock">
+                  <Form.Group>
                     <Form.Control
-                      type="text"
-                      placeholder="Телефон *"
-                      {...register(`contactPhoneRow${index}`, {
-                        required: true,
-                        validate: (value) => phoneCheck(value),
-                      })}
-                    />
-                    {errors[`contactPhoneRow${index}`] && (
-                      <Form.Text className="text-danger">
-                        Назва має містити мінімум дві літери, з першою великою і
-                        рештою малих літер.
-                      </Form.Text>
-                    )}
-                    {index > 0 && (
-                      <span
-                        className="removeEmail"
-                        onClick={() => removePhoneRow(index)}
-                      >
-                        X
-                      </span>
-                    )}
-                  </Form.Group>
-                </div>
-              ))}
-              <span className="addEmail" onClick={addPhoneRow}>
-                Додатковий
-              </span>
-              </div>
-              </div>
-              }
-              
-
-              {showAdress && <div className="adressAddBlock">
-              <Form.Group>
-                    <Form.Control
-                    className="mb-1"
+                      className="mb-1"
                       type="text"
                       hidden
                       {...register(`contactAddresses`, {
                         required: false,
                       })}
                     />
-                    </Form.Group>
+                  </Form.Group>
                   <Form.Group
                     className="mb-2 w-100 AdressAddContact"
                     controlId="formBasicAdress1"
                   >
                     <Form.Label>Адреса прописки *</Form.Label>
                     <Form.Control
-                    className="mb-1"
+                      className="mb-1"
                       type="text"
                       placeholder="Кривий Ріг, Орджонікідзе, 5/65"
                       {...register(`contactAdressRow1`, {
@@ -461,31 +553,31 @@ function ContactsAdd(props) {
                       })}
                     />
                     <div className=" d-flex">
-                    <Form.Control
-                    className="me-1"
-                      type="text"
-                      placeholder="Поштовий код"
-                      {...register(`contactZipRow1`, {
-                        required: true, // Перше поле email обов'язкове
-                        validate: (value) => nameCheck(value),
-                      })}
-                    />
-                    <Form.Control
-                      type="text"
-                      placeholder="Країна"
-                      {...register(`contactCountryRow1`, {
-                        required: true, // Перше поле email обов'язкове
-                        validate: (value) => nameCheck(value),
-                      })}
-                    />
-                    <Form.Control
-                      type="text"
-                      value="0"
-                      hidden
-                      {...register(`addressType1`, {
-                        required: true, 
-                      })}
-                    />
+                      <Form.Control
+                        className="me-1"
+                        type="text"
+                        placeholder="Поштовий код"
+                        {...register(`contactZipRow1`, {
+                          required: true, // Перше поле email обов'язкове
+                          // validate: (value) => nameCheck(value),
+                        })}
+                      />
+                      <Form.Control
+                        type="text"
+                        placeholder="Країна"
+                        {...register(`contactCountryRow1`, {
+                          required: true, // Перше поле email обов'язкове
+                          validate: (value) => nameCheck(value),
+                        })}
+                      />
+                      <Form.Control
+                        type="text"
+                        value="0"
+                        hidden
+                        {...register(`addressType1`, {
+                          required: true,
+                        })}
+                      />
                     </div>
                   </Form.Group>
                   <Form.Group
@@ -494,7 +586,7 @@ function ContactsAdd(props) {
                   >
                     <Form.Label>Адреса проживання</Form.Label>
                     <Form.Control
-                    className="mb-1"
+                      className="mb-1"
                       type="text"
                       placeholder="Кривий Ріг, Орджонікідзе, 5/65"
                       {...register(`contactAdressRow2`, {
@@ -503,31 +595,31 @@ function ContactsAdd(props) {
                       })}
                     />
                     <div className=" d-flex">
-                    <Form.Control
-                    className="me-1"
-                      type="text"
-                      placeholder="Поштовий код"
-                      {...register(`contactZipRow2`, {
-                        required: false, // Перше поле email обов'язкове
-                        validate: (value) => nameCheck(value),
-                      })}
-                    />
-                    <Form.Control
-                      type="text"
-                      placeholder="Країна"
-                      {...register(`contactCountryRow2`, {
-                        required: false, // Перше поле email обов'язкове
-                        validate: (value) => nameCheck(value),
-                      })}
-                    />
-                    <Form.Control
-                      type="text"
-                      value="1"
-                      hidden
-                      {...register(`addressType2`, {
-                        required: true, 
-                      })}
-                    />
+                      <Form.Control
+                        className="me-1"
+                        type="text"
+                        placeholder="Поштовий код"
+                        {...register(`contactZipRow2`, {
+                          required: false, // Перше поле email обов'язкове
+                          // validate: (value) => nameCheck(value),
+                        })}
+                      />
+                      <Form.Control
+                        type="text"
+                        placeholder="Країна"
+                        {...register(`contactCountryRow2`, {
+                          required: false, // Перше поле email обов'язкове
+                          validate: (value) => nameCheck(value),
+                        })}
+                      />
+                      <Form.Control
+                        type="text"
+                        value="1"
+                        hidden
+                        {...register(`addressType2`, {
+                          required: true,
+                        })}
+                      />
                     </div>
                   </Form.Group>
                   <Form.Group
@@ -536,7 +628,7 @@ function ContactsAdd(props) {
                   >
                     <Form.Label>Робоча адреса</Form.Label>
                     <Form.Control
-                    className="mb-1"
+                      className="mb-1"
                       type="text"
                       placeholder="Кривий Ріг, Орджонікідзе, 5/65"
                       {...register(`contactAdressRow3`, {
@@ -545,31 +637,31 @@ function ContactsAdd(props) {
                       })}
                     />
                     <div className=" d-flex">
-                    <Form.Control
-                    className="me-1"
-                      type="text"
-                      placeholder="Поштовий код"
-                      {...register(`contactZipRow3`, {
-                        required: false, // Перше поле email обов'язкове
-                        validate: (value) => nameCheck(value),
-                      })}
-                    />
-                    <Form.Control
-                      type="text"
-                      placeholder="Країна"
-                      {...register(`contactCountryRow3`, {
-                        required: false, // Перше поле email обов'язкове
-                        validate: (value) => nameCheck(value),
-                      })}
-                    />
-                    <Form.Control
-                      type="text"
-                      value="2"
-                      hidden
-                      {...register(`addressType3`, {
-                        required: true, 
-                      })}
-                    />
+                      <Form.Control
+                        className="me-1"
+                        type="text"
+                        placeholder="Поштовий код"
+                        {...register(`contactZipRow3`, {
+                          required: false, // Перше поле email обов'язкове
+                          validate: (value) => nameCheck(value),
+                        })}
+                      />
+                      <Form.Control
+                        type="text"
+                        placeholder="Країна"
+                        {...register(`contactCountryRow3`, {
+                          required: false, // Перше поле email обов'язкове
+                          validate: (value) => nameCheck(value),
+                        })}
+                      />
+                      <Form.Control
+                        type="text"
+                        value="2"
+                        hidden
+                        {...register(`addressType3`, {
+                          required: true,
+                        })}
+                      />
                     </div>
                   </Form.Group>
                   <Form.Group
@@ -578,7 +670,7 @@ function ContactsAdd(props) {
                   >
                     <Form.Label>Адреса інформування</Form.Label>
                     <Form.Control
-                    className="mb-1"
+                      className="mb-1"
                       type="text"
                       placeholder="Кривий Ріг, Орджонікідзе, 5/65"
                       {...register(`contactAdressRow4`, {
@@ -587,34 +679,35 @@ function ContactsAdd(props) {
                       })}
                     />
                     <div className=" d-flex">
-                    <Form.Control
-                    className="me-1"
-                      type="text"
-                      placeholder="Поштовий код"
-                      {...register(`contactZipRow4`, {
-                        required: false, // Перше поле email обов'язкове
-                        validate: (value) => nameCheck(value),
-                      })}
-                    />
-                    <Form.Control
-                      type="text"
-                      placeholder="Країна"
-                      {...register(`contactCountryRow4`, {
-                        required: false, // Перше поле email обов'язкове
-                        validate: (value) => nameCheck(value),
-                      })}
-                    />
-                    <Form.Control
-                      type="text"
-                      value="3"
-                      hidden
-                      {...register(`addressType4`, {
-                        required: true, 
-                      })}
-                    />
+                      <Form.Control
+                        className="me-1"
+                        type="text"
+                        placeholder="Поштовий код"
+                        {...register(`contactZipRow4`, {
+                          required: false, // Перше поле email обов'язкове
+                          validate: (value) => nameCheck(value),
+                        })}
+                      />
+                      <Form.Control
+                        type="text"
+                        placeholder="Країна"
+                        {...register(`contactCountryRow4`, {
+                          required: false, // Перше поле email обов'язкове
+                          validate: (value) => nameCheck(value),
+                        })}
+                      />
+                      <Form.Control
+                        type="text"
+                        value="3"
+                        hidden
+                        {...register(`addressType4`, {
+                          required: true,
+                        })}
+                      />
                     </div>
                   </Form.Group>
-                </div>}
+                </div>
+              )}
               <span className="confirmEdit">{serverAnswer}</span>
               <Button
                 type="submit"

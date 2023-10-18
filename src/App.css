@@ -998,31 +998,29 @@ td {
   cursor: pointer;
   background-color: #daeaea;
 }
-.btnShowPhoneMail{
+.btnShowPhoneMail {
   background-color: #daeaea;
   border-top: 1px solid transparent;
 }
-.btnShowAdress{
+.btnShowAdress {
   background-color: #daeaea;
   border-top: 1px solid transparent;
 }
-.btnShowMoreInfo{
+.btnShowMoreInfo {
   background-color: #daeaea;
   border-top: 1px solid transparent;
 }
-
-
 
 .emailAddContact {
   position: relative;
 }
-.wrapperEmailLayer{
+.wrapperEmailLayer {
   display: flex;
   flex-direction: column;
   position: relative;
 }
 
-.wrapperPhoneLayer{
+.wrapperPhoneLayer {
   display: flex;
   flex-direction: column;
   position: relative;
@@ -1073,17 +1071,34 @@ td {
 }
 .phoneAddContact {
   position: relative;
+  display: flex;
 }
 
-.AdressAddContact{
+.AdressAddContact {
   position: relative;
 }
-.wrapperAdressLayer{
+.wrapperAdressLayer {
   display: flex;
   flex-direction: column;
   position: relative;
 }
-
+.viberTelegramBox {
+  height: 20px;
+  font-size: 13px;
+}
+.viberTelegramBox .form-check-input {
+  margin: 0;
+  margin-right: 5px;
+  height: 12px;
+  width: 12px;
+}
+.viberTelegramBox .form-check {
+  margin: 0;
+  padding: 0;
+}
+.viberTelegramBox .form-check-label {
+  line-height: 10px;
+}
 /* ================Paging style======================= */
 
 .controlBtnPaging {
