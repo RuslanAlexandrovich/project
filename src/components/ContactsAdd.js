@@ -3,6 +3,7 @@ import Form from "react-bootstrap/Form";
 import { Button } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import React, { useState, useRef, useEffect } from "react";
+import { Modal } from "react-bootstrap";
 import { Container, Row, Col } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { phoneCheck } from "../pattern/allPattern";
@@ -18,10 +19,20 @@ function ContactsAdd(props) {
   const [Regions, setRegions] = useState([]);
   const [ContactGroups, setContactGroups] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [modalError, setModalError] = useState(false);
+  const [adressIndicator, setAdressIndicator] = useState(false);
+  const [numberIndicator, setNumberIndicator] = useState(false);
   const submitAddButtonRef = props.submitAddButtonRef;
-  // const closeModal = props.onCloseModal;
-
   const [serverAnswer, setserverAnswer] = useState();
+
+  const closeModalError = ()=>{
+    setModalError(false);
+    setAdressIndicator(false);
+    setNumberIndicator(false);
+  }
+
+  const adressError = "Перевірте обов'язкові поля на вкладці 'Адреса'";
+  const numberError = "Перевірте обов'язкові поля на вкладці 'Телефон та пошта'";
 
   const [emails, setEmails] = useState([{ email: "" }]);
 
@@ -30,11 +41,19 @@ function ContactsAdd(props) {
     setEmails(newEmails);
   };
   const removeEmailRow = (index) => {
-    if (emails.length > 1) {
-      const newEmails = [...emails];
-      newEmails.splice(index, 1);
-      setEmails(newEmails);
-    }
+    const arrayTest = [{email : "1"}, {email : "2"}, {email : "3"}, {email : "4"}];
+    console.log("array before", arrayTest);
+    arrayTest.splice(index, 1);
+    console.log("array after", arrayTest);
+    // console.log("index=============", index);
+   
+    // if (emails.length > 1) {
+    //   const newEmails = [...emails];
+    //   console.log("index=============emails before", newEmails);
+    //   newEmails.splice(index, 1);
+    //   setEmails(newEmails);
+    //   console.log("index=============emails after", newEmails);
+    // }
   };
 
   const [phones, setPhones] = useState([{ phone: "" }]);
@@ -178,7 +197,9 @@ function ContactsAdd(props) {
     // Формуємо масив об'єктів `contactEmail та contactPhones` зі станів
 
     if (!data[`contactEmailRow${0}`] || !data[`contactPhoneRow${0}`]) {
-      alert("Заповніть обов'язкові поля на вкладці 'Телефон та пошта'");
+      setModalError(true);
+      setNumberIndicator(true);
+      // alert("Заповніть обов'язкові поля на вкладці 'Телефон та пошта'");
       return;
     }
 
@@ -229,7 +250,9 @@ function ContactsAdd(props) {
         !data[`contactZipRow${1}`] ||
         !data[`contactCountryRow${1}`]
       ) {
-        alert("Заповніть обов'язкові поля на вкладці 'Адреса'");
+        setModalError(true);
+        setAdressIndicator(true);
+        // alert("Заповніть обов'язкові поля на вкладці 'Адреса'");
         return;
       }
 
@@ -273,18 +296,40 @@ function ContactsAdd(props) {
               onSubmit={handleSubmit(onSubmit)}
               className="form_EditForAdmin contactsAddFormMain"
             >
+  {/* =================================Modal Error===================================== */}
+
+              <Modal
+        show={modalError}
+        onHide={closeModalError}
+        backdrop="static"
+        keyboard={false}
+        className="bg-dark"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Помилка заповнення форми</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {adressIndicator ? adressError : ""}
+          {numberIndicator ? numberError : ""}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={closeModalError}>
+            Зрозуміло
+          </Button>
+        </Modal.Footer>
+      </Modal>
               <div className="headFormContactAdd">
                 <div className="w-50 me-2">
-                  <Form.Group className="mb-2" controlId="formBasicAddCode">
+                  <Form.Group className="mb-2" controlId="formBasicAddSurname">
                     <Form.Control
                       type="text"
-                      placeholder="Код контакту"
-                      {...register("contactCode", {
-                        required: false,
-                        // validate: (value) => nameCheck(value),
+                      placeholder="Прізвище *"
+                      {...register("contactI", {
+                        required: true,
+                        validate: (value) => surNameCheck(value),
                       })}
                     />
-                    {errors.contactCode && (
+                    {errors.contactI && (
                       <Form.Text className="text-danger">
                         Код має містити тільки цифри, не більше 6.
                       </Form.Text>
@@ -293,28 +338,13 @@ function ContactsAdd(props) {
                   <Form.Group className="mb-2" controlId="formBasicAddName">
                     <Form.Control
                       type="text"
-                      placeholder="Ім'я"
+                      placeholder="Ім'я *"
                       {...register("contactF", {
-                        required: false,
+                        required: true,
                         validate: (value) => nameCheck(value),
                       })}
                     />
                     {errors.contactF && (
-                      <Form.Text className="text-danger">
-                        Код має містити тільки цифри, не більше 6.
-                      </Form.Text>
-                    )}
-                  </Form.Group>
-                  <Form.Group className="mb-2" controlId="formBasicAddSurname">
-                    <Form.Control
-                      type="text"
-                      placeholder="Прізвище"
-                      {...register("contactI", {
-                        required: false,
-                        validate: (value) => surNameCheck(value),
-                      })}
-                    />
-                    {errors.contactI && (
                       <Form.Text className="text-danger">
                         Код має містити тільки цифри, не більше 6.
                       </Form.Text>
@@ -337,14 +367,29 @@ function ContactsAdd(props) {
                   </Form.Group>
                 </div>
                 <div className="w-50">
+                <Form.Group className="mb-2" controlId="formBasicAddCode">
+                    <Form.Control
+                      type="text"
+                      placeholder="Код контакту"
+                      {...register("contactCode", {
+                        required: false,
+                        // validate: (value) => nameCheck(value),
+                      })}
+                    />
+                    {errors.contactCode && (
+                      <Form.Text className="text-danger">
+                        Код має містити тільки цифри, не більше 6.
+                      </Form.Text>
+                    )}
+                  </Form.Group>
                   <Form.Group controlId="formBasicAddregionId" className="mb-2">
-                    <Form.Label>Оберіть регіон *</Form.Label>
+                    {/* <Form.Label>Оберіть регіон *</Form.Label> */}
                     <Form.Select
                       {...register("regionId", {
                         required: true,
                       })}
                     >
-                      <option value=""></option>
+                      <option value="" className="text-secondary small">Оберіть регіон *</option>
                       {Regions.map((region) => (
                         <option key={region.id} value={region.id}>
                           {region.regionName}
@@ -353,13 +398,14 @@ function ContactsAdd(props) {
                     </Form.Select>
                   </Form.Group>
                   <Form.Group controlId="formBasicAddcontactGroupId">
-                    <Form.Label>Оберіть контактну групу *</Form.Label>
+                    {/* <Form.Label>Оберіть контактну групу *</Form.Label> */}
                     <Form.Select
+                    className="selectGroup"
                       {...register("contactGroupId", {
                         required: true,
                       })}
                     >
-                      <option value=""></option>
+                      <option value="" className="text-secondary small">Оберіть контактну групу *</option>
                       {ContactGroups.map((group) => (
                         <option key={group.id} value={group.id}>
                           {group.groupName}

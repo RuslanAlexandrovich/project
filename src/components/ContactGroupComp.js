@@ -232,6 +232,26 @@ function ContactGroupComp(props) {
     }
   };
 
+  //====================================Робота з блоком паігнатора =================
+
+  const controlBtnPagingRef = useRef(null);
+
+  // Функція для обробки кліків на кнопки сторінок
+  const handleButtonClick = (buttonIndex) => {
+    const containerWidth = controlBtnPagingRef.current.clientWidth;
+    const contentWidth = controlBtnPagingRef.current.scrollWidth;
+
+    const scrollPosition =
+      buttonIndex *
+        (contentWidth / controlBtnPagingRef.current.children.length) -
+      containerWidth / 2;
+
+    controlBtnPagingRef.current.scrollTo({
+      left: scrollPosition,
+      behavior: "smooth",
+    });
+  };
+
   const {
     register,
     handleSubmit,
@@ -489,30 +509,67 @@ function ContactGroupComp(props) {
               {/* ====================Блок пагінатора========================= */}
 
               <div className="paging">
-                {Array.from({ length: totalPages }, (_, index) => (
-                  <button
-                    key={index}
-                    onChange={() => {
-                      setNumberPagePagin(index + 1);
-                    }}
-                    onClick={() => {
-                      if (indicateSearchForm) {
-                        SearchAllContactGroup(searchContactGroup, index + 1);
-                      } else {
-                        GetAllContactGroup(index + 1);
-                      }
-                      setCurrentPage(index + 1);
-                      setSelectedContactGroupIdForEdit(null);
-                    }}
-                    className={
-                      pageNumber === index + 1
-                        ? "activePagin"
-                        : "notActivePagin"
+                <button
+                  onClick={() => {
+                    if (indicateSearchForm) {
+                      SearchAllContactGroup(searchContactGroup, 1);
+                    } else {
+                      GetAllContactGroup(1);
                     }
-                  >
-                    {index + 1}
-                  </button>
-                ))}
+                    setCurrentPage(1);
+                    setSelectedContactGroupIdForEdit(null);
+                    handleButtonClick(0); // Додайте обробку кліка на кнопці
+                  }}
+                  className={
+                    pageNumber === 1 ? "activePagin" : "notActivePagin"
+                  }
+                >
+                  1 ст.
+                </button>
+                <div className="controlBtnPaging" ref={controlBtnPagingRef}>
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <button
+                      key={index}
+                      onChange={() => {
+                        setNumberPagePagin(index + 1);
+                      }}
+                      onClick={() => {
+                        if (indicateSearchForm) {
+                          SearchAllContactGroup(searchContactGroup, index + 1);
+                        } else {
+                          GetAllContactGroup(index + 1);
+                        }
+                        setCurrentPage(index + 1);
+                        setSelectedContactGroupIdForEdit(null);
+                        handleButtonClick(index); // Додайте обробку кліка на кнопці
+                      }}
+                      className={
+                        pageNumber === index + 1
+                          ? "activePagin"
+                          : "notActivePagin"
+                      }
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  className={
+                    pageNumber === totalPages ? "activePagin" : "notActivePagin"
+                  }
+                  onClick={() => {
+                    if (indicateSearchForm) {
+                      SearchAllContactGroup(searchContactGroup, totalPages);
+                    } else {
+                      GetAllContactGroup(totalPages);
+                    }
+                    setCurrentPage(totalPages);
+                    setSelectedContactGroupIdForEdit(null);
+                    handleButtonClick(totalPages - 1); // Додайте обробку кліка на кнопці
+                  }}
+                >
+                  {totalPages} ст.
+                </button>
               </div>
             </Col>
           </Row>

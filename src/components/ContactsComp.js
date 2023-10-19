@@ -196,6 +196,26 @@ function ContactsComp(props) {
     }
   };
 
+  //====================================Робота з блоком паігнатора =================
+
+  const controlBtnPagingRef = useRef(null);
+
+  // Функція для обробки кліків на кнопки сторінок
+  const handleButtonClick = (buttonIndex) => {
+    const containerWidth = controlBtnPagingRef.current.clientWidth;
+    const contentWidth = controlBtnPagingRef.current.scrollWidth;
+
+    const scrollPosition =
+      buttonIndex *
+        (contentWidth / controlBtnPagingRef.current.children.length) -
+      containerWidth / 2;
+
+    controlBtnPagingRef.current.scrollTo({
+      left: scrollPosition,
+      behavior: "smooth",
+    });
+  };
+
   const {
     register,
     handleSubmit,
@@ -297,6 +317,7 @@ function ContactsComp(props) {
                   onHide={() => setShowAddedContactModal(false)}
                   // dialogClassName="modal-fullscreen "
                   size="lg"
+                  backdrop="static"
                 >
                   <Modal.Header closeButton>
                     <Modal.Title>Додавання контакту</Modal.Title>
@@ -335,6 +356,8 @@ function ContactsComp(props) {
                 <Modal
                   show={showEditContactModal}
                   onHide={() => setShowEditContactModal(false)}
+                  backdrop="static"
+                  size="lg"
                 >
                   <Modal.Header closeButton>
                     <Modal.Title>Редагування контакту</Modal.Title>
@@ -372,6 +395,7 @@ function ContactsComp(props) {
                 <Modal
                   show={showDeleteContactModal}
                   onHide={() => setShowDeleteContactModal(false)}
+                  backdrop="static"
                 >
                   <Modal.Header closeButton>
                     <Modal.Title>Видалення контакту</Modal.Title>
@@ -407,17 +431,20 @@ function ContactsComp(props) {
                   <thead className="headTable headTableRegions">
                     <tr className="headRow">
                       <th>№</th>
-                      <th>contactCode</th>
-                      <th>contactName</th>
-                      <th>contactPhone</th>
-                      <th>contactEmail</th>
+                      <th>Код</th>
+                      <th>П.І.Б</th>
+                      <th>Телефон</th>
+                      <th>Email</th>
+                      <th>Регіон</th>
+                      <th>Група</th>
+                      <th>Адреса</th>
                       {/* <th>UserName</th> */}
                     </tr>
                     <tr>
                       <th colSpan="8" style={{ padding: "5px" }}></th>
                     </tr>
                   </thead>
-                  <tbody className="tBody tBodyRegions">
+                  <tbody className="tBody tBodyContacts">
                     <tr>
                       <td colSpan="8" style={{ padding: "3px" }}></td>
                     </tr>
@@ -435,8 +462,14 @@ function ContactsComp(props) {
                         <td>{index + 1}</td>
                         <td>{contact.contactCode}</td>
                         <td>{contact.contactName}</td>
-                        <td>{contact.contactPhone}</td>
-                        <td>{contact.contactEmail}</td>
+                        <td>{contact.contactPhones && contact.contactPhones.length > 0 ?
+                        contact.contactPhones.find(phone => phone.isMain === true)?.phone || "" : ""}</td>
+                        <td>{contact.contactEmails && contact.contactEmails.length > 0 ?
+                        contact.contactEmails.find(email => email.isMain === true)?.email || "" : ""}</td>
+                        <td>{contact.region.name}</td>
+                        <td>{contact.contactGroup.name}</td>
+                        <td>{contact.contactAddresses && contact.contactAddresses.length > 0 ?
+                        contact.contactAddresses.find(adress => adress.addressType === 0)?.address || "" : ""}</td>
                         {/* <td>{contact.user.name}</td> */}
                       </tr>
                     ))}
@@ -446,30 +479,70 @@ function ContactsComp(props) {
               {/* ====================Блок пагінатора========================= */}
 
               <div className="paging">
-                {Array.from({ length: totalPages }, (_, index) => (
-                  <button
-                    key={index}
-                    onChange={() => {
-                      setNumberPagePagin(index + 1);
-                    }}
-                    onClick={() => {
-                      if (indicateSearchForm) {
-                        SearchAllContacts(searchContact, index + 1);
-                      } else {
-                        GetAllContacts(index + 1);
-                      }
-                      setCurrentPage(index + 1);
-                      setSelectedContact(null);
-                    }}
-                    className={
-                      pageNumber === index + 1
-                        ? "activePagin"
-                        : "notActivePagin"
+                <button
+                  onClick={() => {
+                    if (indicateSearchForm) {
+                      SearchAllContacts(searchContact, 1);
+                    } else {
+                      GetAllContacts(1);
                     }
-                  >
-                    {index + 1}
-                  </button>
-                ))}
+                    setCurrentPage(1);
+                    setSelectedContact(null);
+                    setSelectedContactValue(null);
+                    handleButtonClick(0); // Додайте обробку кліка на кнопці
+                  }}
+                  className={
+                    pageNumber === 1 ? "activePagin" : "notActivePagin"
+                  }
+                >
+                  1 ст.
+                </button>
+                <div className="controlBtnPaging" ref={controlBtnPagingRef}>
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <button
+                      key={index}
+                      onChange={() => {
+                        setNumberPagePagin(index + 1);
+                      }}
+                      onClick={() => {
+                        if (indicateSearchForm) {
+                          SearchAllContacts(searchContact, index + 1);
+                        } else {
+                          GetAllContacts(index + 1);
+                        }
+                        setCurrentPage(index + 1);
+                        setSelectedContact(null);
+                        setSelectedContactValue(null);
+                        handleButtonClick(index); // Додайте обробку кліка на кнопці
+                      }}
+                      className={
+                        pageNumber === index + 1
+                          ? "activePagin"
+                          : "notActivePagin"
+                      }
+                    >
+                      {index + 1}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  className={
+                    pageNumber === totalPages ? "activePagin" : "notActivePagin"
+                  }
+                  onClick={() => {
+                    if (indicateSearchForm) {
+                      SearchAllContacts(searchContact, totalPages);
+                    } else {
+                      GetAllContacts(totalPages);
+                    }
+                    setCurrentPage(totalPages);
+                    setSelectedContact(null);
+                    setSelectedContactValue(null);
+                    handleButtonClick(totalPages - 1); // Додайте обробку кліка на кнопці
+                  }}
+                >
+                  {totalPages} ст.
+                </button>
               </div>
             </Col>
           </Row>

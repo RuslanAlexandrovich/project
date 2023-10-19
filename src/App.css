@@ -18,10 +18,7 @@ main {
   flex-direction: column;
   height: 100%;
 }
-/* .homePageLogo {
-  min-width: 100%;
-  min-height: 100%;
-} */
+
 /* ===============Header============= */
 
 .headerContainer {
@@ -740,7 +737,7 @@ th {
 }
 
 tr :nth-child(7) {
-  min-width: 330px;
+  white-space: nowrap;
 }
 tr {
   cursor: pointer;
@@ -878,6 +875,7 @@ td {
   margin: 0 5px 0 5px;
 }
 
+
 /* =============================Region Comp=============================== */
 
 .wrappRegionBlock {
@@ -969,6 +967,15 @@ td {
   color: red;
 }
 
+/* =============================Contacts Comp=============================== */
+
+.tBodyContacts td:nth-child(3){
+  white-space: nowrap;
+}
+.tBodyContacts td:nth-child(7){
+  width: 100px!important;
+  white-space: nowrap;
+}
 /* ======================Contacts Add form======================= */
 
 .contactsAddFormMain {
@@ -1107,7 +1114,7 @@ td {
   border-right: 1px solid black;
   border-left: 1px solid black;
   padding: 2px;
-  width: 290px;
+  max-width: 290px;
   margin: 0 5px 0 5px;
   overflow: hidden;
 }
